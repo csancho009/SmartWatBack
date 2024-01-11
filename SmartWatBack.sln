@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWatBack", "SmartWatBack\SmartWatBack.csproj", "{4E47DB4C-619F-45AB-A8FB-A880237971FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicaSmartWat", "LogicaSmartWat\LogicaSmartWat.csproj", "{CABB040E-DF9D-47C9-98F9-BB8875FE0350}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E47DB4C-619F-45AB-A8FB-A880237971FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E47DB4C-619F-45AB-A8FB-A880237971FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E47DB4C-619F-45AB-A8FB-A880237971FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E47DB4C-619F-45AB-A8FB-A880237971FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CABB040E-DF9D-47C9-98F9-BB8875FE0350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CABB040E-DF9D-47C9-98F9-BB8875FE0350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CABB040E-DF9D-47C9-98F9-BB8875FE0350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CABB040E-DF9D-47C9-98F9-BB8875FE0350}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83EFCE85-EE49-4565-A1DF-196DDE0601CD}
+	EndGlobalSection
+EndGlobal
