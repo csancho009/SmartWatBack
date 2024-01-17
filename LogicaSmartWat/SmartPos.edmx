@@ -4,7 +4,57 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="POLTA_PRUEBASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="POLTA_PRUEBASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BLOQUES">
+          <Key>
+            <PropertyRef Name="ID_BLO" />
+          </Key>
+          <Property Name="ID_BLO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
+          <Property Name="ID_ZON" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CLIENTES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="DIRECCION" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEFONO" Type="nvarchar" MaxLength="50" />
+          <Property Name="CORREO" Type="nvarchar" MaxLength="255" />
+          <Property Name="TIPO" Type="int" />
+          <Property Name="IDENTIFICACION" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NACIMIENTO" Type="date" />
+          <Property Name="PRECIO" Type="int" />
+          <Property Name="LIMITE" Type="int" />
+          <Property Name="FRECUENCIA" Type="int" />
+          <Property Name="ESTADO" Type="int" />
+          <Property Name="PROVINCIA" Type="int" />
+          <Property Name="CANTON" Type="int" />
+          <Property Name="DISTRITO" Type="int" />
+          <Property Name="BARRIO" Type="int" />
+          <Property Name="NombreComercial" Type="nvarchar" MaxLength="50" />
+          <Property Name="CELULAR" Type="varchar" MaxLength="10" />
+          <Property Name="DIAS" Type="int" />
+          <Property Name="DE_TASA_IMP" Type="varchar" MaxLength="2" />
+          <Property Name="NUMDOCEXO" Type="varchar" MaxLength="50" />
+          <Property Name="INSTIEXO" Type="varchar" MaxLength="50" />
+          <Property Name="FECHAEXO" Type="date" />
+          <Property Name="PROCENTAJEEXO" Type="int" />
+        </EntityType>
+        <EntityType Name="PAJAS">
+          <Key>
+            <PropertyRef Name="ID_PAJ" />
+          </Key>
+          <Property Name="ID_PAJ" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MEDIDOR" Type="varchar" MaxLength="30" />
+          <Property Name="ID_CLI" Type="int" />
+          <Property Name="ID_BLO" Type="int" />
+          <Property Name="DIRECCION" Type="varchar" MaxLength="300" />
+          <Property Name="TIPO_TARIFA" Type="varchar" MaxLength="1" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="3" />
+          <Property Name="FECHA_INSTALACION" Type="datetime" />
+        </EntityType>
         <EntityType Name="TARIFAS">
           <Key>
             <PropertyRef Name="ID_TAR" />
@@ -14,11 +64,70 @@
           <Property Name="RESIDENCIAL" Type="money" />
           <Property Name="COMERCIAL" Type="money" />
         </EntityType>
+        <EntityType Name="ZONAS">
+          <Key>
+            <PropertyRef Name="ID_ZON" />
+          </Key>
+          <Property Name="ID_ZON" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__467f3960">
+          <End Role="ZONAS" Type="Self.ZONAS" Multiplicity="1" />
+          <End Role="BLOQUES" Type="Self.BLOQUES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZONAS">
+              <PropertyRef Name="ID_ZON" />
+            </Principal>
+            <Dependent Role="BLOQUES">
+              <PropertyRef Name="ID_ZON" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__4e03f6cc">
+          <End Role="BLOQUES" Type="Self.BLOQUES" Multiplicity="0..1" />
+          <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BLOQUES">
+              <PropertyRef Name="ID_BLO" />
+            </Principal>
+            <Dependent Role="PAJAS">
+              <PropertyRef Name="ID_BLO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__9d61f4d4">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
+          <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="PAJAS">
+              <PropertyRef Name="ID_CLI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ObtenerBloques" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="POLTA_PRUEBASModelStoreContainer">
+          <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZONAS" EntityType="Self.ZONAS" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__467f3960" Association="Self.FK__467f3960">
+            <End Role="ZONAS" EntitySet="ZONAS" />
+            <End Role="BLOQUES" EntitySet="BLOQUES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__4e03f6cc" Association="Self.FK__4e03f6cc">
+            <End Role="BLOQUES" EntitySet="BLOQUES" />
+            <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__9d61f4d4" Association="Self.FK__9d61f4d4">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="POLTA_PRUEBASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -33,8 +142,129 @@
         </EntityType>
         <EntityContainer Name="POLTA_PRUEBASEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" />
-        </EntityContainer>
-      </Schema>
+          <EntitySet Name="CLIENTES" EntityType="POLTA_PRUEBASModel.CLIENTES" />
+          <EntitySet Name="BLOQUES" EntityType="POLTA_PRUEBASModel.BLOQUES" />
+          <EntitySet Name="PAJAS" EntityType="POLTA_PRUEBASModel.PAJAS" />
+          <EntitySet Name="ZONAS" EntityType="POLTA_PRUEBASModel.ZONAS" />
+          <AssociationSet Name="FK__467f3960" Association="POLTA_PRUEBASModel.FK__467f3960">
+            <End Role="ZONAS" EntitySet="ZONAS" />
+            <End Role="BLOQUES" EntitySet="BLOQUES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__4e03f6cc" Association="POLTA_PRUEBASModel.FK__4e03f6cc">
+            <End Role="BLOQUES" EntitySet="BLOQUES" />
+            <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__9d61f4d4" Association="POLTA_PRUEBASModel.FK__9d61f4d4">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <FunctionImport Name="ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.ObtenerBloques_Result)" />
+          </EntityContainer>
+        <EntityType Name="CLIENTES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CORREO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TIPO" Type="Int32" />
+          <Property Name="IDENTIFICACION" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NACIMIENTO" Type="DateTime" Precision="0" />
+          <Property Name="PRECIO" Type="Int32" />
+          <Property Name="LIMITE" Type="Int32" />
+          <Property Name="FRECUENCIA" Type="Int32" />
+          <Property Name="ESTADO" Type="Int32" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="CANTON" Type="Int32" />
+          <Property Name="DISTRITO" Type="Int32" />
+          <Property Name="BARRIO" Type="Int32" />
+          <Property Name="NombreComercial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CELULAR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DIAS" Type="Int32" />
+          <Property Name="DE_TASA_IMP" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="NUMDOCEXO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="INSTIEXO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FECHAEXO" Type="DateTime" Precision="0" />
+          <Property Name="PROCENTAJEEXO" Type="Int32" />
+          <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__9d61f4d4" FromRole="CLIENTES" ToRole="PAJAS" />
+        </EntityType>
+        <EntityType Name="BLOQUES">
+          <Key>
+            <PropertyRef Name="ID_BLO" />
+          </Key>
+          <Property Name="ID_BLO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID_ZON" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ZONAS" Relationship="POLTA_PRUEBASModel.FK__467f3960" FromRole="BLOQUES" ToRole="ZONAS" />
+          <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__4e03f6cc" FromRole="BLOQUES" ToRole="PAJAS" />
+        </EntityType>
+        <EntityType Name="PAJAS">
+          <Key>
+            <PropertyRef Name="ID_PAJ" />
+          </Key>
+          <Property Name="ID_PAJ" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MEDIDOR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ID_CLI" Type="Int32" />
+          <Property Name="ID_BLO" Type="Int32" />
+          <Property Name="DIRECCION" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="TIPO_TARIFA" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_INSTALACION" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="BLOQUES" Relationship="POLTA_PRUEBASModel.FK__4e03f6cc" FromRole="PAJAS" ToRole="BLOQUES" />
+          <NavigationProperty Name="CLIENTES" Relationship="POLTA_PRUEBASModel.FK__9d61f4d4" FromRole="PAJAS" ToRole="CLIENTES" />
+        </EntityType>
+        <EntityType Name="ZONAS">
+          <Key>
+            <PropertyRef Name="ID_ZON" />
+          </Key>
+          <Property Name="ID_ZON" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BLOQUES" Relationship="POLTA_PRUEBASModel.FK__467f3960" FromRole="ZONAS" ToRole="BLOQUES" />
+        </EntityType>
+        <Association Name="FK__467f3960">
+          <End Type="POLTA_PRUEBASModel.ZONAS" Role="ZONAS" Multiplicity="1" />
+          <End Type="POLTA_PRUEBASModel.BLOQUES" Role="BLOQUES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZONAS">
+              <PropertyRef Name="ID_ZON" />
+            </Principal>
+            <Dependent Role="BLOQUES">
+              <PropertyRef Name="ID_ZON" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__4e03f6cc">
+          <End Type="POLTA_PRUEBASModel.BLOQUES" Role="BLOQUES" Multiplicity="0..1" />
+          <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BLOQUES">
+              <PropertyRef Name="ID_BLO" />
+            </Principal>
+            <Dependent Role="PAJAS">
+              <PropertyRef Name="ID_BLO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__9d61f4d4">
+          <End Type="POLTA_PRUEBASModel.CLIENTES" Role="CLIENTES" Multiplicity="0..1" />
+          <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="PAJAS">
+              <PropertyRef Name="ID_CLI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="ObtenerBloques_Result">
+          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
+          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -50,6 +280,76 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CLIENTES">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CLIENTES">
+              <MappingFragment StoreEntitySet="CLIENTES">
+                <ScalarProperty Name="PROCENTAJEEXO" ColumnName="PROCENTAJEEXO" />
+                <ScalarProperty Name="FECHAEXO" ColumnName="FECHAEXO" />
+                <ScalarProperty Name="INSTIEXO" ColumnName="INSTIEXO" />
+                <ScalarProperty Name="NUMDOCEXO" ColumnName="NUMDOCEXO" />
+                <ScalarProperty Name="DE_TASA_IMP" ColumnName="DE_TASA_IMP" />
+                <ScalarProperty Name="DIAS" ColumnName="DIAS" />
+                <ScalarProperty Name="CELULAR" ColumnName="CELULAR" />
+                <ScalarProperty Name="NombreComercial" ColumnName="NombreComercial" />
+                <ScalarProperty Name="BARRIO" ColumnName="BARRIO" />
+                <ScalarProperty Name="DISTRITO" ColumnName="DISTRITO" />
+                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FRECUENCIA" ColumnName="FRECUENCIA" />
+                <ScalarProperty Name="LIMITE" ColumnName="LIMITE" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="NACIMIENTO" ColumnName="NACIMIENTO" />
+                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BLOQUES">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.BLOQUES">
+              <MappingFragment StoreEntitySet="BLOQUES">
+                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PAJAS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.PAJAS">
+              <MappingFragment StoreEntitySet="PAJAS">
+                <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="ID_CLI" ColumnName="ID_CLI" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZONAS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.ZONAS">
+              <MappingFragment StoreEntitySet="ZONAS">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ObtenerBloques" FunctionName="POLTA_PRUEBASModel.Store.ObtenerBloques">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.ObtenerBloques_Result">
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

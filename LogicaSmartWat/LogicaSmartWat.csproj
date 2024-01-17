@@ -50,7 +50,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLOQUES.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BloqueController.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="CLIENTES.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ObtenerBloques_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PAJAS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartPos.Context.cs">
       <AutoGen>True</AutoGen>
@@ -70,6 +83,11 @@
     <Compile Include="TARIFAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="TarifaController.cs" />
+    <Compile Include="ZONAS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZonaController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="SmartPos.edmx">
@@ -99,5 +117,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

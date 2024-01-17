@@ -6,7 +6,14 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ade900478362475e861dd5d04c4db624" Name="Diagram1">
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.TARIFAS" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-      </Diagram>
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.CLIENTES" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.BLOQUES" Width="1.5" PointX="5.625" PointY="1.5" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.PAJAS" Width="1.5" PointX="7.875" PointY="4" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.ZONAS" Width="1.5" PointX="3.375" PointY="1.625" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__467f3960" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__4e03f6cc" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__9d61f4d4" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

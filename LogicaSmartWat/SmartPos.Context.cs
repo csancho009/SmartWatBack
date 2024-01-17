@@ -12,6 +12,8 @@ namespace LogicaSmartWat
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class POLTA_PRUEBASEntities : DbContext
     {
@@ -26,5 +28,14 @@ namespace LogicaSmartWat
         }
     
         public virtual DbSet<TARIFAS> TARIFAS { get; set; }
+        public virtual DbSet<CLIENTES> CLIENTES { get; set; }
+        public virtual DbSet<BLOQUES> BLOQUES { get; set; }
+        public virtual DbSet<PAJAS> PAJAS { get; set; }
+        public virtual DbSet<ZONAS> ZONAS { get; set; }
+    
+        public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ObtenerBloques_Result>("ObtenerBloques");
+        }
     }
 }

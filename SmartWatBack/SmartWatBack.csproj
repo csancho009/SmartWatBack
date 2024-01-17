@@ -166,9 +166,12 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BloquesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\TarifasController.cs" />
     <Compile Include="Controllers\TokenGeneratorController.cs" />
     <Compile Include="Controllers\TokenValidationHandlerController.cs" />
+    <Compile Include="Controllers\ZonasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -187,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Tarifa\" />
     <Folder Include="Views\TokenGenerator\" />
     <Folder Include="Views\TokenValidationHandler\" />
   </ItemGroup>
