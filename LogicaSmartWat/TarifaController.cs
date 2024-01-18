@@ -10,16 +10,17 @@ namespace LogicaSmartWat
 {
     public class TarifaController
     {
-        public object ObtenerTarifas()
+        public object ObtenerTarifas(string BaseDeDatos)
         {
             using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
             {
+                db.Database.Connection.ChangeDatabase(BaseDeDatos);
                 var tarifasT = from T in db.TARIFAS select new { T.ID_TAR, T.NOMBRE, T.RESIDENCIAL, T.COMERCIAL };
                 return tarifasT.ToList();
             }
         }
 
-        public object ActualizarTarifas(List<TARIFAS> tarifas)
+        public object ActualizarTarifas(List<TARIFAS> tarifas, string BaseDeDatos)
         {
             List<object> respuestas  = new List<object>();
 
@@ -27,6 +28,7 @@ namespace LogicaSmartWat
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    db.Database.Connection.ChangeDatabase(BaseDeDatos);
                     var tarifaResultado = db.TARIFAS.Find(tarifa.ID_TAR);
 
                     if(tarifaResultado != null)

@@ -14,7 +14,7 @@ namespace SmartWatBack.Controllers
     {
         [HttpGet]
         [Route("ObtenerTarifa")]
-        public Respuesta ObtenerTarifa()
+        public Respuesta ObtenerTarifa(string BaseDeDatos)
         {
             Respuesta R = new Respuesta();
 
@@ -23,7 +23,7 @@ namespace SmartWatBack.Controllers
                 TarifaController tarifa = new TarifaController();
                 R.Codigo = 1;
                 R.Nombre = "Ok";
-                R.Detalle = tarifa.ObtenerTarifas();
+                R.Detalle = tarifa.ObtenerTarifas(BaseDeDatos);
             } catch (Exception ex)
             {
                 R.Codigo = -1;
@@ -35,7 +35,7 @@ namespace SmartWatBack.Controllers
 
         [HttpPut]
         [Route("ActualizarTarifa")]
-        public Respuesta ActualizarTarifa([FromBody] List<TARIFAS> tarifas)
+        public Respuesta ActualizarTarifa([FromBody] List<TARIFAS> tarifas, string BaseDeDatos)
         {
             Respuesta R = new Respuesta();
 
@@ -45,7 +45,7 @@ namespace SmartWatBack.Controllers
 
                 R.Codigo = 1;
                 R.Nombre = "Ok";
-                R.Detalle = tarifa.ActualizarTarifas(tarifas);
+                R.Detalle = tarifa.ActualizarTarifas(tarifas, BaseDeDatos);
             }
             catch(Exception ex)
             {

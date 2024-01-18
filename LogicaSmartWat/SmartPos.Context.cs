@@ -32,6 +32,11 @@ namespace LogicaSmartWat
         public virtual DbSet<BLOQUES> BLOQUES { get; set; }
         public virtual DbSet<PAJAS> PAJAS { get; set; }
         public virtual DbSet<ZONAS> ZONAS { get; set; }
+        public virtual DbSet<LISTA_PRECIOS> LISTA_PRECIOS { get; set; }
+        public virtual DbSet<CANTONES> CANTONES { get; set; }
+        public virtual DbSet<DISTRITOS> DISTRITOS { get; set; }
+        public virtual DbSet<PROVINCIAS> PROVINCIAS { get; set; }
+        public virtual DbSet<CIA> CIA { get; set; }
     
         public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
         {

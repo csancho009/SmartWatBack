@@ -13,6 +13,50 @@
           <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
           <Property Name="ID_ZON" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.CANTONES' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="CANTONES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" Nullable="false" />
+          <Property Name="PROVINCIA" Type="int" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="CIA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CEDULA" Type="nvarchar" MaxLength="50" />
+          <Property Name="FANTASIA" Type="nvarchar" MaxLength="50" />
+          <Property Name="DIRECCION" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEFONO" Type="nvarchar" MaxLength="50" />
+          <Property Name="LIMITE" Type="real" />
+          <Property Name="LOGO" Type="varbinary(max)" />
+          <Property Name="SERVIDOR" Type="nvarchar" MaxLength="100" />
+          <Property Name="PUERTO" Type="int" />
+          <Property Name="SSL" Type="varchar" MaxLength="2" />
+          <Property Name="TIPO" Type="char" MaxLength="1" />
+          <Property Name="PROVINCIA" Type="int" />
+          <Property Name="CANTON" Type="int" />
+          <Property Name="DISTRITO" Type="int" />
+          <Property Name="BARRIO" Type="int" />
+          <Property Name="CORREO" Type="varchar" MaxLength="50" />
+          <Property Name="TOKEN" Type="nvarchar" MaxLength="500" />
+          <Property Name="USUARIO" Type="nvarchar" MaxLength="100" />
+          <Property Name="CLAVE" Type="nvarchar" MaxLength="100" />
+          <Property Name="CLAVE_CERT" Type="nvarchar" MaxLength="10" />
+          <Property Name="SUCURSAL" Type="nvarchar" MaxLength="10" />
+          <Property Name="USUARIO_FE" Type="int" />
+          <Property Name="AMBIENTE" Type="int" />
+          <Property Name="NOMBRE_CORREO" Type="int" />
+          <Property Name="CODIGO_ACTIVIDAD" Type="varchar" MaxLength="6" />
+          <Property Name="FACTURAR_NEGATIVO" Type="int" />
+          <Property Name="CARPRESP" Type="varchar" MaxLength="200" />
+          <Property Name="CONDICION_REBAJA_INVENTARIO" Type="varchar" MaxLength="3" />
+        </EntityType>
         <EntityType Name="CLIENTES">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -42,6 +86,25 @@
           <Property Name="FECHAEXO" Type="date" />
           <Property Name="PROCENTAJEEXO" Type="int" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.DISTRITOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="DISTRITOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" Nullable="false" />
+          <Property Name="PROVINCIA" Type="int" />
+          <Property Name="CANTON" Type="int" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="LISTA_PRECIOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="ESTADO" Type="int" />
+        </EntityType>
         <EntityType Name="PAJAS">
           <Key>
             <PropertyRef Name="ID_PAJ" />
@@ -54,6 +117,15 @@
           <Property Name="TIPO_TARIFA" Type="varchar" MaxLength="1" />
           <Property Name="ESTADO" Type="varchar" MaxLength="3" />
           <Property Name="FECHA_INSTALACION" Type="datetime" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="PROVINCIAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="TARIFAS">
           <Key>
@@ -110,10 +182,33 @@
         <Function Name="ObtenerBloques" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="POLTA_PRUEBASModelStoreContainer">
           <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CIA" EntityType="Self.CIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZONAS" EntityType="Self.ZONAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CANTONES" EntityType="Self.CANTONES" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CANTONES].[CODIGO] AS [CODIGO], 
+    [CANTONES].[PROVINCIA] AS [PROVINCIA], 
+    [CANTONES].[NOMBRE] AS [NOMBRE]
+    FROM [dbo].[CANTONES] AS [CANTONES]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="DISTRITOS" EntityType="Self.DISTRITOS" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DISTRITOS].[CODIGO] AS [CODIGO], 
+    [DISTRITOS].[PROVINCIA] AS [PROVINCIA], 
+    [DISTRITOS].[CANTON] AS [CANTON], 
+    [DISTRITOS].[NOMBRE] AS [NOMBRE]
+    FROM [dbo].[DISTRITOS] AS [DISTRITOS]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PROVINCIAS" EntityType="Self.PROVINCIAS" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PROVINCIAS].[CODIGO] AS [CODIGO], 
+    [PROVINCIAS].[NOMBRE] AS [NOMBRE]
+    FROM [dbo].[PROVINCIAS] AS [PROVINCIAS]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__467f3960" Association="Self.FK__467f3960">
             <End Role="ZONAS" EntitySet="ZONAS" />
             <End Role="BLOQUES" EntitySet="BLOQUES" />
@@ -159,6 +254,11 @@
             <End Role="PAJAS" EntitySet="PAJAS" />
           </AssociationSet>
           <FunctionImport Name="ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.ObtenerBloques_Result)" />
+          <EntitySet Name="LISTA_PRECIOS" EntityType="POLTA_PRUEBASModel.LISTA_PRECIOS" />
+          <EntitySet Name="CANTONES" EntityType="POLTA_PRUEBASModel.CANTONES" />
+          <EntitySet Name="DISTRITOS" EntityType="POLTA_PRUEBASModel.DISTRITOS" />
+          <EntitySet Name="PROVINCIAS" EntityType="POLTA_PRUEBASModel.PROVINCIAS" />
+          <EntitySet Name="CIA" EntityType="POLTA_PRUEBASModel.CIA" />
           </EntityContainer>
         <EntityType Name="CLIENTES">
           <Key>
@@ -264,6 +364,72 @@
           <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="LISTA_PRECIOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ESTADO" Type="Int32" />
+        </EntityType>
+        <EntityType Name="CANTONES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DISTRITOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="CANTON" Type="Int32" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PROVINCIAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CIA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEDULA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FANTASIA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LIMITE" Type="Single" />
+          <Property Name="LOGO" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="SERVIDOR" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PUERTO" Type="Int32" />
+          <Property Name="SSL" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="TIPO" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="CANTON" Type="Int32" />
+          <Property Name="DISTRITO" Type="Int32" />
+          <Property Name="BARRIO" Type="Int32" />
+          <Property Name="CORREO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TOKEN" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="USUARIO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CLAVE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CLAVE_CERT" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SUCURSAL" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="USUARIO_FE" Type="Int32" />
+          <Property Name="AMBIENTE" Type="Int32" />
+          <Property Name="NOMBRE_CORREO" Type="Int32" />
+          <Property Name="CODIGO_ACTIVIDAD" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="FACTURAR_NEGATIVO" Type="Int32" />
+          <Property Name="CARPRESP" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CONDICION_REBAJA_INVENTARIO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -350,6 +516,77 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="LISTA_PRECIOS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.LISTA_PRECIOS">
+              <MappingFragment StoreEntitySet="LISTA_PRECIOS">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CANTONES">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CANTONES">
+              <MappingFragment StoreEntitySet="CANTONES">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DISTRITOS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.DISTRITOS">
+              <MappingFragment StoreEntitySet="DISTRITOS">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROVINCIAS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.PROVINCIAS">
+              <MappingFragment StoreEntitySet="PROVINCIAS">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CIA">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CIA">
+              <MappingFragment StoreEntitySet="CIA">
+                <ScalarProperty Name="CONDICION_REBAJA_INVENTARIO" ColumnName="CONDICION_REBAJA_INVENTARIO" />
+                <ScalarProperty Name="CARPRESP" ColumnName="CARPRESP" />
+                <ScalarProperty Name="FACTURAR_NEGATIVO" ColumnName="FACTURAR_NEGATIVO" />
+                <ScalarProperty Name="CODIGO_ACTIVIDAD" ColumnName="CODIGO_ACTIVIDAD" />
+                <ScalarProperty Name="NOMBRE_CORREO" ColumnName="NOMBRE_CORREO" />
+                <ScalarProperty Name="AMBIENTE" ColumnName="AMBIENTE" />
+                <ScalarProperty Name="USUARIO_FE" ColumnName="USUARIO_FE" />
+                <ScalarProperty Name="SUCURSAL" ColumnName="SUCURSAL" />
+                <ScalarProperty Name="CLAVE_CERT" ColumnName="CLAVE_CERT" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="TOKEN" ColumnName="TOKEN" />
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+                <ScalarProperty Name="BARRIO" ColumnName="BARRIO" />
+                <ScalarProperty Name="DISTRITO" ColumnName="DISTRITO" />
+                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="SSL" ColumnName="SSL" />
+                <ScalarProperty Name="PUERTO" ColumnName="PUERTO" />
+                <ScalarProperty Name="SERVIDOR" ColumnName="SERVIDOR" />
+                <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+                <ScalarProperty Name="LIMITE" ColumnName="LIMITE" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="FANTASIA" ColumnName="FANTASIA" />
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
