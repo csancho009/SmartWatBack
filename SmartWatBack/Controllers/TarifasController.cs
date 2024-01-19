@@ -13,54 +13,19 @@ namespace SmartWatBack.Controllers
     public class TarifasController : ApiController
     {
         [HttpGet]
-        [Route("ObtenerTarifa")]
-        public Respuesta ObtenerTarifa(string BaseDeDatos)
+        public IHttpActionResult ObtenerTarifa(string BaseDeDatos)
         {
-            Respuesta R = new Respuesta();
-
-            try
-            {
-                TarifaController tarifa = new TarifaController();
-                R.Codigo = 1;
-                R.Nombre = "Ok";
-                R.Detalle = tarifa.ObtenerTarifas(BaseDeDatos);
-            } catch (Exception ex)
-            {
-                R.Codigo = -1;
-                R.Nombre = "Alerta, la conexion fallo";
-            }
-            return R;
+            TarifaController tarifa = new TarifaController();
+            return Ok(tarifa.ObtenerTarifas(BaseDeDatos));
 
         }
 
         [HttpPut]
-        [Route("ActualizarTarifa")]
-        public Respuesta ActualizarTarifa([FromBody] List<TARIFAS> tarifas, string BaseDeDatos)
+        public IHttpActionResult ActualizarTarifa([FromBody] List<TARIFAS> tarifas, string BaseDeDatos)
         {
-            Respuesta R = new Respuesta();
-
-            try
-            {
-                TarifaController tarifa = new TarifaController();
-
-                R.Codigo = 1;
-                R.Nombre = "Ok";
-                R.Detalle = tarifa.ActualizarTarifas(tarifas, BaseDeDatos);
-            }
-            catch(Exception ex)
-            {
-                R.Codigo = -1;
-                R.Nombre = "Alerta, la conexion fallo";
-                
-            }
-            return R;
+            TarifaController tarifa = new TarifaController();
+            return Ok(tarifa.ActualizarTarifas(tarifas, BaseDeDatos));
         }
 
-        public class Respuesta
-        {
-            public int Codigo { get; set; }
-            public string Nombre { get; set; }
-            public object Detalle = new object();
-        }
     }
 }

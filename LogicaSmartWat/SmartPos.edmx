@@ -179,7 +179,15 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="ObtenerBloques" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_BuscarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Sp_BuscarPaja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="buscador" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Sp_ObtenerBloques" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_zona" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="POLTA_PRUEBASModelStoreContainer">
           <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIA" EntityType="Self.CIA" Schema="dbo" store:Type="Tables" />
@@ -259,6 +267,15 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <EntitySet Name="DISTRITOS" EntityType="POLTA_PRUEBASModel.DISTRITOS" />
           <EntitySet Name="PROVINCIAS" EntityType="POLTA_PRUEBASModel.PROVINCIAS" />
           <EntitySet Name="CIA" EntityType="POLTA_PRUEBASModel.CIA" />
+          <FunctionImport Name="Sp_BuscarCliente" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarCliente_Result)">
+          <Parameter Name="nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.Sp_ObtenerBloques_Result)">
+          <Parameter Name="id_zona" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_BuscarPaja" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarPaja_Result)">
+            <Parameter Name="buscador" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="CLIENTES">
           <Key>
@@ -430,6 +447,25 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Name="CARPRESP" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CONDICION_REBAJA_INVENTARIO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="Sp_BuscarCliente_Result">
+          <Property Type="Int32" Name="CODIGO" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Sp_ObtenerBloques_Result">
+          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
+          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Sp_BuscarPaja_Result">
+          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
+          <Property Type="String" Name="MEDIDOR" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="ID_CLI" Nullable="true" />
+          <Property Type="Int32" Name="ID_BLO" Nullable="true" />
+          <Property Type="String" Name="DIRECCION" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TIPO_TARIFA" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="ESTADO" Nullable="true" MaxLength="3" />
+          <Property Type="DateTime" Name="FECHA_INSTALACION" Nullable="true" Precision="23" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -507,15 +543,6 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ObtenerBloques" FunctionName="POLTA_PRUEBASModel.Store.ObtenerBloques">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.ObtenerBloques_Result">
-                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
-                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="LISTA_PRECIOS">
             <EntityTypeMapping TypeName="POLTA_PRUEBASModel.LISTA_PRECIOS">
               <MappingFragment StoreEntitySet="LISTA_PRECIOS">
@@ -587,6 +614,37 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Sp_BuscarCliente" FunctionName="POLTA_PRUEBASModel.Store.Sp_BuscarCliente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_BuscarCliente_Result">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_ObtenerBloques" FunctionName="POLTA_PRUEBASModel.Store.Sp_ObtenerBloques">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_ObtenerBloques_Result">
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_BuscarPaja" FunctionName="POLTA_PRUEBASModel.Store.Sp_BuscarPaja">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_BuscarPaja_Result">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="ID_CLI" ColumnName="ID_CLI" />
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

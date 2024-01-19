@@ -143,6 +143,19 @@ namespace LogicaSmartWat.Controllers
                 return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
             }
         }
+
+        public object GetCliente(string nombre)
+        {
+            using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+            {
+                if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                {
+                    db.Database.Connection.Open();
+                }
+                var listC = db.Sp_BuscarCliente(nombre);
+                return listC;
+            }
+        }
     }
 
     public class ArregloProvCantDist

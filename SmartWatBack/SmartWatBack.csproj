@@ -169,6 +169,7 @@
     <Compile Include="Controllers\BloquesController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PajasController.cs" />
     <Compile Include="Controllers\TarifasController.cs" />
     <Compile Include="Controllers\TokenGeneratorController.cs" />
     <Compile Include="Controllers\TokenValidationHandlerController.cs" />

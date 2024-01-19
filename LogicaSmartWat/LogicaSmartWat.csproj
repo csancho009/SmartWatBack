@@ -53,7 +53,7 @@
     <Compile Include="BLOQUES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="BloqueController.cs" />
+    <Compile Include="Controllers\BloqueController.cs" />
     <Compile Include="CANTONES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -65,6 +65,7 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\GestionClientes.cs" />
+    <Compile Include="Controllers\PajaController.cs" />
     <Compile Include="Datos\Respuesta.cs" />
     <Compile Include="DISTRITOS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
@@ -97,14 +98,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SmartPos.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Sp_BuscarCliente_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sp_BuscarPaja_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sp_ObtenerBloques_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="TARIFAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="TarifaController.cs" />
+    <Compile Include="Controllers\TarifaController.cs" />
     <Compile Include="ZONAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="ZonaController.cs" />
+    <Compile Include="Controllers\ZonaController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="SmartPos.edmx">

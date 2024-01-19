@@ -15,50 +15,19 @@ namespace SmartWatBack.Controllers
     {
 
         [HttpGet]
-        [Route("ObtenerBloques")]
-        public Respuesta ObtenerBloques()
+        public IHttpActionResult ObtenerBloques(int id_zon)
         {
-            Respuesta R = new Respuesta();
-            try
-            {
-                BloqueController bloques = new BloqueController();
-                R.Codigo = 1;
-                R.Nombre = "Ok";
-                R.Detalle = bloques.ObtenerBloques();
-            }
-            catch (Exception ex)
-            {
-                R.Codigo = -1;
-                R.Nombre = "Alerta, la conexion fallo";
-            }
-            return R;
+            BloqueController bloques = new BloqueController();
+            return Ok(bloques.ObtenerBloques(id_zon));
         }
 
         [HttpPost]
-        [Route("IngresarBloques")]
-        public Respuesta IngresarBloques(BLOQUES bloque)
+        public IHttpActionResult IngresarBloques(BLOQUES bloque)
         {
-            Respuesta R = new Respuesta();
-            try
-            {
-                BloqueController bloques = new BloqueController();
-                R.Codigo = 1;
-                R.Nombre = "Ok";
-                R.Detalle = bloques.IngresarBloques(bloque);
-            }
-            catch (Exception ex)
-            {
-                R.Codigo = -1;
-                R.Nombre = "Alerta, la conexion fallo";
-            }
-            return R;
+            BloqueController bloques = new BloqueController();
+            return Ok(bloques.IngresarBloques(bloque));
         }
 
-        public class Respuesta
-        {
-            public int Codigo { get; set; }
-            public string Nombre {get; set; }
-            public object Detalle = new Object();
-        }
+      
     }
 }

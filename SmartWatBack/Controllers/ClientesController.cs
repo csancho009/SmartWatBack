@@ -38,5 +38,12 @@ namespace SmartWatBack.Controllers
             GestionClientes C = new GestionClientes();
             return Ok(C.NuevoCliente(Cliente, BaseDeDatos));
         }
+
+        [HttpGet]
+        public IHttpActionResult GetCliente(string nombre)
+        {
+            GestionClientes C = new GestionClientes();
+            return Ok(C.GetCliente(nombre));
+        }
     }
 }

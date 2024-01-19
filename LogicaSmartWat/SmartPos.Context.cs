@@ -42,5 +42,32 @@ namespace LogicaSmartWat
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ObtenerBloques_Result>("ObtenerBloques");
         }
+    
+        public virtual ObjectResult<Sp_BuscarCliente_Result> Sp_BuscarCliente(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("nombre", nombre) :
+                new ObjectParameter("nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarCliente_Result>("Sp_BuscarCliente", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Sp_ObtenerBloques_Result> Sp_ObtenerBloques(Nullable<int> id_zona)
+        {
+            var id_zonaParameter = id_zona.HasValue ?
+                new ObjectParameter("id_zona", id_zona) :
+                new ObjectParameter("id_zona", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_ObtenerBloques_Result>("Sp_ObtenerBloques", id_zonaParameter);
+        }
+    
+        public virtual ObjectResult<Sp_BuscarPaja_Result> Sp_BuscarPaja(string buscador)
+        {
+            var buscadorParameter = buscador != null ?
+                new ObjectParameter("buscador", buscador) :
+                new ObjectParameter("buscador", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarPaja_Result>("Sp_BuscarPaja", buscadorParameter);
+        }
     }
 }
