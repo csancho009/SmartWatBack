@@ -36,7 +36,6 @@ namespace LogicaSmartWat
         {
             Respuesta R = new Respuesta();
             List<object> respuestas  = new List<object>();
-
            try
             {
                 foreach (var tarifa in tarifas)
