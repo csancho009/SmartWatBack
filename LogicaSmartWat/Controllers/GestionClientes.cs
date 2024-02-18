@@ -1,7 +1,9 @@
 ﻿using LogicaSmartWat.Datos;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,7 +49,8 @@ namespace LogicaSmartWat.Controllers
                                 C.FECHAEXO,
                                 C.PROCENTAJEEXO
                             };
-                    return new { Codigo = 1, Mensaje = "OK", Objeto = R };
+                    db.Database.Connection.Close();
+                    return new { Codigo = 1, Mensaje = "OK", Objeto = R.ToList() };
                 }
             }
             catch (Exception ex)
@@ -77,7 +80,8 @@ namespace LogicaSmartWat.Controllers
                                 C.NOMBRE,
                                 C.IDENTIFICACION
                             };
-                    return new { Codigo = 1, Mensaje = "OK", Objeto = R };
+                    db.Database.Connection.Close();
+                    return new { Codigo = 1, Mensaje = "OK", Objeto = R.ToList() };
                 }
             }
             catch (Exception ex)
@@ -100,7 +104,81 @@ namespace LogicaSmartWat.Controllers
                     db.Database.Connection.ChangeDatabase(BDCia);
                     db.CLIENTES.Add(C);
                     db.SaveChanges();
+                    db.Database.Connection.Close();
                     return new { Codigo = C.CODIGO, Mensaje = "OK" };
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.EntityValidationErrors.ToString() };
+            }
+        }
+
+        public Object ActualizaCliente(CLIENTES C, string BDCia)
+        {
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    CLIENTES CL = db.CLIENTES.Where(d => d.CODIGO == C.CODIGO).FirstOrDefault();
+                    
+                    db.SaveChanges();
+                    db.Database.Connection.Close();
+                    return new { Codigo = C.CODIGO, Mensaje = "OK" };
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.EntityValidationErrors.ToString() };
+            }
+        }
+        public Object ConsultaCedula(string Dato, string BDCia)
+        {
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    CLIENTES Cl = db.CLIENTES.Where(d => d.IDENTIFICACION == Dato).FirstOrDefault();
+                    db.Database.Connection.Close();
+                    if (Cl != null)
+                    {
+                        return new { Codigo = 0, Mensaje = "Cliente Ya Existe", Objeto = Cl.NOMBRE };
+                    }
+                    else
+                    {
+                        HttpClient http = new HttpClient();                        
+                        string URL = "https://api.hacienda.go.cr/fe/ae?identificacion=" + Dato;
+                        HttpResponseMessage response = http.GetAsync(URL).Result;
+                        string res = response.Content.ReadAsStringAsync().Result;
+                        try
+                        {
+                            Root Hac = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(res);
+                            if (Hac.nombre!= null)
+                            {
+                                return new { Codigo = 0, Mensaje = "OK", Objeto = Hac.nombre };
+                            }
+                            else
+                            {
+                                return new { Codigo = -4, Mensaje = "Cédula incorrecta. Omita guiones o espacios", Objeto = "" };
+                            }
+                        }
+                        catch (Exception)
+                        {
+                           
+                            return new { Codigo = -3, Mensaje = "Cédula incorrecta. Omita guiones o espacios", Objeto = ""};
+                        }
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -109,7 +187,7 @@ namespace LogicaSmartWat.Controllers
             }
         }
 
-        public object ParametrosInicialesCarga(string BDCia)
+        public Respuesta ParametrosInicialesCarga(string BDCia)
         {
             Respuesta R = new Respuesta();
             ArregloProvCantDist Ubicacion = new ArregloProvCantDist();
@@ -125,22 +203,79 @@ namespace LogicaSmartWat.Controllers
                     CIA E = db.CIA.FirstOrDefault();
 
                     var P = from Ps in db.PROVINCIAS select new { Ps.CODIGO, Ps.NOMBRE };
-                    Ubicacion.Pro = new Respuesta { Codigo = (int)E.PROVINCIA, Mensaje = "OK", Objeto = P };
+                    Ubicacion.Pro = new Respuesta { Codigo = (int)E.PROVINCIA, Mensaje = "OK", Objeto = P.ToList() };
                     var C = from Cs in db.CANTONES.Where(d => d.PROVINCIA == E.PROVINCIA) select new { Cs.CODIGO, Cs.NOMBRE };
-                    Ubicacion.Can = new Respuesta { Codigo = (int)E.CANTON, Mensaje = "OK", Objeto = C };
+                    Ubicacion.Can = new Respuesta { Codigo = (int)E.CANTON, Mensaje = "OK", Objeto = C.ToList() };
                     var D = from Ds in db.DISTRITOS.Where(d => d.PROVINCIA == E.PROVINCIA && d.CANTON == E.CANTON) select new { Ds.CODIGO, Ds.NOMBRE };
-                    Ubicacion.Dis = new Respuesta { Codigo = (int)E.DISTRITO, Mensaje = "OK", Objeto = D };
+                    Ubicacion.Dis = new Respuesta { Codigo = (int)E.DISTRITO, Mensaje = "OK", Objeto = D.ToList() };
                     var Pcs = from Pc in db.LISTA_PRECIOS select new { Pc.CODIGO, Pc.NOMBRE };
-                    Ubicacion.ListasPrecios = new Respuesta { Codigo = 0, Mensaje = "OK", Objeto = Pcs };
+                    Ubicacion.ListasPrecios = new Respuesta { Codigo = 0, Mensaje = "OK", Objeto = Pcs.ToList() };
                     R.Codigo = 0;
                     R.Mensaje = "OK";
                     R.Objeto = Ubicacion;
+                    db.Database.Connection.Close();
                     return R;
                 }
             }
             catch (Exception ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+                return new Respuesta { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+            }
+        }
+
+        public object Cantones(string BDCia, int Provincia)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    var P = from Ps in db.CANTONES.Where(d => d.PROVINCIA == Provincia).OrderBy(O => O.NOMBRE) select new { Ps.CODIGO, Ps.NOMBRE };
+                    R.Codigo = 0;
+                    R.Mensaje = "OK";
+                    R.Objeto = P.ToList();
+                    db.Database.Connection.Close();
+                    return R;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new Respuesta { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+            }
+        }
+
+        public object Distritos(string BDCia, int Provincia, int Canton)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    var P = from Ps in db.DISTRITOS.Where(d => d.PROVINCIA == Provincia && d.CANTON==Canton).OrderBy(O => O.NOMBRE) select new { Ps.CODIGO, Ps.NOMBRE };
+                    R.Codigo = 0;
+                    R.Mensaje = "OK";
+                    R.Objeto = P.ToList();
+                    db.Database.Connection.Close();
+                    return R;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new Respuesta { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
             }
         }
 
@@ -171,6 +306,35 @@ namespace LogicaSmartWat.Controllers
         public string NombreCliente { get; set; }
         public string Cedula { get; set; }
         public string BDCia { get; set; }
+    }
+
+    public class Regimen
+    {
+        public int codigo { get; set; }
+        public string descripcion { get; set; }
+    }
+
+    public class Root
+    {
+        public string nombre { get; set; }
+        public string tipoIdentificacion { get; set; }
+        public Regimen regimen { get; set; }
+        public Situacion situacion { get; set; }
+        public List<object> actividades { get; set; }
+    }
+
+    public class Situacion    {
+        public string moroso { get; set; }
+        public string omiso { get; set; }
+        public string estado { get; set; }
+        public string administracionTributaria { get; set; }
+        public string mensaje { get; set; }
+    }
+
+    public class RootError
+    {
+        public int code { get; set; }
+        public string status { get; set; }
     }
 
 }

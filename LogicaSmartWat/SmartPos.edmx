@@ -62,7 +62,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.CANTONES' no tiene definid
             <PropertyRef Name="CODIGO" />
           </Key>
           <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="150" />
           <Property Name="DIRECCION" Type="nvarchar" MaxLength="50" />
           <Property Name="TELEFONO" Type="nvarchar" MaxLength="50" />
           <Property Name="CORREO" Type="nvarchar" MaxLength="255" />
@@ -110,7 +110,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.DISTRITOS' no tiene defini
             <PropertyRef Name="ID_PAJ" />
           </Key>
           <Property Name="ID_PAJ" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MEDIDOR" Type="varchar" MaxLength="30" />
+          <Property Name="MEDIDOR" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ID_CLI" Type="int" />
           <Property Name="ID_BLO" Type="int" />
           <Property Name="DIRECCION" Type="varchar" MaxLength="300" />
@@ -274,7 +274,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Parameter Name="id_zona" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_BuscarPaja" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarPaja_Result)">
-            <Parameter Name="buscador" Mode="In" Type="String" />
+          <Parameter Name="buscador" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="CLIENTES">
@@ -282,7 +282,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             <PropertyRef Name="CODIGO" />
           </Key>
           <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NOMBRE" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CORREO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -322,7 +322,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             <PropertyRef Name="ID_PAJ" />
           </Key>
           <Property Name="ID_PAJ" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MEDIDOR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MEDIDOR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ID_CLI" Type="Int32" />
           <Property Name="ID_BLO" Type="Int32" />
           <Property Name="DIRECCION" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />

@@ -5,9 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace SmartWatBack.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [Authorize]
     [RoutePrefix("api/tarifas")]
     public class TarifasController : ApiController

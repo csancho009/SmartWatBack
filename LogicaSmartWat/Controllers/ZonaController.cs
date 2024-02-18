@@ -9,17 +9,23 @@ namespace LogicaSmartWat
 {
     public class ZonaController
     {
-        public object ObtenerZonas()
+        public object ObtenerZonas(string BDCia)
         {
             Respuesta R = new Respuesta();
             try
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
                     var zonas = from T in db.ZONAS select new { T.ID_ZON, T.NOMBRE };
                     R.Codigo = 75;
                     R.Mensaje = "Ok";
                     R.Objeto = zonas.ToList();
+                    db.Database.Connection.Close();
                 }
             } catch (Exception ex)
             {
@@ -29,13 +35,18 @@ namespace LogicaSmartWat
             return R;
         }
 
-        public Respuesta IngresarZonas(ZONAS zona)
+        public Respuesta IngresarZonas(ZONAS zona, string BDCia)
         {
             Respuesta R = new Respuesta();
             try
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
                     bool zonaE = db.ZONAS.Any(b => b.NOMBRE == zona.NOMBRE);
                     if (!zonaE)
                     {
@@ -51,6 +62,7 @@ namespace LogicaSmartWat
                         R.Codigo = 0;
                         R.Mensaje = "La zona ingresada ya existe";
                     }
+                    db.Database.Connection.Close();
                 }
             } catch (Exception ex)
             {

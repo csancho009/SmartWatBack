@@ -18,11 +18,16 @@ namespace LogicaSmartWat
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
                     db.Database.Connection.ChangeDatabase(BaseDeDatos);
                     var tarifasT = from T in db.TARIFAS select new { T.ID_TAR, T.NOMBRE, T.RESIDENCIAL, T.COMERCIAL };
                     R.Codigo = 75;
                     R.Mensaje = "Ok";
                     R.Objeto = tarifasT.ToList();
+                    db.Database.Connection.Close();
                 }
             } catch (Exception ex)
             {
@@ -42,6 +47,10 @@ namespace LogicaSmartWat
                 {
                     using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                     {
+                        if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                        {
+                            db.Database.Connection.Open();
+                        }
                         db.Database.Connection.ChangeDatabase(BaseDeDatos);
                         var tarifaResultado = db.TARIFAS.Find(tarifa.ID_TAR);
 
@@ -59,6 +68,7 @@ namespace LogicaSmartWat
                             };
                             respuestas.Add(respuesta);
                         }
+                        db.Database.Connection.Close();
                     }
                 }
                 R.Codigo = 1;

@@ -10,7 +10,7 @@ namespace LogicaSmartWat
     public class PajaController
     {
 
-        public Respuesta ObtenerPajas(string paja)
+        public Respuesta ObtenerPajas(string paja, string BDCia)
         {
             Respuesta R = new Respuesta();
 
@@ -18,9 +18,15 @@ namespace LogicaSmartWat
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
                     R.Codigo = 0;
                     R.Mensaje = "Ok";
                     R.Objeto = db.Sp_BuscarPaja(paja).ToList();
+                    db.Database.Connection.Close();
                 }
             } catch (Exception ex)
             {
@@ -30,7 +36,7 @@ namespace LogicaSmartWat
             return R;
         }
 
-        public Respuesta IngresarPaja(PAJAS paja) 
+        public Respuesta IngresarPaja(PAJAS paja, string BDCia) 
         {
             Respuesta R = new Respuesta();
 
@@ -38,6 +44,11 @@ namespace LogicaSmartWat
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
                     paja.FECHA_INSTALACION = DateTime.Now;
                     db.PAJAS.Add(paja);
                     db.SaveChanges();
@@ -45,6 +56,7 @@ namespace LogicaSmartWat
                     R.Codigo = 75;
                     R.Mensaje = "Ok";
                     R.Objeto = paja;
+                    db.Database.Connection.Close();
                 }
             } catch (Exception ex) 
             {

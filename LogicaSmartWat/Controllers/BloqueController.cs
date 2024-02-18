@@ -9,16 +9,22 @@ namespace LogicaSmartWat
 {
     public class BloqueController
     {
-        public Respuesta ObtenerBloques(int id_zon)
+        public Respuesta ObtenerBloques(int id_zon, string BDCia)
         {
             Respuesta R = new Respuesta();
             try
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
                     R.Codigo = 75;
                     R.Mensaje = "Ok";
                     R.Objeto = db.Sp_ObtenerBloques(id_zon).ToList();
+                    db.Database.Connection.Close();
                 }
             }
             catch(Exception ex)
@@ -29,13 +35,18 @@ namespace LogicaSmartWat
             return R;
         }
 
-        public Respuesta IngresarBloques(BLOQUES bloque)
+        public Respuesta IngresarBloques(BLOQUES bloque, string BDCia)
         {
             Respuesta R = new Respuesta();
             try
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
                     bool bloqueE = db.BLOQUES.Any(b => b.NOMBRE == bloque.NOMBRE &&  b.ID_ZON == bloque.ID_ZON);
                     if (!bloqueE)
                     {
@@ -50,6 +61,7 @@ namespace LogicaSmartWat
                         R.Mensaje = "El bloque ingresado ya existe";
                         R.Objeto = bloque;
                     }
+                    db.Database.Connection.Close();
                 }
                 return R;
             }
