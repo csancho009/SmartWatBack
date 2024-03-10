@@ -71,6 +71,13 @@ namespace SmartWatBack.Controllers
             GestionClientes C = new GestionClientes();
             return Ok(C.NuevoCliente(Cliente, BaseDeDatos));
         }
+        [Route("api/Clientes/ActualizaCliente")]
+        [HttpPost]
+        public IHttpActionResult ActualizaCliente([FromBody] CLIENTES Cliente, string BaseDeDatos)
+        {
+            GestionClientes C = new GestionClientes();
+            return Ok(C.ActualizaCliente(Cliente, BaseDeDatos));
+        }
 
         [Route("api/Clientes/GetCliente")]
         [HttpGet]

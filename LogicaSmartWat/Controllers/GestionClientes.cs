@@ -126,15 +126,37 @@ namespace LogicaSmartWat.Controllers
                     }
                     db.Database.Connection.ChangeDatabase(BDCia);
                     CLIENTES CL = db.CLIENTES.Where(d => d.CODIGO == C.CODIGO).FirstOrDefault();
-                    
+                    db.Entry(CL).State = System.Data.Entity.EntityState.Modified;
+                    CL.NOMBRE = C.NOMBRE;
+                    CL.DIRECCION = C.DIRECCION;
+                    CL.TELEFONO = C.TELEFONO;
+                    CL.CORREO = C.CORREO;
+                    CL.TIPO = C.TIPO;
+                    CL.IDENTIFICACION = C.IDENTIFICACION;
+                    CL.PRECIO = C.PRECIO;
+                    CL.LIMITE = C.LIMITE;
+                    CL.FRECUENCIA = C.FRECUENCIA;
+                    CL.ESTADO = C.ESTADO;
+                    CL.PROVINCIA = C.PROVINCIA;
+                    CL.CANTON = C.CANTON;
+                    CL.DISTRITO = C.DISTRITO;
+                    CL.BARRIO = C.BARRIO;
+                    CL.NombreComercial = C.NombreComercial;
+                    CL.CELULAR = C.CELULAR;
+                    CL.DIAS = C.DIAS;
+                    CL.DE_TASA_IMP = C.DE_TASA_IMP;
+                    CL.NUMDOCEXO = C.NUMDOCEXO;
+                    CL.INSTIEXO = C.INSTIEXO;
+                    CL.FECHAEXO = C.FECHAEXO;
+                    CL.PROCENTAJEEXO = C.PROCENTAJEEXO;
                     db.SaveChanges();
                     db.Database.Connection.Close();
                     return new { Codigo = C.CODIGO, Mensaje = "OK" };
                 }
             }
-            catch (DbEntityValidationException ex)
+            catch (Exception ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.EntityValidationErrors.ToString() };
+                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException.ToString() };
             }
         }
         public Object ConsultaCedula(string Dato, string BDCia)
