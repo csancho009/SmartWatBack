@@ -67,6 +67,47 @@ namespace LogicaSmartWat
             return R;
         }
 
+        public Respuesta ActualizarPaja(PAJAS paja, String BaseDeDatos)
+        {
+            Respuesta R = new Respuesta();
 
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    db.Database.Connection.ChangeDatabase(BaseDeDatos);
+                    PAJAS pajaE = db.PAJAS.First(b => b.ID_PAJ == paja.ID_PAJ);
+                    if (pajaE != null)
+                    {
+                        pajaE.MEDIDOR = paja.MEDIDOR;
+                        pajaE.ID_CLI = paja.ID_CLI;
+                        pajaE.ID_BLO = paja.ID_BLO;
+                        pajaE.DIRECCION = paja.DIRECCION;
+                        pajaE.TIPO_TARIFA = paja.TIPO_TARIFA;
+                        pajaE.ESTADO = paja.ESTADO;
+                        db.SaveChanges();
+                        R.Codigo = 1;
+                        R.Mensaje = "Se ha actualizado con éxito";
+                    }
+                    else
+                    {
+                        R.Objeto = paja;
+                        R.Codigo = 0;
+                        R.Mensaje = "La zona actualizada no existe";
+                    }
+
+                    R.Codigo = 75;
+                    R.Mensaje = "Ok";
+                    R.Objeto = paja;
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+
+            return R;
+        }
     }
 }
