@@ -97,6 +97,19 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.DISTRITOS' no tiene defini
           <Property Name="CANTON" Type="int" />
           <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
         </EntityType>
+        <EntityType Name="LECTURAS">
+          <Key>
+            <PropertyRef Name="ID_LEC" />
+          </Key>
+          <Property Name="ID_LEC" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_PAJ" Type="int" Nullable="false" />
+          <Property Name="FECHA" Type="datetime" />
+          <Property Name="ID_USU" Type="int" />
+          <Property Name="MES" Type="int" Nullable="false" />
+          <Property Name="ANIO" Type="int" Nullable="false" />
+          <Property Name="LECTURA" Type="int" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="3" />
+        </EntityType>
         <EntityType Name="LISTA_PRECIOS">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -143,6 +156,18 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Name="ID_ZON" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK__1bca5d8f">
+          <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="1" />
+          <End Role="LECTURAS" Type="Self.LECTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAJAS">
+              <PropertyRef Name="ID_PAJ" />
+            </Principal>
+            <Dependent Role="LECTURAS">
+              <PropertyRef Name="ID_PAJ" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__467f3960">
           <End Role="ZONAS" Type="Self.ZONAS" Multiplicity="1" />
           <End Role="BLOQUES" Type="Self.BLOQUES" Multiplicity="*" />
@@ -179,6 +204,19 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GENERA_FACTURACION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RECTIFICA_LECTURA_MEDIDOR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+          <Parameter Name="NumLectura" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_BUSCAR_PAJA_PARAMETROS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Codigo" Type="varchar" Mode="In" />
+          <Parameter Name="Cedula" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="NumMedidor" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="Sp_BuscarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="nombre" Type="nvarchar" Mode="In" />
         </Function>
@@ -188,10 +226,15 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
         <Function Name="Sp_ObtenerBloques" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id_zona" Type="int" Mode="In" />
         </Function>
+        <Function Name="TablaLecturas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="mes" Type="int" Mode="In" />
+          <Parameter Name="annio" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="POLTA_PRUEBASModelStoreContainer">
           <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIA" EntityType="Self.CIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LECTURAS" EntityType="Self.LECTURAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" Schema="dbo" store:Type="Tables" />
@@ -217,6 +260,10 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
     [PROVINCIAS].[NOMBRE] AS [NOMBRE]
     FROM [dbo].[PROVINCIAS] AS [PROVINCIAS]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__1bca5d8f" Association="Self.FK__1bca5d8f">
+            <End Role="PAJAS" EntitySet="PAJAS" />
+            <End Role="LECTURAS" EntitySet="LECTURAS" />
+          </AssociationSet>
           <AssociationSet Name="FK__467f3960" Association="Self.FK__467f3960">
             <End Role="ZONAS" EntitySet="ZONAS" />
             <End Role="BLOQUES" EntitySet="BLOQUES" />
@@ -276,6 +323,28 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <FunctionImport Name="Sp_BuscarPaja" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarPaja_Result)">
           <Parameter Name="buscador" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="LECTURAS" EntityType="POLTA_PRUEBASModel.LECTURAS" />
+          <AssociationSet Name="FK__1bca5d8f" Association="POLTA_PRUEBASModel.FK__1bca5d8f">
+            <End Role="PAJAS" EntitySet="PAJAS" />
+            <End Role="LECTURAS" EntitySet="LECTURAS" />
+          </AssociationSet>
+          <FunctionImport Name="TablaLecturas" ReturnType="Collection(POLTA_PRUEBASModel.TablaLecturas_Result)">
+            <Parameter Name="mes" Mode="In" Type="Int32" />
+            <Parameter Name="annio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GENERA_FACTURACION" ReturnType="Collection(POLTA_PRUEBASModel.GENERA_FACTURACION_Result)">
+          <Parameter Name="Usuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_BUSCAR_PAJA_PARAMETROS" ReturnType="Collection(POLTA_PRUEBASModel.SP_BUSCAR_PAJA_PARAMETROS_Result)">
+            <Parameter Name="Codigo" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="NumMedidor" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RECTIFICA_LECTURA_MEDIDOR" ReturnType="Collection(POLTA_PRUEBASModel.RECTIFICA_LECTURA_MEDIDOR_Result)">
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="NumLectura" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="CLIENTES">
           <Key>
@@ -331,6 +400,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Name="FECHA_INSTALACION" Type="DateTime" Precision="3" />
           <NavigationProperty Name="BLOQUES" Relationship="POLTA_PRUEBASModel.FK__4e03f6cc" FromRole="PAJAS" ToRole="BLOQUES" />
           <NavigationProperty Name="CLIENTES" Relationship="POLTA_PRUEBASModel.FK__9d61f4d4" FromRole="PAJAS" ToRole="CLIENTES" />
+          <NavigationProperty Name="LECTURAS" Relationship="POLTA_PRUEBASModel.FK__1bca5d8f" FromRole="PAJAS" ToRole="LECTURAS" />
         </EntityType>
         <EntityType Name="ZONAS">
           <Key>
@@ -465,6 +535,57 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Type="String" Name="TIPO_TARIFA" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="ESTADO" Nullable="true" MaxLength="3" />
           <Property Type="DateTime" Name="FECHA_INSTALACION" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="LECTURAS">
+          <Key>
+            <PropertyRef Name="ID_LEC" />
+          </Key>
+          <Property Name="ID_LEC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_PAJ" Type="Int32" Nullable="false" />
+          <Property Name="FECHA" Type="DateTime" Precision="3" />
+          <Property Name="ID_USU" Type="Int32" />
+          <Property Name="MES" Type="Int32" Nullable="false" />
+          <Property Name="ANIO" Type="Int32" Nullable="false" />
+          <Property Name="LECTURA" Type="Int32" />
+          <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__1bca5d8f" FromRole="LECTURAS" ToRole="PAJAS" />
+        </EntityType>
+        <Association Name="FK__1bca5d8f">
+          <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="1" />
+          <End Type="POLTA_PRUEBASModel.LECTURAS" Role="LECTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAJAS">
+              <PropertyRef Name="ID_PAJ" />
+            </Principal>
+            <Dependent Role="LECTURAS">
+              <PropertyRef Name="ID_PAJ" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="TablaLecturas_Result">
+          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Zona" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Bloque" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="3" />
+          <Property Type="Int32" Name="UltimaLectura" Nullable="true" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="NumLectura" Nullable="false" />
+          <Property Type="Int32" Name="LecturaActual" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GENERA_FACTURACION_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
+          <Property Type="Int32" Name="id" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SP_BUSCAR_PAJA_PARAMETROS_Result">
+          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="IDENTIFICACION" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="RECTIFICA_LECTURA_MEDIDOR_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
+          <Property Type="Int32" Name="id" Nullable="false" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -642,6 +763,61 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
                 <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
                 <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
                 <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="LECTURAS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.LECTURAS">
+              <MappingFragment StoreEntitySet="LECTURAS">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="LECTURA" ColumnName="LECTURA" />
+                <ScalarProperty Name="ANIO" ColumnName="ANIO" />
+                <ScalarProperty Name="MES" ColumnName="MES" />
+                <ScalarProperty Name="ID_USU" ColumnName="ID_USU" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="ID_LEC" ColumnName="ID_LEC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="TablaLecturas" FunctionName="POLTA_PRUEBASModel.Store.TablaLecturas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.TablaLecturas_Result">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="Zona" ColumnName="Zona" />
+                <ScalarProperty Name="Bloque" ColumnName="Bloque" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="UltimaLectura" ColumnName="UltimaLectura" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="NumLectura" ColumnName="NumLectura" />
+                <ScalarProperty Name="LecturaActual" ColumnName="LecturaActual" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GENERA_FACTURACION" FunctionName="POLTA_PRUEBASModel.Store.GENERA_FACTURACION">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.GENERA_FACTURACION_Result">
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_BUSCAR_PAJA_PARAMETROS" FunctionName="POLTA_PRUEBASModel.Store.SP_BUSCAR_PAJA_PARAMETROS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.SP_BUSCAR_PAJA_PARAMETROS_Result">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RECTIFICA_LECTURA_MEDIDOR" FunctionName="POLTA_PRUEBASModel.Store.RECTIFICA_LECTURA_MEDIDOR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.RECTIFICA_LECTURA_MEDIDOR_Result">
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

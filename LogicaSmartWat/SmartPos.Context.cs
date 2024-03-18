@@ -37,6 +37,7 @@ namespace LogicaSmartWat
         public virtual DbSet<DISTRITOS> DISTRITOS { get; set; }
         public virtual DbSet<PROVINCIAS> PROVINCIAS { get; set; }
         public virtual DbSet<CIA> CIA { get; set; }
+        public virtual DbSet<LECTURAS> LECTURAS { get; set; }
     
         public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
         {
@@ -68,6 +69,62 @@ namespace LogicaSmartWat
                 new ObjectParameter("buscador", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarPaja_Result>("Sp_BuscarPaja", buscadorParameter);
+        }
+    
+        public virtual ObjectResult<TablaLecturas_Result> TablaLecturas(Nullable<int> mes, Nullable<int> annio)
+        {
+            var mesParameter = mes.HasValue ?
+                new ObjectParameter("mes", mes) :
+                new ObjectParameter("mes", typeof(int));
+    
+            var annioParameter = annio.HasValue ?
+                new ObjectParameter("annio", annio) :
+                new ObjectParameter("annio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TablaLecturas_Result>("TablaLecturas", mesParameter, annioParameter);
+        }
+    
+        public virtual ObjectResult<GENERA_FACTURACION_Result> GENERA_FACTURACION(Nullable<int> usuario)
+        {
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GENERA_FACTURACION_Result>("GENERA_FACTURACION", usuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_BUSCAR_PAJA_PARAMETROS_Result> SP_BUSCAR_PAJA_PARAMETROS(string codigo, string cedula, string nombre, string numMedidor)
+        {
+            var codigoParameter = codigo != null ?
+                new ObjectParameter("Codigo", codigo) :
+                new ObjectParameter("Codigo", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var numMedidorParameter = numMedidor != null ?
+                new ObjectParameter("NumMedidor", numMedidor) :
+                new ObjectParameter("NumMedidor", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BUSCAR_PAJA_PARAMETROS_Result>("SP_BUSCAR_PAJA_PARAMETROS", codigoParameter, cedulaParameter, nombreParameter, numMedidorParameter);
+        }
+    
+        public virtual ObjectResult<RECTIFICA_LECTURA_MEDIDOR_Result> RECTIFICA_LECTURA_MEDIDOR(Nullable<int> usuario, Nullable<int> numLectura)
+        {
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
+    
+            var numLecturaParameter = numLectura.HasValue ?
+                new ObjectParameter("NumLectura", numLectura) :
+                new ObjectParameter("NumLectura", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RECTIFICA_LECTURA_MEDIDOR_Result>("RECTIFICA_LECTURA_MEDIDOR", usuarioParameter, numLecturaParameter);
         }
     }
 }

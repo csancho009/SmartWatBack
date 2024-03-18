@@ -55,7 +55,7 @@ namespace LogicaSmartWat.Controllers
             }
             catch (Exception ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+                return new { Codigo = -1, Mensaje = ex.Message + " UnCliente NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
             }
 
         }
@@ -86,7 +86,7 @@ namespace LogicaSmartWat.Controllers
             }
             catch (Exception ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+                return new { Codigo = -1, Mensaje = ex.Message + " ListaClientes NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
             }
 
         }
@@ -110,7 +110,7 @@ namespace LogicaSmartWat.Controllers
             }
             catch (DbEntityValidationException ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.EntityValidationErrors.ToString() };
+                return new { Codigo = -1, Mensaje = ex.Message + " NuevoCliente NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.EntityValidationErrors.ToString() };
             }
         }
 
@@ -156,7 +156,7 @@ namespace LogicaSmartWat.Controllers
             }
             catch (Exception ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException.ToString() };
+                return new { Codigo = -1, Mensaje = ex.Message + " ActualizaCliente NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException.ToString() };
             }
         }
         public Object ConsultaCedula(string Dato, string BDCia)
@@ -205,7 +205,30 @@ namespace LogicaSmartWat.Controllers
             }
             catch (Exception ex)
             {
-                return new { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+                return new { Codigo = -1, Mensaje = ex.Message + " ConsultaCedula NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+            }
+        }
+
+        public Object ListaGeneralClientes( string BDCia)
+        {
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    var Lista = from Cs in  db.CLIENTES.OrderBy(O=>O.NOMBRE) select new { value= Cs.CODIGO, label=Cs.NOMBRE };
+                    db.Database.Connection.Close();
+
+                    return Lista.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new { value = -1, label = ex.Message + " ConsultaCedula NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
             }
         }
 
@@ -241,7 +264,7 @@ namespace LogicaSmartWat.Controllers
             }
             catch (Exception ex)
             {
-                return new Respuesta { Codigo = -1, Mensaje = ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
+                return new Respuesta { Codigo = -1, Mensaje = ex.Message + " ParametrosInicialesCarga NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7), Objeto = ex.InnerException };
             }
         }
 

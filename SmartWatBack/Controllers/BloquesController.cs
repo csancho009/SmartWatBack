@@ -22,6 +22,13 @@ namespace SmartWatBack.Controllers
             return Ok(bloques.ObtenerBloques(id_zon, BDCia));
         }
 
+        [HttpGet]
+        public IHttpActionResult TodosBloques( string BDCia)
+        {
+            BloqueController bloques = new BloqueController();
+            return Ok(bloques.TodosBloques( BDCia));
+        }
+
         [HttpPost]
         public IHttpActionResult IngresarBloques([FromBody] BLOQUES bloque, string BDCia)
         {

@@ -68,9 +68,16 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\GestionClientes.cs" />
+    <Compile Include="Controllers\Lecturas.cs" />
     <Compile Include="Controllers\PajaController.cs" />
     <Compile Include="Datos\Respuesta.cs" />
     <Compile Include="DISTRITOS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GENERA_FACTURACION_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LECTURAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="LISTA_PRECIOS.cs">
@@ -84,6 +91,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PROVINCIAS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RECTIFICA_LECTURA_MEDIDOR_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="SmartPos.Context.cs">
@@ -107,7 +117,13 @@
     <Compile Include="Sp_BuscarPaja_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="SP_BUSCAR_PAJA_PARAMETROS_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="Sp_ObtenerBloques_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TablaLecturas_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="TARIFAS.cs">

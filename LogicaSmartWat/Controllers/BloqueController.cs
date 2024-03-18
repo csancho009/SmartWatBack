@@ -35,6 +35,33 @@ namespace LogicaSmartWat
             return R;
         }
 
+        public Respuesta TodosBloques( string BDCia)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    var Bs = from B in db.BLOQUES join Z in db.ZONAS.OrderBy(o=>o.NOMBRE) on B.ID_ZON equals Z.ID_ZON select new { B.ID_BLO, Nombre = B.NOMBRE + " (" + Z.NOMBRE + ")" };
+                    R.Objeto = Bs.ToList();
+                    R.Codigo = 0;
+                    R.Mensaje = "Ok";
+                    db.Database.Connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+            return R;
+        }
+
         public Respuesta IngresarBloques(BLOQUES bloque, string BDCia)
         {
             Respuesta R = new Respuesta();

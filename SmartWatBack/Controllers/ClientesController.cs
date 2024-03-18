@@ -48,6 +48,14 @@ namespace SmartWatBack.Controllers
             return Ok(C.ConsultaCedula(Dato, BDCia));
         }
 
+        [Route("api/Clientes/ListaGeneralClientes")]
+        [HttpGet]
+        public IHttpActionResult ListaGeneralClientes(string BDCia)
+        {
+            GestionClientes C = new GestionClientes();
+            return Ok(C.ListaGeneralClientes( BDCia));
+        }
+
         [Route("api/Clientes/Cantones")]
         [HttpGet]
         public IHttpActionResult Cantones(string BD, int Provincia)

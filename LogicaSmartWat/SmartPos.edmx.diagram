@@ -18,6 +18,8 @@
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.DISTRITOS" Width="1.5" PointX="5.375" PointY="7.75" />
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.PROVINCIAS" Width="1.5" PointX="7.375" PointY="7.75" />
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.CIA" Width="1.5" PointX="9.375" PointY="7.75" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.LECTURAS" Width="1.5" PointX="10.125" PointY="4.25" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__1bca5d8f" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

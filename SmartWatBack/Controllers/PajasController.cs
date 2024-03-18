@@ -16,10 +16,17 @@ namespace SmartWatBack.Controllers
     {
 
         [HttpGet]
-        public IHttpActionResult ObtenerPajas(string buscador, string BDCia)
+        public IHttpActionResult ObtenerPajas(int Paja, string BDCia)
         {
             PajaController pajaC = new PajaController();
-            return Ok(pajaC.ObtenerPajas(buscador, BDCia));
+            return Ok(pajaC.ObtenerPajas(Paja, BDCia));
+        }
+
+        [HttpGet]
+        public IHttpActionResult BUSCARPAJAPARAMETROS(string paja, string Cedula, string Nombre, string BDCia, string Medidor)
+        {
+            PajaController pajaC = new PajaController();
+            return Ok(pajaC.BUSCAR_PAJA_PARAMETROS(paja, Cedula,Nombre,BDCia, Medidor));
         }
 
         [HttpPost]

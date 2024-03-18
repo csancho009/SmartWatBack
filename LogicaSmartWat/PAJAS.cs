@@ -14,6 +14,12 @@ namespace LogicaSmartWat
     
     public partial class PAJAS
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PAJAS()
+        {
+            this.LECTURAS = new HashSet<LECTURAS>();
+        }
+    
         public int ID_PAJ { get; set; }
         public string MEDIDOR { get; set; }
         public Nullable<int> ID_CLI { get; set; }
@@ -25,5 +31,7 @@ namespace LogicaSmartWat
     
         public virtual BLOQUES BLOQUES { get; set; }
         public virtual CLIENTES CLIENTES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LECTURAS> LECTURAS { get; set; }
     }
 }
