@@ -12,18 +12,14 @@ namespace LogicaSmartWat
     using System;
     using System.Collections.Generic;
     
-    public partial class LECTURAS
+    public partial class DATAFONOS
     {
-        public int ID_LEC { get; set; }
-        public int ID_PAJ { get; set; }
-        public Nullable<System.DateTime> FECHA { get; set; }
-        public Nullable<int> ID_USU { get; set; }
-        public int MES { get; set; }
-        public int ANIO { get; set; }
-        public Nullable<int> LECTURA { get; set; }
-        public string ESTADO { get; set; }
+        public int CODIGO { get; set; }
+        public string NOMBRE { get; set; }
+        public Nullable<int> CUENTA { get; set; }
+        public Nullable<float> COMISION { get; set; }
+        public Nullable<float> RETENCION { get; set; }
     
-        public virtual PAJAS PAJAS { get; set; }
-        public virtual USUARIOS USUARIOS { get; set; }
+        public virtual CUENTAS_BANCO CUENTAS_BANCO { get; set; }
     }
 }

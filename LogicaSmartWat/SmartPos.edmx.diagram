@@ -20,6 +20,11 @@
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.CIA" Width="1.5" PointX="9.375" PointY="7.75" />
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.LECTURAS" Width="1.5" PointX="10.125" PointY="4.25" />
         <AssociationConnector Association="POLTA_PRUEBASModel.FK__1bca5d8f" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.DATAFONOS" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.CUENTAS_BANCO" Width="1.5" PointX="8.125" PointY="0.75" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__6f58e2d3" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.USUARIOS" Width="1.5" PointX="0.75" PointY="11" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__493bfcd8" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

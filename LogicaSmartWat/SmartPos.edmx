@@ -86,6 +86,27 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.CANTONES' no tiene definid
           <Property Name="FECHAEXO" Type="date" />
           <Property Name="PROCENTAJEEXO" Type="int" />
         </EntityType>
+        <EntityType Name="CUENTAS_BANCO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BANCO" Type="int" Nullable="false" />
+          <Property Name="MONEDA" Type="smallint" />
+          <Property Name="CUENTA" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="SINPE" Type="nvarchar" MaxLength="255" />
+          <Property Name="SALDO" Type="money" />
+        </EntityType>
+        <EntityType Name="DATAFONOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CUENTA" Type="int" />
+          <Property Name="COMISION" Type="real" />
+          <Property Name="RETENCION" Type="real" />
+        </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.DISTRITOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="DISTRITOS">
@@ -149,6 +170,26 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Name="RESIDENCIAL" Type="money" />
           <Property Name="COMERCIAL" Type="money" />
         </EntityType>
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CEDULA" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEFONO" Type="nvarchar" MaxLength="50" />
+          <Property Name="DIRECCION" Type="nvarchar" MaxLength="50" />
+          <Property Name="USUARIO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CLAVE" Type="nvarchar" MaxLength="50" />
+          <Property Name="PERMISO" Type="int" />
+          <Property Name="ESTADO" Type="int" />
+          <Property Name="UC" Type="real" />
+          <Property Name="VENDEDOR" Type="int" />
+          <Property Name="COMANDO" Type="nvarchar" MaxLength="1" />
+          <Property Name="CAJA" Type="int" />
+          <Property Name="BODEGA" Type="int" />
+          <Property Name="UF" Type="nvarchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="ZONAS">
           <Key>
             <PropertyRef Name="ID_ZON" />
@@ -180,6 +221,18 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__493bfcd8">
+          <End Role="USUARIOS" Type="Self.USUARIOS" Multiplicity="0..1" />
+          <End Role="LECTURAS" Type="Self.LECTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIOS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="LECTURAS">
+              <PropertyRef Name="ID_USU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__4e03f6cc">
           <End Role="BLOQUES" Type="Self.BLOQUES" Multiplicity="0..1" />
           <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="*" />
@@ -189,6 +242,18 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             </Principal>
             <Dependent Role="PAJAS">
               <PropertyRef Name="ID_BLO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__6f58e2d3">
+          <End Role="CUENTAS_BANCO" Type="Self.CUENTAS_BANCO" Multiplicity="0..1" />
+          <End Role="DATAFONOS" Type="Self.DATAFONOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUENTAS_BANCO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DATAFONOS">
+              <PropertyRef Name="CUENTA" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -206,6 +271,22 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
         </Association>
         <Function Name="GENERA_FACTURACION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Usuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PAGO_LECTURA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NumCoti" Type="int" Mode="In" />
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+          <Parameter Name="MontoEfectivo" Type="real" Mode="In" />
+          <Parameter Name="MontoTransfer" Type="real" Mode="In" />
+          <Parameter Name="NumCtaBco" Type="int" Mode="In" />
+          <Parameter Name="NumTransfer" Type="varchar" Mode="In" />
+          <Parameter Name="MontoTarejeta" Type="real" Mode="In" />
+          <Parameter Name="NumDatafono" Type="int" Mode="In" />
+          <Parameter Name="Voucher" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PAJAS_PENDIENTES_PAGO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NombreCliente" Type="varchar" Mode="In" />
+          <Parameter Name="Cedula" Type="varchar" Mode="In" />
+          <Parameter Name="Estado" Type="int" Mode="In" />
         </Function>
         <Function Name="RECTIFICA_LECTURA_MEDIDOR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Usuario" Type="int" Mode="In" />
@@ -230,14 +311,20 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Parameter Name="mes" Type="int" Mode="In" />
           <Parameter Name="annio" Type="int" Mode="In" />
         </Function>
+        <Function Name="TablaPrecios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="coti" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="POLTA_PRUEBASModelStoreContainer">
           <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIA" EntityType="Self.CIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CUENTAS_BANCO" EntityType="Self.CUENTAS_BANCO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DATAFONOS" EntityType="Self.DATAFONOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LECTURAS" EntityType="Self.LECTURAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZONAS" EntityType="Self.ZONAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CANTONES" EntityType="Self.CANTONES" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -268,9 +355,17 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             <End Role="ZONAS" EntitySet="ZONAS" />
             <End Role="BLOQUES" EntitySet="BLOQUES" />
           </AssociationSet>
+          <AssociationSet Name="FK__493bfcd8" Association="Self.FK__493bfcd8">
+            <End Role="USUARIOS" EntitySet="USUARIOS" />
+            <End Role="LECTURAS" EntitySet="LECTURAS" />
+          </AssociationSet>
           <AssociationSet Name="FK__4e03f6cc" Association="Self.FK__4e03f6cc">
             <End Role="BLOQUES" EntitySet="BLOQUES" />
             <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__6f58e2d3" Association="Self.FK__6f58e2d3">
+            <End Role="CUENTAS_BANCO" EntitySet="CUENTAS_BANCO" />
+            <End Role="DATAFONOS" EntitySet="DATAFONOS" />
           </AssociationSet>
           <AssociationSet Name="FK__9d61f4d4" Association="Self.FK__9d61f4d4">
             <End Role="CLIENTES" EntitySet="CLIENTES" />
@@ -345,6 +440,36 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
             <Parameter Name="Usuario" Mode="In" Type="Int32" />
             <Parameter Name="NumLectura" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="TablaPrecios" ReturnType="Collection(POLTA_PRUEBASModel.TablaPrecios_Result)">
+          <Parameter Name="coti" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="DATAFONOS" EntityType="POLTA_PRUEBASModel.DATAFONOS" />
+          <EntitySet Name="CUENTAS_BANCO" EntityType="POLTA_PRUEBASModel.CUENTAS_BANCO" />
+          <AssociationSet Name="FK__6f58e2d3" Association="POLTA_PRUEBASModel.FK__6f58e2d3">
+            <End Role="CUENTAS_BANCO" EntitySet="CUENTAS_BANCO" />
+            <End Role="DATAFONOS" EntitySet="DATAFONOS" />
+          </AssociationSet>
+          <FunctionImport Name="PAGO_LECTURA" ReturnType="Collection(POLTA_PRUEBASModel.PAGO_LECTURA_Result)">
+            <Parameter Name="NumCoti" Mode="In" Type="Int32" />
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="MontoEfectivo" Mode="In" Type="Single" />
+            <Parameter Name="MontoTransfer" Mode="In" Type="Single" />
+            <Parameter Name="NumCtaBco" Mode="In" Type="Int32" />
+            <Parameter Name="NumTransfer" Mode="In" Type="String" />
+            <Parameter Name="MontoTarejeta" Mode="In" Type="Single" />
+            <Parameter Name="NumDatafono" Mode="In" Type="Int32" />
+            <Parameter Name="Voucher" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PAJAS_PENDIENTES_PAGO" ReturnType="Collection(POLTA_PRUEBASModel.PAJAS_PENDIENTES_PAGO_Result)">
+            <Parameter Name="NombreCliente" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Estado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="USUARIOS" EntityType="POLTA_PRUEBASModel.USUARIOS" />
+          <AssociationSet Name="FK__493bfcd8" Association="POLTA_PRUEBASModel.FK__493bfcd8">
+            <End Role="USUARIOS" EntitySet="USUARIOS" />
+            <End Role="LECTURAS" EntitySet="LECTURAS" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="CLIENTES">
           <Key>
@@ -549,6 +674,7 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Name="LECTURA" Type="Int32" />
           <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__1bca5d8f" FromRole="LECTURAS" ToRole="PAJAS" />
+          <NavigationProperty Name="USUARIOS" Relationship="POLTA_PRUEBASModel.FK__493bfcd8" FromRole="LECTURAS" ToRole="USUARIOS" />
         </EntityType>
         <Association Name="FK__1bca5d8f">
           <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="1" />
@@ -587,6 +713,97 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
           <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
           <Property Type="Int32" Name="id" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="TablaPrecios_Result">
+          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="80" />
+          <Property Type="String" Name="Precio" Nullable="true" MaxLength="30" />
+          <Property Type="Single" Name="cantidad" Nullable="true" />
+          <Property Type="Single" Name="Descuento" Nullable="true" />
+          <Property Type="String" Name="Sub" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Vendedor" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="C_" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="DATAFONOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUENTA" Type="Int32" />
+          <Property Name="COMISION" Type="Single" />
+          <Property Name="RETENCION" Type="Single" />
+          <NavigationProperty Name="CUENTAS_BANCO" Relationship="POLTA_PRUEBASModel.FK__6f58e2d3" FromRole="DATAFONOS" ToRole="CUENTAS_BANCO" />
+        </EntityType>
+        <EntityType Name="CUENTAS_BANCO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BANCO" Type="Int32" Nullable="false" />
+          <Property Name="MONEDA" Type="Int16" />
+          <Property Name="CUENTA" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SINPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SALDO" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="DATAFONOS" Relationship="POLTA_PRUEBASModel.FK__6f58e2d3" FromRole="CUENTAS_BANCO" ToRole="DATAFONOS" />
+        </EntityType>
+        <Association Name="FK__6f58e2d3">
+          <End Type="POLTA_PRUEBASModel.CUENTAS_BANCO" Role="CUENTAS_BANCO" Multiplicity="0..1" />
+          <End Type="POLTA_PRUEBASModel.DATAFONOS" Role="DATAFONOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUENTAS_BANCO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DATAFONOS">
+              <PropertyRef Name="CUENTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="PAGO_LECTURA_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PAJAS_PENDIENTES_PAGO_Result">
+          <Property Type="Int32" Name="CODIGO" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Periodo" Nullable="true" MaxLength="61" />
+          <Property Type="Double" Name="Total" Nullable="true" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="IDENTIFICACION" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Factura" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEDULA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="USUARIO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CLAVE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PERMISO" Type="Int32" />
+          <Property Name="ESTADO" Type="Int32" />
+          <Property Name="UC" Type="Single" />
+          <Property Name="VENDEDOR" Type="Int32" />
+          <Property Name="COMANDO" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="CAJA" Type="Int32" />
+          <Property Name="BODEGA" Type="Int32" />
+          <Property Name="UF" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LECTURAS" Relationship="POLTA_PRUEBASModel.FK__493bfcd8" FromRole="USUARIOS" ToRole="LECTURAS" />
+        </EntityType>
+        <Association Name="FK__493bfcd8">
+          <End Type="POLTA_PRUEBASModel.USUARIOS" Role="USUARIOS" Multiplicity="0..1" />
+          <End Type="POLTA_PRUEBASModel.LECTURAS" Role="LECTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIOS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="LECTURAS">
+              <PropertyRef Name="ID_USU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -821,6 +1038,85 @@ advertencia 6002: La tabla o vista 'POLTA_PRUEBAS.dbo.PROVINCIAS' no tiene defin
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TablaPrecios" FunctionName="POLTA_PRUEBASModel.Store.TablaPrecios">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.TablaPrecios_Result">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
+                <ScalarProperty Name="Sub" ColumnName="Sub" />
+                <ScalarProperty Name="Vendedor" ColumnName="Vendedor" />
+                <ScalarProperty Name="C_" ColumnName="#" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="DATAFONOS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.DATAFONOS">
+              <MappingFragment StoreEntitySet="DATAFONOS">
+                <ScalarProperty Name="RETENCION" ColumnName="RETENCION" />
+                <ScalarProperty Name="COMISION" ColumnName="COMISION" />
+                <ScalarProperty Name="CUENTA" ColumnName="CUENTA" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CUENTAS_BANCO">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CUENTAS_BANCO">
+              <MappingFragment StoreEntitySet="CUENTAS_BANCO">
+                <ScalarProperty Name="SALDO" ColumnName="SALDO" />
+                <ScalarProperty Name="SINPE" ColumnName="SINPE" />
+                <ScalarProperty Name="CUENTA" ColumnName="CUENTA" />
+                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
+                <ScalarProperty Name="BANCO" ColumnName="BANCO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PAGO_LECTURA" FunctionName="POLTA_PRUEBASModel.Store.PAGO_LECTURA">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.PAGO_LECTURA_Result">
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PAJAS_PENDIENTES_PAGO" FunctionName="POLTA_PRUEBASModel.Store.PAJAS_PENDIENTES_PAGO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.PAJAS_PENDIENTES_PAGO_Result">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="Periodo" ColumnName="Periodo" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
+                <ScalarProperty Name="Factura" ColumnName="Factura" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="USUARIOS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.USUARIOS">
+              <MappingFragment StoreEntitySet="USUARIOS">
+                <ScalarProperty Name="UF" ColumnName="UF" />
+                <ScalarProperty Name="BODEGA" ColumnName="BODEGA" />
+                <ScalarProperty Name="CAJA" ColumnName="CAJA" />
+                <ScalarProperty Name="COMANDO" ColumnName="COMANDO" />
+                <ScalarProperty Name="VENDEDOR" ColumnName="VENDEDOR" />
+                <ScalarProperty Name="UC" ColumnName="UC" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="PERMISO" ColumnName="PERMISO" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

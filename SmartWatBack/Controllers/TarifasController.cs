@@ -11,9 +11,10 @@ namespace SmartWatBack.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [Authorize]
-    [RoutePrefix("api/tarifas")]
+ 
     public class TarifasController : ApiController
     {
+        [Route("api/tarifas/ObtenerTarifa")]
         [HttpGet]
         public IHttpActionResult ObtenerTarifa(string BaseDeDatos)
         {
@@ -21,7 +22,7 @@ namespace SmartWatBack.Controllers
             return Ok(tarifa.ObtenerTarifas(BaseDeDatos));
 
         }
-
+        [Route("api/tarifas/ActualizarTarifa")]
         [HttpPut]
         public IHttpActionResult ActualizarTarifa([FromBody] List<TARIFAS> tarifas, string BaseDeDatos)
         {

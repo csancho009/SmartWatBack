@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -43,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -68,8 +72,17 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\GestionClientes.cs" />
+    <Compile Include="Controllers\Impresiones.cs" />
     <Compile Include="Controllers\Lecturas.cs" />
     <Compile Include="Controllers\PajaController.cs" />
+    <Compile Include="CUENTAS_BANCO.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DATAFONOS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Datos\Cobros.cs" />
+    <Compile Include="Datos\ParametrosPagos.cs" />
     <Compile Include="Datos\Respuesta.cs" />
     <Compile Include="DISTRITOS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
@@ -86,7 +99,13 @@
     <Compile Include="ObtenerBloques_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="PAGO_LECTURA_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="PAJAS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PAJAS_PENDIENTES_PAGO_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +114,12 @@
     </Compile>
     <Compile Include="RECTIFICA_LECTURA_MEDIDOR_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RPTs\FacturaTiquete.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FacturaTiquete.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SmartPos.Context.cs">
       <AutoGen>True</AutoGen>
@@ -126,10 +151,16 @@
     <Compile Include="TablaLecturas_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="TablaPrecios_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="TARIFAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\TarifaController.cs" />
+    <Compile Include="USUARIOS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZONAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -162,7 +193,13 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="RPTs\FacturaTiquete.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>FacturaTiquete.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

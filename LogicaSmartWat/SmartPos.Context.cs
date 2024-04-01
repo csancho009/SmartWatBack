@@ -38,6 +38,9 @@ namespace LogicaSmartWat
         public virtual DbSet<PROVINCIAS> PROVINCIAS { get; set; }
         public virtual DbSet<CIA> CIA { get; set; }
         public virtual DbSet<LECTURAS> LECTURAS { get; set; }
+        public virtual DbSet<DATAFONOS> DATAFONOS { get; set; }
+        public virtual DbSet<CUENTAS_BANCO> CUENTAS_BANCO { get; set; }
+        public virtual DbSet<USUARIOS> USUARIOS { get; set; }
     
         public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
         {
@@ -125,6 +128,73 @@ namespace LogicaSmartWat
                 new ObjectParameter("NumLectura", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RECTIFICA_LECTURA_MEDIDOR_Result>("RECTIFICA_LECTURA_MEDIDOR", usuarioParameter, numLecturaParameter);
+        }
+    
+        public virtual ObjectResult<TablaPrecios_Result> TablaPrecios(Nullable<int> coti)
+        {
+            var cotiParameter = coti.HasValue ?
+                new ObjectParameter("coti", coti) :
+                new ObjectParameter("coti", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TablaPrecios_Result>("TablaPrecios", cotiParameter);
+        }
+    
+        public virtual ObjectResult<PAGO_LECTURA_Result> PAGO_LECTURA(Nullable<int> numCoti, Nullable<int> usuario, Nullable<float> montoEfectivo, Nullable<float> montoTransfer, Nullable<int> numCtaBco, string numTransfer, Nullable<float> montoTarejeta, Nullable<int> numDatafono, string voucher)
+        {
+            var numCotiParameter = numCoti.HasValue ?
+                new ObjectParameter("NumCoti", numCoti) :
+                new ObjectParameter("NumCoti", typeof(int));
+    
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
+    
+            var montoEfectivoParameter = montoEfectivo.HasValue ?
+                new ObjectParameter("MontoEfectivo", montoEfectivo) :
+                new ObjectParameter("MontoEfectivo", typeof(float));
+    
+            var montoTransferParameter = montoTransfer.HasValue ?
+                new ObjectParameter("MontoTransfer", montoTransfer) :
+                new ObjectParameter("MontoTransfer", typeof(float));
+    
+            var numCtaBcoParameter = numCtaBco.HasValue ?
+                new ObjectParameter("NumCtaBco", numCtaBco) :
+                new ObjectParameter("NumCtaBco", typeof(int));
+    
+            var numTransferParameter = numTransfer != null ?
+                new ObjectParameter("NumTransfer", numTransfer) :
+                new ObjectParameter("NumTransfer", typeof(string));
+    
+            var montoTarejetaParameter = montoTarejeta.HasValue ?
+                new ObjectParameter("MontoTarejeta", montoTarejeta) :
+                new ObjectParameter("MontoTarejeta", typeof(float));
+    
+            var numDatafonoParameter = numDatafono.HasValue ?
+                new ObjectParameter("NumDatafono", numDatafono) :
+                new ObjectParameter("NumDatafono", typeof(int));
+    
+            var voucherParameter = voucher != null ?
+                new ObjectParameter("Voucher", voucher) :
+                new ObjectParameter("Voucher", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAGO_LECTURA_Result>("PAGO_LECTURA", numCotiParameter, usuarioParameter, montoEfectivoParameter, montoTransferParameter, numCtaBcoParameter, numTransferParameter, montoTarejetaParameter, numDatafonoParameter, voucherParameter);
+        }
+    
+        public virtual ObjectResult<PAJAS_PENDIENTES_PAGO_Result> PAJAS_PENDIENTES_PAGO(string nombreCliente, string cedula, Nullable<int> estado)
+        {
+            var nombreClienteParameter = nombreCliente != null ?
+                new ObjectParameter("NombreCliente", nombreCliente) :
+                new ObjectParameter("NombreCliente", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var estadoParameter = estado.HasValue ?
+                new ObjectParameter("Estado", estado) :
+                new ObjectParameter("Estado", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAJAS_PENDIENTES_PAGO_Result>("PAJAS_PENDIENTES_PAGO", nombreClienteParameter, cedulaParameter, estadoParameter);
         }
     }
 }

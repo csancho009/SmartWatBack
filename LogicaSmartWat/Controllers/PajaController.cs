@@ -10,6 +10,7 @@ namespace LogicaSmartWat
     public class PajaController
     {
 
+
         public Respuesta ObtenerPajas(int paja, string BDCia)
         {
             Respuesta R = new Respuesta();
@@ -111,6 +112,106 @@ namespace LogicaSmartWat
                 R.Mensaje = "Alerta GuardaPaja " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
             }
 
+            return R;
+        }
+
+        public Respuesta PendientesPago(string  Nombre, string Cedula, string BDCia, int Estado)
+        {
+            Respuesta R = new Respuesta();
+
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    List<Cobros> C = new List<Cobros>();
+                    var Ps = db.PAJAS_PENDIENTES_PAGO(Nombre, Cedula, Estado);
+                    foreach(var P in Ps)
+                    {
+                        var Ts = db.TablaPrecios(P.CODIGO).ToList();
+                        C.Add(new Cobros
+                        {
+                            CODIGO = P.CODIGO,
+                            NOMBRE = P.NOMBRE,
+                            Periodo = P.Periodo,
+                            Total = (float)P.Total,
+                            MEDIDOR=P.MEDIDOR,
+                            IDENTIFICACION= P.IDENTIFICACION,
+                            Factura=P.Factura,
+                            Detalle = (from L in Ts select new DetalleCobros { cantidad = (float)L.cantidad, Codigo=L.Codigo, Descuento= (float)L.Descuento, 
+                                Nombre=L.Nombre, NumeroLin= (int) L.C_, Precio= L.Precio, Sub=L.Sub, Vendedor=L.Vendedor }).ToList()
+                        }); ;
+                    }
+
+                    R.Mensaje = "Ok";
+                    R.Objeto = C;
+                    db.Database.Connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta PendientesPago " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+
+            return R;
+        }
+
+        public Respuesta CuentasDeBanco(string BDCia)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    var Ds = db.CUENTAS_BANCO;
+
+                    R.Mensaje = "Ok";
+                    R.Objeto = (from D in Ds select new { D.CODIGO, D.CUENTA }).ToList();
+                    db.Database.Connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta Datafonos " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+            return R;
+        }
+
+        public Respuesta Datafonos(string BDCia)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+                    var Ds = db.DATAFONOS;
+
+                    R.Mensaje = "Ok";
+                    R.Objeto = (from D in Ds select new {D.CODIGO,D.NOMBRE }).ToList();
+                    db.Database.Connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta Datafonos " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
             return R;
         }
 

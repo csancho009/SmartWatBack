@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using LogicaSmartWat;
 using LogicaSmartWat.Controllers;
+using LogicaSmartWat.Datos;
 
 namespace SmartWatBack.Controllers
 {
@@ -53,7 +54,14 @@ namespace SmartWatBack.Controllers
             Lecturas L = new Lecturas();
             return Ok(L.GenerarCobro(Usuario, BDCia));
         }
-
+        [Route("api/Lecturas/AplicaPago")]
+        [HttpPost]
+        public IHttpActionResult AplicaPago([FromBody] ParametrosPagos P)
+        {
+            Lecturas L = new Lecturas();
+            return Ok(L.AplicaPago(P));
+        }
+     
         public class DatosIniciales
         {
          

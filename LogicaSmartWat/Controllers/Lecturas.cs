@@ -142,5 +142,68 @@ namespace LogicaSmartWat.Controllers
             }
             return R;
         }
+
+        public Respuesta AplicaPago(ParametrosPagos P)
+        {
+            Respuesta R = new Respuesta();
+
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(P.BDCia);
+                    USUARIOS usr = db.USUARIOS.Where(d => d.CODIGO == P.Usuario).FirstOrDefault();
+                    if (usr.CAJA == 1)
+                    {
+                        var Repos = db.PAGO_LECTURA(P.NunCoti, P.Usuario, P.EfectivoReal, P.Transfer, P.Cuenta,
+                        P.NumTransfer, P.Tarjeta, P.Datafono, P.Voucher);
+                        foreach (var L in Repos)
+                        {
+                            if (L.id > 0)
+                            {
+                                R.Codigo = (int)L.id;
+
+                            }
+                            else
+                            {
+                                R.Codigo = -2;
+                                R.Mensaje = "Alerta al intentar aplicar pago " + L.Mensaje;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        R.Codigo = -4;
+                        R.Mensaje = "Caja está cerrada";
+                    }
+                        
+                    db.Database.Connection.Close();                    
+                }
+                if (R.Codigo > 0)
+                {
+                    Impresiones I = new Impresiones();
+                    Respuesta R2 = I.Factura(R.Codigo, P.BDCia);
+                    R.Mensaje = "Documento creado exitosamente #" + R.Codigo.ToString();
+                    if (R2.Codigo == 0)
+                    {
+                        R.Objeto = R2.Objeto;
+                    }
+                    else
+                    {
+                        R.Mensaje = "Documento creado exitosamente #" + R.Codigo.ToString() + ", sin embargo, hubo al generar el pdf indica: " + R2.Mensaje; ;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta Generar Cobro " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+            return R;
+        }
     }
 }
