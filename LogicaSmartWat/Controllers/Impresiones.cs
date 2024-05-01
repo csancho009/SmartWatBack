@@ -45,6 +45,71 @@ namespace LogicaSmartWat.Controllers
 
         }
 
+        public Respuesta PrefacturaFactura(int NumeroCoti, int NumPaja, int NumLectura, string BD)
+        {
+            Respuesta R = new Respuesta();
+            ReportDocument Reporte = new ReportDocument();
+            try
+            {
+                Reporte = new CotiPreventa();
+                Reporte.SetParameterValue(0, NumeroCoti);
+                Reporte.SetParameterValue(1, NumPaja);
+                Reporte.SetParameterValue(2, NumLectura);
+                Conecta_Reporte(ref Reporte, BD);
+                Stream reportStream = Reporte.ExportToStream(ExportFormatType.PortableDocFormat);
+                byte[] pdfBytes;
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    reportStream.CopyTo(memoryStream);
+                    pdfBytes = memoryStream.ToArray();
+                }
+                R.Objeto = Convert.ToBase64String(pdfBytes);
+                R.Codigo = 0;
+                R.Mensaje = "OK";
+                Reporte.Dispose();
+                Reporte.Close();
+                Reporte = null;
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = ex.Message;
+            }
+            return R;
+
+        }
+        public Respuesta CierreCaja(int Numero, string BD)
+        {
+            Respuesta R = new Respuesta();
+            ReportDocument Reporte = new ReportDocument();
+            try
+            {
+                Reporte = new CierreTiquete();
+                Reporte.SetParameterValue(0, Numero);
+                Conecta_Reporte(ref Reporte, BD);
+                Stream reportStream = Reporte.ExportToStream(ExportFormatType.PortableDocFormat);
+                byte[] pdfBytes;
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    reportStream.CopyTo(memoryStream);
+                    pdfBytes = memoryStream.ToArray();
+                }
+                R.Objeto = Convert.ToBase64String(pdfBytes);
+                R.Codigo = 0;
+                R.Mensaje = "OK";
+                Reporte.Dispose();
+                Reporte.Close();
+                Reporte = null;
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = ex.Message;
+            }
+            return R;
+
+        }
+
         private void Conecta_Reporte(ref ReportDocument Reporte, string BD)
         {
             TableLogOnInfo rptcon = new TableLogOnInfo();

@@ -75,6 +75,9 @@
     <Compile Include="Controllers\Impresiones.cs" />
     <Compile Include="Controllers\Lecturas.cs" />
     <Compile Include="Controllers\PajaController.cs" />
+    <Compile Include="COTIZACIONES.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="CUENTAS_BANCO.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -85,6 +88,9 @@
     <Compile Include="Datos\ParametrosPagos.cs" />
     <Compile Include="Datos\Respuesta.cs" />
     <Compile Include="DISTRITOS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FACTURAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="GENERA_FACTURACION_Result.cs">
@@ -114,6 +120,18 @@
     </Compile>
     <Compile Include="RECTIFICA_LECTURA_MEDIDOR_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RPTs\CierreTiquete.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CierreTiquete.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RPTs\CotiPreventa.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CotiPreventa.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="RPTs\FacturaTiquete.cs">
       <AutoGen>True</AutoGen>
@@ -196,6 +214,14 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="RPTs\CierreTiquete.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CierreTiquete.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RPTs\CotiPreventa.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CotiPreventa.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="RPTs\FacturaTiquete.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>FacturaTiquete.cs</LastGenOutput>

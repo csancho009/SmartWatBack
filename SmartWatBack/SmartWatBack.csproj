@@ -168,6 +168,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BloquesController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
+    <Compile Include="Controllers\ImpresorasController.cs" />
     <Compile Include="Controllers\LecturasController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PajasController.cs" />

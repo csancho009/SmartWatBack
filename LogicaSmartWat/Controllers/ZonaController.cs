@@ -30,7 +30,7 @@ namespace LogicaSmartWat
             } catch (Exception ex)
             {
                 R.Codigo = -1;
-                R.Mensaje = "Alerta " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+                R.Mensaje = "Alerta ObtenerZonas " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7) +" Det "+ ex.Message;
             }
             return R;
         }

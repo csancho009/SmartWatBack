@@ -205,5 +205,63 @@ namespace LogicaSmartWat.Controllers
             }
             return R;
         }
+
+        public Respuesta PreImpresion(ParametrosPagos P)
+        {
+
+            Respuesta R = new Respuesta();
+            Impresiones I = new Impresiones();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(P.BDCia);
+                    COTIZACIONES Ct = db.COTIZACIONES.Where(d => d.CODIGO == P.NunCoti).FirstOrDefault();
+                    if (Ct.ESTADO == 4) //Ya se facturo
+                    {
+                        FACTURAS F = db.FACTURAS.Where(d => d.USU_CAN == Ct.CODIGO).FirstOrDefault();
+                        Respuesta R2 = I.Factura(F.CODIGO, P.BDCia);
+                        if (R2.Codigo == 0)
+                        {
+                            R.Codigo = 0;
+                            R.Mensaje = "OK";
+                            R.Objeto = R2.Objeto;
+                        }
+                        else
+                        {
+                            R.Codigo = -1;
+                            R.Mensaje = "Hubo una situación al generar el PDF -Factura- indica: " + R2.Mensaje; ;
+                        }
+                    }
+                    else
+                    {
+                        LECTURAS Ls = db.LECTURAS.Where(d => d.ID_LEC==Ct.CANCELADO).FirstOrDefault();
+                        Respuesta R2 = I.PrefacturaFactura(Ct.CODIGO,Ls.ID_PAJ, Ls.ID_LEC, P.BDCia);
+                        if (R2.Codigo == 0)
+                        {
+                            R.Codigo = 0;
+                            R.Mensaje = "OK";
+                            R.Objeto = R2.Objeto;
+                        }
+                        else
+                        {
+                            R.Codigo = -1;
+                            R.Mensaje = "Hubo una situación al generar el PDF -Prefactura- indica: " + R2.Mensaje; ;
+                        }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta Generar Impresión " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+            return R;
+        }
     }
 }

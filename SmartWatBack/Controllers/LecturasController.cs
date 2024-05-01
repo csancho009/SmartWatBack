@@ -61,7 +61,15 @@ namespace SmartWatBack.Controllers
             Lecturas L = new Lecturas();
             return Ok(L.AplicaPago(P));
         }
-     
+
+        [Route("api/Lecturas/PreImpresion")]
+        [HttpPost]
+        public IHttpActionResult PreImpresion([FromBody] ParametrosPagos P)
+        {
+            Lecturas L = new Lecturas();
+            return Ok(L.PreImpresion(P));
+        }
+
         public class DatosIniciales
         {
          

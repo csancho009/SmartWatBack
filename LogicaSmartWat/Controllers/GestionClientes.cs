@@ -73,7 +73,7 @@ namespace LogicaSmartWat.Controllers
                     db.Database.Connection.ChangeDatabase(P.BDCia);
                     int NumSaliente = 0;
                     int.TryParse(P.Codigo, out NumSaliente);
-                    var R = from C in db.CLIENTES.Where(d => (P.NombreCliente.Length > 0 && d.NOMBRE.Contains(P.NombreCliente)) || (P.Cedula.Length > 0 && d.IDENTIFICACION.Contains(P.Cedula)) || (NumSaliente > 0 && d.CODIGO == NumSaliente))
+                    var R = from C in db.CLIENTES.Where(d => ( (P.NombreCliente.Length > 0 && d.NOMBRE.Contains(P.NombreCliente)) || (P.Cedula.Length > 0 && d.IDENTIFICACION.Contains(P.Cedula)) || (NumSaliente > 0 && d.CODIGO == NumSaliente)))
                             select new
                             {
                                 C.CODIGO,

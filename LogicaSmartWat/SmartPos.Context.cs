@@ -41,6 +41,8 @@ namespace LogicaSmartWat
         public virtual DbSet<DATAFONOS> DATAFONOS { get; set; }
         public virtual DbSet<CUENTAS_BANCO> CUENTAS_BANCO { get; set; }
         public virtual DbSet<USUARIOS> USUARIOS { get; set; }
+        public virtual DbSet<COTIZACIONES> COTIZACIONES { get; set; }
+        public virtual DbSet<FACTURAS> FACTURAS { get; set; }
     
         public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
         {

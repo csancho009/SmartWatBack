@@ -18,6 +18,9 @@ namespace LogicaSmartWat
         public CLIENTES()
         {
             this.PAJAS = new HashSet<PAJAS>();
+            this.COTIZACIONES = new HashSet<COTIZACIONES>();
+            this.COTIZACIONES1 = new HashSet<COTIZACIONES>();
+            this.FACTURAS = new HashSet<FACTURAS>();
         }
     
         public int CODIGO { get; set; }
@@ -47,5 +50,11 @@ namespace LogicaSmartWat
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PAJAS> PAJAS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<COTIZACIONES> COTIZACIONES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<COTIZACIONES> COTIZACIONES1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FACTURAS> FACTURAS { get; set; }
     }
 }
