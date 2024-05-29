@@ -80,6 +80,10 @@ namespace LogicaSmartWat
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
                     db.Database.Connection.ChangeDatabase(BaseDeDatos);
                     ZONAS zonaE = db.ZONAS.First(b => b.ID_ZON == zona.ID_ZON);
                     if (zonaE != null)
@@ -102,7 +106,7 @@ namespace LogicaSmartWat
             catch (Exception ex)
             {
                 R.Codigo = -1;
-                R.Mensaje = "Alerta " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+                R.Mensaje = "Alerta " + ex.Message +  " " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
             }
 
             return R;

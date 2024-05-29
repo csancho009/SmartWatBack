@@ -263,5 +263,90 @@ namespace LogicaSmartWat.Controllers
             }
             return R;
         }
+
+        public Respuesta ImpresionEnSitio(int NumLectura, string BDCia)
+        {
+            Respuesta R = new Respuesta();
+            if (NumLectura > 0)
+            {
+              
+                try
+                {
+                    using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                    {
+                        if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                        {
+                            db.Database.Connection.Open();
+                        }
+                        db.Database.Connection.ChangeDatabase(BDCia);
+                        COTIZACIONES Ct = db.COTIZACIONES.Where(d => d.CANCELADO == NumLectura).FirstOrDefault();
+                        CIA C = db.CIA.FirstOrDefault();
+                        LECTURAS Ls = db.LECTURAS.Where(d => d.ID_LEC == Ct.CANCELADO).FirstOrDefault();
+                        ImpresionWeb I = new ImpresionWeb();
+                        List<DetallePrefactura> LineasCoti = new List<DetallePrefactura>();
+                        float  ContaIva = 0;
+                        float ContaSub = 0;
+                        float ContaDescuento = 0;
+                        foreach (var D in Ct.DETALLE_CTZ.OrderBy(O=>O.LIN))
+                        {
+                            ContaIva += ((float) D.PRECIO / (1 + ( (float)D.INVENTARIO.IMPUESTOS)/100)) * (((float)D.INVENTARIO.IMPUESTOS) / 100) * (float) D.CANTIDAD; //(D.PRECIO /  ( 1 +  D.INVENTARIO.IMPUESTOS)) * D.CANTIDAD
+                            ContaSub+= ((float)D.PRECIO / (1 + ((float)D.INVENTARIO.IMPUESTOS) / 100)) * (float)D.CANTIDAD;
+                            ContaDescuento+= ((float)D.PRECIO / (1 + ((float)D.INVENTARIO.IMPUESTOS) / 100)) * ((float)D.IMPUESTO / 100)  * (float)D.CANTIDAD;
+                            LineasCoti.Add(new DetallePrefactura { Descripcion = D.NOMBRE, Cantidad = (float)D.CANTIDAD, Precio = ((float)D.PRECIO / (1 + ((float)D.INVENTARIO.IMPUESTOS) / 100)), Valor = ((float)D.PRECIO / (1 + ((float)D.INVENTARIO.IMPUESTOS) / 100)) * (float)D.CANTIDAD });
+                        }
+                        string LecturaAnterior = "";
+                        var LA = db.ObtenerLecturaAnterior(Ls.ID_PAJ, NumLectura);
+                        foreach(var A in LA)
+                        {
+                            LecturaAnterior = A.Value.ToString();
+                        }
+
+                        string FachaAnterior = "";
+                        var FA = db.ObtenernerFechaLecturaAnterior(Ls.ID_PAJ, NumLectura);
+                        foreach(var F in FA)
+                        {
+                            FachaAnterior = F.Value.ToString();
+                        }
+                        R.Objeto = new ImpresionWeb
+                        {
+                            NombreCia = C.NOMBRE,
+                            Direccion = C.DIRECCION,
+                            Telefono = C.TELEFONO,
+                            Cedula = C.CEDULA,
+                            Abonado= Ct.CLIENTES.NOMBRE,
+                            NumeroCoti = Ct.CODIGO.ToString(),
+                            TipoTarifa = Ls.PAJAS.TIPO_TARIFA == "R" ? "Residencial" : "Comercial",
+                            CodigoPaja = Ls.PAJAS.ID_PAJ.ToString(),
+                            Medidor = Ls.PAJAS.MEDIDOR,
+                            NumLectura = Ls.ID_LEC.ToString(),
+                            FechaPrefactura = (DateTime) Ct.FECHA,
+                            Periodo = Ls.MES.ToString() + "-" + Ls.ANIO.ToString(),
+                            LecturaAnterior = FachaAnterior + " x " + LecturaAnterior + " M3",
+                            LecturaActual = Ls.LECTURA.ToString(),
+                            Consumo= (int) Ls.LECTURA- int.Parse(LecturaAnterior),
+                            SubTotal=ContaSub,
+                            Descuento=ContaDescuento,
+                            IVA=ContaIva,
+                            Total=ContaSub-ContaDescuento+ContaIva,
+                            Detalle= LineasCoti
+                        };
+                        R.Mensaje = "OK";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    R.Codigo = -1;
+                    R.Mensaje = "Alerta Generar Impresión Masiva " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+                }
+            }
+            else
+            {
+                R.Codigo = 0;
+                R.Mensaje = "No es una lectura";
+            }            
+           
+            return R;
+        }
     }
 }

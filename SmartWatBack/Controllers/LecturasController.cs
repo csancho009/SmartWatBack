@@ -54,6 +54,13 @@ namespace SmartWatBack.Controllers
             Lecturas L = new Lecturas();
             return Ok(L.GenerarCobro(Usuario, BDCia));
         }
+        [Route("api/Lecturas/ImpresionEnSitio")]
+        [HttpGet]
+        public IHttpActionResult ImpresionEnSitio(int NumLectura, string BDCia)
+        {
+            Lecturas L = new Lecturas();
+            return Ok(L.ImpresionEnSitio(NumLectura, BDCia));
+        }
         [Route("api/Lecturas/AplicaPago")]
         [HttpPost]
         public IHttpActionResult AplicaPago([FromBody] ParametrosPagos P)

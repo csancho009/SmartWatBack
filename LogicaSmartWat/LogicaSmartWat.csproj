@@ -85,8 +85,12 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Datos\Cobros.cs" />
+    <Compile Include="Datos\ImpresionWeb.cs" />
     <Compile Include="Datos\ParametrosPagos.cs" />
     <Compile Include="Datos\Respuesta.cs" />
+    <Compile Include="DETALLE_CTZ.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="DISTRITOS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -94,6 +98,9 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="GENERA_FACTURACION_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INVENTARIO.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="LECTURAS.cs">

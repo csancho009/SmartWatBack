@@ -12,30 +12,33 @@ namespace LogicaSmartWat
     using System;
     using System.Collections.Generic;
     
-    public partial class COTIZACIONES
+    public partial class INVENTARIO
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public COTIZACIONES()
+        public INVENTARIO()
         {
             this.DETALLE_CTZ = new HashSet<DETALLE_CTZ>();
         }
     
-        public int CODIGO { get; set; }
-        public Nullable<int> CLIENTE { get; set; }
-        public Nullable<System.DateTime> FECHA { get; set; }
-        public Nullable<int> CREADO { get; set; }
-        public Nullable<int> CANCELADO { get; set; }
-        public Nullable<int> FORMA_PAGO { get; set; }
-        public Nullable<float> TOTAL { get; set; }
-        public string MONEDA { get; set; }
+        public string CODIGO { get; set; }
+        public string NOMBRE { get; set; }
+        public Nullable<int> UTILIDAD { get; set; }
+        public string COD_IMPUESTO { get; set; }
+        public Nullable<int> CENTRO_COSTO { get; set; }
+        public Nullable<int> GRAVADO { get; set; }
+        public Nullable<int> UNIDAD { get; set; }
+        public Nullable<short> TIPO { get; set; }
+        public string TALLA { get; set; }
+        public Nullable<float> PRE_PROVE { get; set; }
+        public Nullable<float> IMPUESTOS { get; set; }
+        public string COD_CORTO { get; set; }
+        public string COD_TARIFA { get; set; }
+        public Nullable<int> FAMILIA { get; set; }
         public Nullable<int> ESTADO { get; set; }
-        public Nullable<float> TARJETA { get; set; }
-        public string NTARJETA { get; set; }
+        public string GARANTIA { get; set; }
+        public Nullable<int> IMPRESORA { get; set; }
+        public string CABYS { get; set; }
     
-        public virtual CLIENTES CLIENTES { get; set; }
-        public virtual CLIENTES CLIENTES1 { get; set; }
-        public virtual USUARIOS USUARIOS { get; set; }
-        public virtual USUARIOS USUARIOS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DETALLE_CTZ> DETALLE_CTZ { get; set; }
     }

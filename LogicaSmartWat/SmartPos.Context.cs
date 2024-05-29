@@ -43,6 +43,8 @@ namespace LogicaSmartWat
         public virtual DbSet<USUARIOS> USUARIOS { get; set; }
         public virtual DbSet<COTIZACIONES> COTIZACIONES { get; set; }
         public virtual DbSet<FACTURAS> FACTURAS { get; set; }
+        public virtual DbSet<DETALLE_CTZ> DETALLE_CTZ { get; set; }
+        public virtual DbSet<INVENTARIO> INVENTARIO { get; set; }
     
         public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
         {
@@ -197,6 +199,32 @@ namespace LogicaSmartWat
                 new ObjectParameter("Estado", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAJAS_PENDIENTES_PAGO_Result>("PAJAS_PENDIENTES_PAGO", nombreClienteParameter, cedulaParameter, estadoParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> ObtenerLecturaAnterior(Nullable<int> iDPAJ, Nullable<int> iDLEC)
+        {
+            var iDPAJParameter = iDPAJ.HasValue ?
+                new ObjectParameter("IDPAJ", iDPAJ) :
+                new ObjectParameter("IDPAJ", typeof(int));
+    
+            var iDLECParameter = iDLEC.HasValue ?
+                new ObjectParameter("IDLEC", iDLEC) :
+                new ObjectParameter("IDLEC", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ObtenerLecturaAnterior", iDPAJParameter, iDLECParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> ObtenernerFechaLecturaAnterior(Nullable<int> iDPAJ, Nullable<int> iDLEC)
+        {
+            var iDPAJParameter = iDPAJ.HasValue ?
+                new ObjectParameter("IDPAJ", iDPAJ) :
+                new ObjectParameter("IDPAJ", typeof(int));
+    
+            var iDLECParameter = iDLEC.HasValue ?
+                new ObjectParameter("IDLEC", iDLEC) :
+                new ObjectParameter("IDLEC", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("ObtenernerFechaLecturaAnterior", iDPAJParameter, iDLECParameter);
         }
     }
 }

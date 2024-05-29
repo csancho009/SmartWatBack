@@ -123,6 +123,20 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="COMISION" Type="real" />
           <Property Name="RETENCION" Type="real" />
         </EntityType>
+        <EntityType Name="DETALLE_CTZ">
+          <Key>
+            <PropertyRef Name="FACTURA" />
+            <PropertyRef Name="PRODUCTO" />
+          </Key>
+          <Property Name="FACTURA" Type="int" Nullable="false" />
+          <Property Name="PRODUCTO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PRECIO" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="IMPUESTO" Type="real" />
+          <Property Name="CANTIDAD" Type="real" />
+          <Property Name="VENDEDOR" Type="int" />
+          <Property Name="LIN" Type="int" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="80" />
+        </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="DISTRITOS">
@@ -153,6 +167,29 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ningu
           <Property Name="CLAVE" Type="nvarchar" MaxLength="100" />
           <Property Name="CONSECUTIVO" Type="nvarchar" MaxLength="100" />
           <Property Name="ESTADO_HACIENDA" Type="int" />
+        </EntityType>
+        <EntityType Name="INVENTARIO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="255" />
+          <Property Name="UTILIDAD" Type="int" />
+          <Property Name="COD_IMPUESTO" Type="varchar" MaxLength="2" />
+          <Property Name="CENTRO_COSTO" Type="int" />
+          <Property Name="GRAVADO" Type="int" />
+          <Property Name="UNIDAD" Type="int" />
+          <Property Name="TIPO" Type="smallint" />
+          <Property Name="TALLA" Type="nvarchar" MaxLength="150" />
+          <Property Name="PRE_PROVE" Type="real" />
+          <Property Name="IMPUESTOS" Type="real" />
+          <Property Name="COD_CORTO" Type="nvarchar" MaxLength="255" />
+          <Property Name="COD_TARIFA" Type="varchar" MaxLength="2" />
+          <Property Name="FAMILIA" Type="int" />
+          <Property Name="ESTADO" Type="int" />
+          <Property Name="GARANTIA" Type="char" MaxLength="1" />
+          <Property Name="IMPRESORA" Type="int" />
+          <Property Name="CABYS" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="LECTURAS">
           <Key>
@@ -365,8 +402,40 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DETALLE_CTZ_COTIZACIONES">
+          <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="1" />
+          <End Role="DETALLE_CTZ" Type="Self.DETALLE_CTZ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COTIZACIONES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DETALLE_CTZ">
+              <PropertyRef Name="FACTURA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLE_CTZ_INVENTARIO">
+          <End Role="INVENTARIO" Type="Self.INVENTARIO" Multiplicity="1" />
+          <End Role="DETALLE_CTZ" Type="Self.DETALLE_CTZ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="INVENTARIO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DETALLE_CTZ">
+              <PropertyRef Name="PRODUCTO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="GENERA_FACTURACION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Usuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ObtenerLecturaAnterior" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDPAJ" Type="int" Mode="In" />
+          <Parameter Name="IDLEC" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ObtenernerFechaLecturaAnterior" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDPAJ" Type="int" Mode="In" />
+          <Parameter Name="IDLEC" Type="int" Mode="In" />
         </Function>
         <Function Name="PAGO_LECTURA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NumCoti" Type="int" Mode="In" />
@@ -417,7 +486,9 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <EntitySet Name="COTIZACIONES" EntityType="Self.COTIZACIONES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CUENTAS_BANCO" EntityType="Self.CUENTAS_BANCO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DATAFONOS" EntityType="Self.DATAFONOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DETALLE_CTZ" EntityType="Self.DETALLE_CTZ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FACTURAS" EntityType="Self.FACTURAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="INVENTARIO" EntityType="Self.INVENTARIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LECTURAS" EntityType="Self.LECTURAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
@@ -488,6 +559,14 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <AssociationSet Name="FK_COTIZACIONES_USUARIOS" Association="Self.FK_COTIZACIONES_USUARIOS">
             <End Role="USUARIOS" EntitySet="USUARIOS" />
             <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLE_CTZ_COTIZACIONES" Association="Self.FK_DETALLE_CTZ_COTIZACIONES">
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLE_CTZ_INVENTARIO" Association="Self.FK_DETALLE_CTZ_INVENTARIO">
+            <End Role="INVENTARIO" EntitySet="INVENTARIO" />
+            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -610,6 +689,24 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
             <End Role="CLIENTES" EntitySet="CLIENTES" />
             <End Role="FACTURAS" EntitySet="FACTURAS" />
           </AssociationSet>
+          <EntitySet Name="DETALLE_CTZ" EntityType="POLTA_PRUEBASModel.DETALLE_CTZ" />
+          <AssociationSet Name="FK_DETALLE_CTZ_COTIZACIONES" Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES">
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
+          </AssociationSet>
+          <EntitySet Name="INVENTARIO" EntityType="POLTA_PRUEBASModel.INVENTARIO" />
+          <AssociationSet Name="FK_DETALLE_CTZ_INVENTARIO" Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO">
+            <End Role="INVENTARIO" EntitySet="INVENTARIO" />
+            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
+          </AssociationSet>
+          <FunctionImport Name="ObtenerLecturaAnterior" ReturnType="Collection(Int32)">
+            <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
+            <Parameter Name="IDLEC" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ObtenernerFechaLecturaAnterior" ReturnType="Collection(DateTime)">
+            <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
+            <Parameter Name="IDLEC" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="CLIENTES">
           <Key>
@@ -968,6 +1065,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <NavigationProperty Name="CLIENTES1" Relationship="POLTA_PRUEBASModel.FK_COTIZACIONES_CLIENTES" FromRole="COTIZACIONES" ToRole="CLIENTES" />
           <NavigationProperty Name="USUARIOS" Relationship="POLTA_PRUEBASModel.FK__39c3a648" FromRole="COTIZACIONES" ToRole="USUARIOS" />
           <NavigationProperty Name="USUARIOS1" Relationship="POLTA_PRUEBASModel.FK_COTIZACIONES_USUARIOS" FromRole="COTIZACIONES" ToRole="USUARIOS" />
+          <NavigationProperty Name="DETALLE_CTZ" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" FromRole="COTIZACIONES" ToRole="DETALLE_CTZ" />
         </EntityType>
         <Association Name="FK__595edfbe">
           <End Type="POLTA_PRUEBASModel.CLIENTES" Role="CLIENTES" Multiplicity="0..1" />
@@ -1047,6 +1145,70 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
             </Principal>
             <Dependent Role="FACTURAS">
               <PropertyRef Name="CLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DETALLE_CTZ">
+          <Key>
+            <PropertyRef Name="FACTURA" />
+            <PropertyRef Name="PRODUCTO" />
+          </Key>
+          <Property Name="FACTURA" Type="Int32" Nullable="false" />
+          <Property Name="PRODUCTO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PRECIO" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="IMPUESTO" Type="Single" />
+          <Property Name="CANTIDAD" Type="Single" />
+          <Property Name="VENDEDOR" Type="Int32" />
+          <Property Name="LIN" Type="Int32" />
+          <Property Name="NOMBRE" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="COTIZACIONES" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" FromRole="DETALLE_CTZ" ToRole="COTIZACIONES" />
+          <NavigationProperty Name="INVENTARIO" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" FromRole="DETALLE_CTZ" ToRole="INVENTARIO" />
+        </EntityType>
+        <Association Name="FK_DETALLE_CTZ_COTIZACIONES">
+          <End Type="POLTA_PRUEBASModel.COTIZACIONES" Role="COTIZACIONES" Multiplicity="1" />
+          <End Type="POLTA_PRUEBASModel.DETALLE_CTZ" Role="DETALLE_CTZ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COTIZACIONES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DETALLE_CTZ">
+              <PropertyRef Name="FACTURA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="INVENTARIO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NOMBRE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UTILIDAD" Type="Int32" />
+          <Property Name="COD_IMPUESTO" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CENTRO_COSTO" Type="Int32" />
+          <Property Name="GRAVADO" Type="Int32" />
+          <Property Name="UNIDAD" Type="Int32" />
+          <Property Name="TIPO" Type="Int16" />
+          <Property Name="TALLA" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PRE_PROVE" Type="Single" />
+          <Property Name="IMPUESTOS" Type="Single" />
+          <Property Name="COD_CORTO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="COD_TARIFA" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="FAMILIA" Type="Int32" />
+          <Property Name="ESTADO" Type="Int32" />
+          <Property Name="GARANTIA" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="IMPRESORA" Type="Int32" />
+          <Property Name="CABYS" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DETALLE_CTZ" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" FromRole="INVENTARIO" ToRole="DETALLE_CTZ" />
+        </EntityType>
+        <Association Name="FK_DETALLE_CTZ_INVENTARIO">
+          <End Type="POLTA_PRUEBASModel.INVENTARIO" Role="INVENTARIO" Multiplicity="1" />
+          <End Type="POLTA_PRUEBASModel.DETALLE_CTZ" Role="DETALLE_CTZ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="INVENTARIO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DETALLE_CTZ">
+              <PropertyRef Name="PRODUCTO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1401,6 +1563,46 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DETALLE_CTZ">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.DETALLE_CTZ">
+              <MappingFragment StoreEntitySet="DETALLE_CTZ">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="LIN" ColumnName="LIN" />
+                <ScalarProperty Name="VENDEDOR" ColumnName="VENDEDOR" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+                <ScalarProperty Name="IMPUESTO" ColumnName="IMPUESTO" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="PRODUCTO" ColumnName="PRODUCTO" />
+                <ScalarProperty Name="FACTURA" ColumnName="FACTURA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INVENTARIO">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.INVENTARIO">
+              <MappingFragment StoreEntitySet="INVENTARIO">
+                <ScalarProperty Name="CABYS" ColumnName="CABYS" />
+                <ScalarProperty Name="IMPRESORA" ColumnName="IMPRESORA" />
+                <ScalarProperty Name="GARANTIA" ColumnName="GARANTIA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FAMILIA" ColumnName="FAMILIA" />
+                <ScalarProperty Name="COD_TARIFA" ColumnName="COD_TARIFA" />
+                <ScalarProperty Name="COD_CORTO" ColumnName="COD_CORTO" />
+                <ScalarProperty Name="IMPUESTOS" ColumnName="IMPUESTOS" />
+                <ScalarProperty Name="PRE_PROVE" ColumnName="PRE_PROVE" />
+                <ScalarProperty Name="TALLA" ColumnName="TALLA" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="UNIDAD" ColumnName="UNIDAD" />
+                <ScalarProperty Name="GRAVADO" ColumnName="GRAVADO" />
+                <ScalarProperty Name="CENTRO_COSTO" ColumnName="CENTRO_COSTO" />
+                <ScalarProperty Name="COD_IMPUESTO" ColumnName="COD_IMPUESTO" />
+                <ScalarProperty Name="UTILIDAD" ColumnName="UTILIDAD" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ObtenerLecturaAnterior" FunctionName="POLTA_PRUEBASModel.Store.ObtenerLecturaAnterior" />
+          <FunctionImportMapping FunctionImportName="ObtenernerFechaLecturaAnterior" FunctionName="POLTA_PRUEBASModel.Store.ObtenernerFechaLecturaAnterior" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

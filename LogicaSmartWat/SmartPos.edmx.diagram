@@ -32,6 +32,10 @@
         <AssociationConnector Association="POLTA_PRUEBASModel.FK_COTIZACIONES_USUARIOS" />
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.FACTURAS" Width="1.5" PointX="3" PointY="15.875" />
         <AssociationConnector Association="POLTA_PRUEBASModel.FK__0b15f0f8" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.DETALLE_CTZ" Width="1.5" PointX="6.125" PointY="10.75" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.INVENTARIO" Width="1.5" PointX="11.375" PointY="9" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

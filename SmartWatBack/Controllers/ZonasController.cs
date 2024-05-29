@@ -28,5 +28,12 @@ namespace SmartWatBack.Controllers
             ZonaController zonas = new ZonaController();
             return Ok(zonas.IngresarZonas(zona, BDCia));
         }
+
+        [HttpPatch]
+        public IHttpActionResult ActualizarZona([FromBody] ZONAS zona, string BDCia)
+        {
+            ZonaController zonas = new ZonaController();
+            return Ok(zonas.ActualizarZonas(zona, BDCia));
+        }
     }
 }
