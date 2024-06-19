@@ -36,6 +36,11 @@
         <AssociationConnector Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" />
         <EntityTypeShape EntityType="POLTA_PRUEBASModel.INVENTARIO" Width="1.5" PointX="11.375" PointY="9" />
         <AssociationConnector Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.R_CIERRE" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.TRANSACCIONES" Width="1.5" PointX="13.375" PointY="6.75" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.IMPRESORASxUSUARIO" Width="1.5" PointX="13.375" PointY="9.75" />
+        <EntityTypeShape EntityType="POLTA_PRUEBASModel.IMPRESORAS" Width="1.5" PointX="11.125" PointY="15.625" />
+        <AssociationConnector Association="POLTA_PRUEBASModel.FK__d2eeebbb" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -264,6 +264,68 @@ namespace LogicaSmartWat.Controllers
             return R;
         }
 
+        public Respuesta EnviarCobroCorreo(ParametrosPagos P)
+        {
+
+            Respuesta R = new Respuesta();
+            Impresiones I = new Impresiones();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(P.BDCia);
+                    COTIZACIONES Ct = db.COTIZACIONES.Where(d => d.CANCELADO == P.NunCoti).FirstOrDefault();
+                    if (Ct.ESTADO == 4) //Ya se facturo
+                    {
+                        //FACTURAS F = db.FACTURAS.Where(d => d.USU_CAN == Ct.CODIGO).FirstOrDefault();
+                        //Respuesta R2 = I.Factura(F.CODIGO, P.BDCia);
+                        //if (R2.Codigo == 0)
+                        //{
+                        //    R.Codigo = 0;
+                        //    R.Mensaje = "OK";
+                        //    R.Objeto = R2.Objeto;
+                        //}
+                        //else
+                        //{
+                        //    R.Codigo = -1;
+                        //    R.Mensaje = "Hubo una situación al generar el PDF -Factura- indica: " + R2.Mensaje; ;
+                        //}
+                    }
+                    else
+                    {
+                        if (Ct.CLIENTES.CORREO.Contains("@"))
+                        {
+                            LECTURAS Ls = db.LECTURAS.Where(d => d.ID_LEC == Ct.CANCELADO).FirstOrDefault();
+                            Respuesta R2 = I.PrefacturaFacturaAlCorreo(Ct.CODIGO, Ls.ID_PAJ, Ls.ID_LEC, P.BDCia, Ct.CLIENTES.CORREO);
+                            if (R2.Codigo == 0)
+                            {
+                                R.Codigo = 0;
+                                R.Mensaje = "OK";
+                                R.Objeto = R2.Objeto;
+                            }
+                            else
+                            {
+                                R.Codigo = -1;
+                                R.Mensaje = "EnviarCobroCorreo -  situación al generar el PDF -Prefactura- indica: " + R2.Mensaje; ;
+                            }
+                        }
+                        
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta Generar Impresión " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+            return R;
+        }
+
         public Respuesta ImpresionEnSitio(int NumLectura, string BDCia)
         {
             Respuesta R = new Respuesta();

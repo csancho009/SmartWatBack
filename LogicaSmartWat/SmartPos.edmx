@@ -168,6 +168,24 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ningu
           <Property Name="CONSECUTIVO" Type="nvarchar" MaxLength="100" />
           <Property Name="ESTADO_HACIENDA" Type="int" />
         </EntityType>
+        <EntityType Name="IMPRESORAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ESTADO" Type="int" />
+          <Property Name="REDUCIDA" Type="int" />
+        </EntityType>
+        <EntityType Name="IMPRESORASxUSUARIO">
+          <Key>
+            <PropertyRef Name="USUARIO" />
+            <PropertyRef Name="IMPRESORA" />
+          </Key>
+          <Property Name="USUARIO" Type="int" Nullable="false" />
+          <Property Name="TAMANO" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="IMPRESORA" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="INVENTARIO">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -234,6 +252,32 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
         </EntityType>
+        <EntityType Name="R_CIERRE">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FECHA" Type="datetime" />
+          <Property Name="USUARIO" Type="int" />
+          <Property Name="EFECTIVO" Type="real" />
+          <Property Name="TARJETA" Type="real" />
+          <Property Name="TRANSFERENCIA" Type="real" />
+          <Property Name="CHEQUE" Type="real" />
+          <Property Name="CEFECTIVO" Type="real" />
+          <Property Name="CTARJETA" Type="real" />
+          <Property Name="CFACTURA" Type="real" />
+          <Property Name="COTROS" Type="real" />
+          <Property Name="CDOLARES" Type="real" />
+          <Property Name="APERTURA" Type="real" />
+          <Property Name="EFEC_DOL" Type="real" />
+          <Property Name="TARJ_DOL" Type="real" />
+          <Property Name="TRANS_DOL" Type="real" />
+          <Property Name="CHEQ_DOL" Type="real" />
+          <Property Name="CON_EFE_DOL" Type="real" />
+          <Property Name="CON_TAR_DOL" Type="real" />
+          <Property Name="CON_TRA_DOL" Type="real" />
+          <Property Name="CON_CHE_DOL" Type="real" />
+        </EntityType>
         <EntityType Name="TARIFAS">
           <Key>
             <PropertyRef Name="ID_TAR" />
@@ -242,6 +286,16 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
           <Property Name="RESIDENCIAL" Type="money" />
           <Property Name="COMERCIAL" Type="money" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="TRANSACCIONES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="TIPO" Type="int" />
         </EntityType>
         <EntityType Name="USUARIOS">
           <Key>
@@ -378,6 +432,18 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__d2eeebbb">
+          <End Role="IMPRESORAS" Type="Self.IMPRESORAS" Multiplicity="1" />
+          <End Role="IMPRESORASxUSUARIO" Type="Self.IMPRESORASxUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IMPRESORAS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="IMPRESORASxUSUARIO">
+              <PropertyRef Name="IMPRESORA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_COTIZACIONES_CLIENTES">
           <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
           <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="*" />
@@ -426,8 +492,57 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="DESGLOSE_ENTRADAS_SALIDAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tipo" Type="varchar" Mode="In" />
+          <Parameter Name="Numero" Type="int" Mode="In" />
+          <Parameter Name="Desde" Type="date" Mode="In" />
+          <Parameter Name="Hasta" Type="date" Mode="In" />
+        </Function>
         <Function Name="GENERA_FACTURACION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Usuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MOVIMIENTOS_CAJA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ElUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="NuevaCaja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TIPO" Type="int" Mode="In" />
+          <Parameter Name="MONT" Type="real" Mode="In" />
+          <Parameter Name="USUA" Type="int" Mode="In" />
+          <Parameter Name="TRANS" Type="int" Mode="In" />
+          <Parameter Name="MEDI" Type="int" Mode="In" />
+          <Parameter Name="FECH" Type="date" Mode="In" />
+          <Parameter Name="DOCU" Type="int" Mode="In" />
+          <Parameter Name="Mone" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="NuevoCierre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usu" Type="int" Mode="In" />
+          <Parameter Name="efec" Type="real" Mode="In" />
+          <Parameter Name="tar" Type="real" Mode="In" />
+          <Parameter Name="trans" Type="real" Mode="In" />
+          <Parameter Name="che" Type="real" Mode="In" />
+          <Parameter Name="cefec" Type="real" Mode="In" />
+          <Parameter Name="ctar" Type="real" Mode="In" />
+          <Parameter Name="cfactura" Type="real" Mode="In" />
+          <Parameter Name="Otros" Type="real" Mode="In" />
+          <Parameter Name="Cdolares" Type="real" Mode="In" />
+          <Parameter Name="Aper" Type="real" Mode="In" />
+          <Parameter Name="CONEFEDOL" Type="real" Mode="In" />
+          <Parameter Name="CONTARDOL" Type="real" Mode="In" />
+          <Parameter Name="ConTraDol" Type="real" Mode="In" />
+          <Parameter Name="ConCheDol" Type="real" Mode="In" />
+          <Parameter Name="SysEfeDol" Type="real" Mode="In" />
+          <Parameter Name="SysTarDol" Type="real" Mode="In" />
+          <Parameter Name="SysTraDol" Type="real" Mode="In" />
+          <Parameter Name="SysCheDol" Type="real" Mode="In" />
+          <Parameter Name="new_identity" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="NuevoMovOperacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tipo" Type="int" Mode="In" />
+          <Parameter Name="Motivo" Type="int" Mode="In" />
+          <Parameter Name="Monto" Type="money" Mode="In" />
+          <Parameter Name="Deta" Type="nvarchar" Mode="In" />
+          <Parameter Name="USR" Type="int" Mode="In" />
+          <Parameter Name="new_identity" Type="int" Mode="InOut" />
         </Function>
         <Function Name="ObtenerLecturaAnterior" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IDPAJ" Type="int" Mode="In" />
@@ -452,6 +567,9 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <Parameter Name="NombreCliente" Type="varchar" Mode="In" />
           <Parameter Name="Cedula" Type="varchar" Mode="In" />
           <Parameter Name="Estado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PROCESO_CAJA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usu" Type="int" Mode="In" />
         </Function>
         <Function Name="RECTIFICA_LECTURA_MEDIDOR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Usuario" Type="int" Mode="In" />
@@ -488,10 +606,13 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <EntitySet Name="DATAFONOS" EntityType="Self.DATAFONOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DETALLE_CTZ" EntityType="Self.DETALLE_CTZ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FACTURAS" EntityType="Self.FACTURAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IMPRESORAS" EntityType="Self.IMPRESORAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IMPRESORASxUSUARIO" EntityType="Self.IMPRESORASxUSUARIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="INVENTARIO" EntityType="Self.INVENTARIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LECTURAS" EntityType="Self.LECTURAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="R_CIERRE" EntityType="Self.R_CIERRE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZONAS" EntityType="Self.ZONAS" Schema="dbo" store:Type="Tables" />
@@ -515,6 +636,13 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
     [PROVINCIAS].[CODIGO] AS [CODIGO], 
     [PROVINCIAS].[NOMBRE] AS [NOMBRE]
     FROM [dbo].[PROVINCIAS] AS [PROVINCIAS]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TRANSACCIONES" EntityType="Self.TRANSACCIONES" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TRANSACCIONES].[CODIGO] AS [CODIGO], 
+    [TRANSACCIONES].[NOMBRE] AS [NOMBRE], 
+    [TRANSACCIONES].[TIPO] AS [TIPO]
+    FROM [dbo].[TRANSACCIONES] AS [TRANSACCIONES]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK__0b15f0f8" Association="Self.FK__0b15f0f8">
             <End Role="CLIENTES" EntitySet="CLIENTES" />
@@ -551,6 +679,10 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <AssociationSet Name="FK__9d61f4d4" Association="Self.FK__9d61f4d4">
             <End Role="CLIENTES" EntitySet="CLIENTES" />
             <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__d2eeebbb" Association="Self.FK__d2eeebbb">
+            <End Role="IMPRESORAS" EntitySet="IMPRESORAS" />
+            <End Role="IMPRESORASxUSUARIO" EntitySet="IMPRESORASxUSUARIO" />
           </AssociationSet>
           <AssociationSet Name="FK_COTIZACIONES_CLIENTES" Association="Self.FK_COTIZACIONES_CLIENTES">
             <End Role="CLIENTES" EntitySet="CLIENTES" />
@@ -608,9 +740,6 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <EntitySet Name="CIA" EntityType="POLTA_PRUEBASModel.CIA" />
           <FunctionImport Name="Sp_BuscarCliente" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarCliente_Result)">
           <Parameter Name="nombre" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="Sp_ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.Sp_ObtenerBloques_Result)">
-          <Parameter Name="id_zona" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_BuscarPaja" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarPaja_Result)">
           <Parameter Name="buscador" Mode="In" Type="String" />
@@ -706,6 +835,69 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <FunctionImport Name="ObtenernerFechaLecturaAnterior" ReturnType="Collection(DateTime)">
             <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
             <Parameter Name="IDLEC" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.Sp_ObtenerBloques_Result)">
+          <Parameter Name="id_zona" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="R_CIERRE" EntityType="POLTA_PRUEBASModel.R_CIERRE" />
+          <FunctionImport Name="PROCESO_CAJA" ReturnType="Collection(POLTA_PRUEBASModel.PROCESO_CAJA_Result)">
+          <Parameter Name="Usu" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="NuevaCaja" ReturnType="Collection(Int32)">
+            <Parameter Name="TIPO" Mode="In" Type="Int32" />
+            <Parameter Name="MONT" Mode="In" Type="Single" />
+            <Parameter Name="USUA" Mode="In" Type="Int32" />
+            <Parameter Name="TRANS" Mode="In" Type="Int32" />
+            <Parameter Name="MEDI" Mode="In" Type="Int32" />
+            <Parameter Name="FECH" Mode="In" Type="DateTime" />
+            <Parameter Name="DOCU" Mode="In" Type="Int32" />
+            <Parameter Name="Mone" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="NuevoCierre" ReturnType="Collection(Int32)">
+            <Parameter Name="Usu" Mode="In" Type="Int32" />
+            <Parameter Name="efec" Mode="In" Type="Single" />
+            <Parameter Name="tar" Mode="In" Type="Single" />
+            <Parameter Name="trans" Mode="In" Type="Single" />
+            <Parameter Name="che" Mode="In" Type="Single" />
+            <Parameter Name="cefec" Mode="In" Type="Single" />
+            <Parameter Name="ctar" Mode="In" Type="Single" />
+            <Parameter Name="cfactura" Mode="In" Type="Single" />
+            <Parameter Name="Otros" Mode="In" Type="Single" />
+            <Parameter Name="Cdolares" Mode="In" Type="Single" />
+            <Parameter Name="Aper" Mode="In" Type="Single" />
+            <Parameter Name="CONEFEDOL" Mode="In" Type="Single" />
+            <Parameter Name="CONTARDOL" Mode="In" Type="Single" />
+            <Parameter Name="ConTraDol" Mode="In" Type="Single" />
+            <Parameter Name="ConCheDol" Mode="In" Type="Single" />
+            <Parameter Name="SysEfeDol" Mode="In" Type="Single" />
+            <Parameter Name="SysTarDol" Mode="In" Type="Single" />
+            <Parameter Name="SysTraDol" Mode="In" Type="Single" />
+            <Parameter Name="SysCheDol" Mode="In" Type="Single" />
+            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="TRANSACCIONES" EntityType="POLTA_PRUEBASModel.TRANSACCIONES" />
+          <FunctionImport Name="NuevoMovOperacion" ReturnType="Collection(Int32)">
+            <Parameter Name="Tipo" Mode="In" Type="Int32" />
+            <Parameter Name="Motivo" Mode="In" Type="Int32" />
+            <Parameter Name="Monto" Mode="In" Type="Decimal" />
+            <Parameter Name="Deta" Mode="In" Type="String" />
+            <Parameter Name="USR" Mode="In" Type="Int32" />
+            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="IMPRESORASxUSUARIO" EntityType="POLTA_PRUEBASModel.IMPRESORASxUSUARIO" />
+          <EntitySet Name="IMPRESORAS" EntityType="POLTA_PRUEBASModel.IMPRESORAS" />
+          <AssociationSet Name="FK__d2eeebbb" Association="POLTA_PRUEBASModel.FK__d2eeebbb">
+            <End Role="IMPRESORAS" EntitySet="IMPRESORAS" />
+            <End Role="IMPRESORASxUSUARIO" EntitySet="IMPRESORASxUSUARIO" />
+          </AssociationSet>
+          <FunctionImport Name="MOVIMIENTOS_CAJA" ReturnType="Collection(POLTA_PRUEBASModel.MOVIMIENTOS_CAJA_Result)">
+          <Parameter Name="ElUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DESGLOSE_ENTRADAS_SALIDAS" ReturnType="Collection(POLTA_PRUEBASModel.DESGLOSE_ENTRADAS_SALIDAS_Result)">
+            <Parameter Name="Tipo" Mode="In" Type="String" />
+            <Parameter Name="Numero" Mode="In" Type="Int32" />
+            <Parameter Name="Desde" Mode="In" Type="DateTime" />
+            <Parameter Name="Hasta" Mode="In" Type="DateTime" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="CLIENTES">
@@ -885,11 +1077,6 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
         <ComplexType Name="Sp_BuscarCliente_Result">
           <Property Type="Int32" Name="CODIGO" Nullable="false" />
           <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="Sp_ObtenerBloques_Result">
-          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
-          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="Sp_BuscarPaja_Result">
           <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
@@ -1212,6 +1399,108 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="Sp_ObtenerBloques_Result">
+          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
+          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ID_ZON" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="R_CIERRE">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FECHA" Type="DateTime" Precision="3" />
+          <Property Name="USUARIO" Type="Int32" />
+          <Property Name="EFECTIVO" Type="Single" />
+          <Property Name="TARJETA" Type="Single" />
+          <Property Name="TRANSFERENCIA" Type="Single" />
+          <Property Name="CHEQUE" Type="Single" />
+          <Property Name="CEFECTIVO" Type="Single" />
+          <Property Name="CTARJETA" Type="Single" />
+          <Property Name="CFACTURA" Type="Single" />
+          <Property Name="COTROS" Type="Single" />
+          <Property Name="CDOLARES" Type="Single" />
+          <Property Name="APERTURA" Type="Single" />
+          <Property Name="EFEC_DOL" Type="Single" />
+          <Property Name="TARJ_DOL" Type="Single" />
+          <Property Name="TRANS_DOL" Type="Single" />
+          <Property Name="CHEQ_DOL" Type="Single" />
+          <Property Name="CON_EFE_DOL" Type="Single" />
+          <Property Name="CON_TAR_DOL" Type="Single" />
+          <Property Name="CON_TRA_DOL" Type="Single" />
+          <Property Name="CON_CHE_DOL" Type="Single" />
+        </EntityType>
+        <ComplexType Name="PROCESO_CAJA_Result">
+          <Property Type="Single" Name="Efectivo" Nullable="true" />
+          <Property Type="Single" Name="Tarjeta" Nullable="true" />
+          <Property Type="Single" Name="Transfer" Nullable="true" />
+          <Property Type="Single" Name="Cheque" Nullable="true" />
+          <Property Type="Single" Name="Apertura" Nullable="true" />
+          <Property Type="String" Name="VerSaldo" Nullable="true" MaxLength="5" />
+          <Property Type="Single" Name="EfectivoDol" Nullable="true" />
+          <Property Type="Single" Name="TarjetaDol" Nullable="true" />
+          <Property Type="Single" Name="TransferDol" Nullable="true" />
+          <Property Type="Single" Name="ChequeDol" Nullable="true" />
+          <Property Type="Single" Name="AperturaDol" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="TRANSACCIONES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TIPO" Type="Int32" />
+        </EntityType>
+        <EntityType Name="IMPRESORASxUSUARIO">
+          <Key>
+            <PropertyRef Name="USUARIO" />
+            <PropertyRef Name="IMPRESORA" />
+          </Key>
+          <Property Name="USUARIO" Type="Int32" Nullable="false" />
+          <Property Name="TAMANO" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="IMPRESORA" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="IMPRESORAS" Relationship="POLTA_PRUEBASModel.FK__d2eeebbb" FromRole="IMPRESORASxUSUARIO" ToRole="IMPRESORAS" />
+        </EntityType>
+        <EntityType Name="IMPRESORAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ESTADO" Type="Int32" />
+          <Property Name="REDUCIDA" Type="Int32" />
+          <NavigationProperty Name="IMPRESORASxUSUARIO" Relationship="POLTA_PRUEBASModel.FK__d2eeebbb" FromRole="IMPRESORAS" ToRole="IMPRESORASxUSUARIO" />
+        </EntityType>
+        <Association Name="FK__d2eeebbb">
+          <End Type="POLTA_PRUEBASModel.IMPRESORAS" Role="IMPRESORAS" Multiplicity="1" />
+          <End Type="POLTA_PRUEBASModel.IMPRESORASxUSUARIO" Role="IMPRESORASxUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IMPRESORAS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="IMPRESORASxUSUARIO">
+              <PropertyRef Name="IMPRESORA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="MOVIMIENTOS_CAJA_Result">
+          <Property Type="Int32" Name="codigo" Nullable="false" />
+          <Property Type="String" Name="Monto" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Documento" Nullable="true" />
+          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="Transaccion" Nullable="false" MaxLength="22" />
+          <Property Type="String" Name="Medio" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="MONEDA" Nullable="true" MaxLength="3" />
+        </ComplexType>
+        <ComplexType Name="DESGLOSE_ENTRADAS_SALIDAS_Result">
+          <Property Type="String" Name="USUARIO" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DETALLE" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="FECHA" Nullable="true" Precision="23" />
+          <Property Type="Single" Name="Monto" Nullable="true" />
+          <Property Type="String" Name="Medio" Nullable="false" MaxLength="8" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1365,15 +1654,6 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
               <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_BuscarCliente_Result">
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="Sp_ObtenerBloques" FunctionName="POLTA_PRUEBASModel.Store.Sp_ObtenerBloques">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_ObtenerBloques_Result">
-                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
-                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1603,6 +1883,116 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ObtenerLecturaAnterior" FunctionName="POLTA_PRUEBASModel.Store.ObtenerLecturaAnterior" />
           <FunctionImportMapping FunctionImportName="ObtenernerFechaLecturaAnterior" FunctionName="POLTA_PRUEBASModel.Store.ObtenernerFechaLecturaAnterior" />
+          <FunctionImportMapping FunctionImportName="Sp_ObtenerBloques" FunctionName="POLTA_PRUEBASModel.Store.Sp_ObtenerBloques">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_ObtenerBloques_Result">
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="R_CIERRE">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.R_CIERRE">
+              <MappingFragment StoreEntitySet="R_CIERRE">
+                <ScalarProperty Name="CON_CHE_DOL" ColumnName="CON_CHE_DOL" />
+                <ScalarProperty Name="CON_TRA_DOL" ColumnName="CON_TRA_DOL" />
+                <ScalarProperty Name="CON_TAR_DOL" ColumnName="CON_TAR_DOL" />
+                <ScalarProperty Name="CON_EFE_DOL" ColumnName="CON_EFE_DOL" />
+                <ScalarProperty Name="CHEQ_DOL" ColumnName="CHEQ_DOL" />
+                <ScalarProperty Name="TRANS_DOL" ColumnName="TRANS_DOL" />
+                <ScalarProperty Name="TARJ_DOL" ColumnName="TARJ_DOL" />
+                <ScalarProperty Name="EFEC_DOL" ColumnName="EFEC_DOL" />
+                <ScalarProperty Name="APERTURA" ColumnName="APERTURA" />
+                <ScalarProperty Name="CDOLARES" ColumnName="CDOLARES" />
+                <ScalarProperty Name="COTROS" ColumnName="COTROS" />
+                <ScalarProperty Name="CFACTURA" ColumnName="CFACTURA" />
+                <ScalarProperty Name="CTARJETA" ColumnName="CTARJETA" />
+                <ScalarProperty Name="CEFECTIVO" ColumnName="CEFECTIVO" />
+                <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+                <ScalarProperty Name="TRANSFERENCIA" ColumnName="TRANSFERENCIA" />
+                <ScalarProperty Name="TARJETA" ColumnName="TARJETA" />
+                <ScalarProperty Name="EFECTIVO" ColumnName="EFECTIVO" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PROCESO_CAJA" FunctionName="POLTA_PRUEBASModel.Store.PROCESO_CAJA">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.PROCESO_CAJA_Result">
+                <ScalarProperty Name="Efectivo" ColumnName="Efectivo" />
+                <ScalarProperty Name="Tarjeta" ColumnName="Tarjeta" />
+                <ScalarProperty Name="Transfer" ColumnName="Transfer" />
+                <ScalarProperty Name="Cheque" ColumnName="Cheque" />
+                <ScalarProperty Name="Apertura" ColumnName="Apertura" />
+                <ScalarProperty Name="VerSaldo" ColumnName="VerSaldo" />
+                <ScalarProperty Name="EfectivoDol" ColumnName="EfectivoDol" />
+                <ScalarProperty Name="TarjetaDol" ColumnName="TarjetaDol" />
+                <ScalarProperty Name="TransferDol" ColumnName="TransferDol" />
+                <ScalarProperty Name="ChequeDol" ColumnName="ChequeDol" />
+                <ScalarProperty Name="AperturaDol" ColumnName="AperturaDol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="NuevaCaja" FunctionName="POLTA_PRUEBASModel.Store.NuevaCaja" />
+          <FunctionImportMapping FunctionImportName="NuevoCierre" FunctionName="POLTA_PRUEBASModel.Store.NuevoCierre" />
+          <EntitySetMapping Name="TRANSACCIONES">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.TRANSACCIONES">
+              <MappingFragment StoreEntitySet="TRANSACCIONES">
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="NuevoMovOperacion" FunctionName="POLTA_PRUEBASModel.Store.NuevoMovOperacion" />
+          <EntitySetMapping Name="IMPRESORASxUSUARIO">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.IMPRESORASxUSUARIO">
+              <MappingFragment StoreEntitySet="IMPRESORASxUSUARIO">
+                <ScalarProperty Name="IMPRESORA" ColumnName="IMPRESORA" />
+                <ScalarProperty Name="TAMANO" ColumnName="TAMANO" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IMPRESORAS">
+            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.IMPRESORAS">
+              <MappingFragment StoreEntitySet="IMPRESORAS">
+                <ScalarProperty Name="REDUCIDA" ColumnName="REDUCIDA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MOVIMIENTOS_CAJA" FunctionName="POLTA_PRUEBASModel.Store.MOVIMIENTOS_CAJA">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.MOVIMIENTOS_CAJA_Result">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Transaccion" ColumnName="Transaccion" />
+                <ScalarProperty Name="Medio" ColumnName="Medio" />
+                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DESGLOSE_ENTRADAS_SALIDAS" FunctionName="POLTA_PRUEBASModel.Store.DESGLOSE_ENTRADAS_SALIDAS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.DESGLOSE_ENTRADAS_SALIDAS_Result">
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="DETALLE" ColumnName="DETALLE" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Medio" ColumnName="Medio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -10,12 +10,12 @@
 namespace LogicaSmartWat
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class Sp_ObtenerBloques_Result
+    public partial class TRANSACCIONES
     {
-        public int ID_BLO { get; set; }
-        public string NombreZona { get; set; }
-        public string Nombre { get; set; }
-        public int ID_ZON { get; set; }
+        public int CODIGO { get; set; }
+        public string NOMBRE { get; set; }
+        public Nullable<int> TIPO { get; set; }
     }
 }

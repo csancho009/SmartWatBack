@@ -22,6 +22,13 @@ namespace SmartWatBack.Controllers
             return Ok(zona.ObtenerZonas(BDCia));
         }
 
+        [HttpDelete]
+        public IHttpActionResult EliminarZona(string BDCia, int IdZona)
+        {
+            ZonaController zona = new ZonaController();
+            return Ok(zona.EliminarZona(IdZona,BDCia));
+        }
+
         [HttpPost]
         public IHttpActionResult IngresarZonas([FromBody] ZONAS zona, string BDCia)
         {

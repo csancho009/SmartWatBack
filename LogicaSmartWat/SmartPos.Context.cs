@@ -45,6 +45,10 @@ namespace LogicaSmartWat
         public virtual DbSet<FACTURAS> FACTURAS { get; set; }
         public virtual DbSet<DETALLE_CTZ> DETALLE_CTZ { get; set; }
         public virtual DbSet<INVENTARIO> INVENTARIO { get; set; }
+        public virtual DbSet<R_CIERRE> R_CIERRE { get; set; }
+        public virtual DbSet<TRANSACCIONES> TRANSACCIONES { get; set; }
+        public virtual DbSet<IMPRESORASxUSUARIO> IMPRESORASxUSUARIO { get; set; }
+        public virtual DbSet<IMPRESORAS> IMPRESORAS { get; set; }
     
         public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
         {
@@ -58,15 +62,6 @@ namespace LogicaSmartWat
                 new ObjectParameter("nombre", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarCliente_Result>("Sp_BuscarCliente", nombreParameter);
-        }
-    
-        public virtual ObjectResult<Sp_ObtenerBloques_Result> Sp_ObtenerBloques(Nullable<int> id_zona)
-        {
-            var id_zonaParameter = id_zona.HasValue ?
-                new ObjectParameter("id_zona", id_zona) :
-                new ObjectParameter("id_zona", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_ObtenerBloques_Result>("Sp_ObtenerBloques", id_zonaParameter);
         }
     
         public virtual ObjectResult<Sp_BuscarPaja_Result> Sp_BuscarPaja(string buscador)
@@ -225,6 +220,197 @@ namespace LogicaSmartWat
                 new ObjectParameter("IDLEC", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("ObtenernerFechaLecturaAnterior", iDPAJParameter, iDLECParameter);
+        }
+    
+        public virtual ObjectResult<Sp_ObtenerBloques_Result> Sp_ObtenerBloques(Nullable<int> id_zona)
+        {
+            var id_zonaParameter = id_zona.HasValue ?
+                new ObjectParameter("id_zona", id_zona) :
+                new ObjectParameter("id_zona", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_ObtenerBloques_Result>("Sp_ObtenerBloques", id_zonaParameter);
+        }
+    
+        public virtual ObjectResult<PROCESO_CAJA_Result> PROCESO_CAJA(Nullable<int> usu)
+        {
+            var usuParameter = usu.HasValue ?
+                new ObjectParameter("Usu", usu) :
+                new ObjectParameter("Usu", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PROCESO_CAJA_Result>("PROCESO_CAJA", usuParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> NuevaCaja(Nullable<int> tIPO, Nullable<float> mONT, Nullable<int> uSUA, Nullable<int> tRANS, Nullable<int> mEDI, Nullable<System.DateTime> fECH, Nullable<int> dOCU, string mone)
+        {
+            var tIPOParameter = tIPO.HasValue ?
+                new ObjectParameter("TIPO", tIPO) :
+                new ObjectParameter("TIPO", typeof(int));
+    
+            var mONTParameter = mONT.HasValue ?
+                new ObjectParameter("MONT", mONT) :
+                new ObjectParameter("MONT", typeof(float));
+    
+            var uSUAParameter = uSUA.HasValue ?
+                new ObjectParameter("USUA", uSUA) :
+                new ObjectParameter("USUA", typeof(int));
+    
+            var tRANSParameter = tRANS.HasValue ?
+                new ObjectParameter("TRANS", tRANS) :
+                new ObjectParameter("TRANS", typeof(int));
+    
+            var mEDIParameter = mEDI.HasValue ?
+                new ObjectParameter("MEDI", mEDI) :
+                new ObjectParameter("MEDI", typeof(int));
+    
+            var fECHParameter = fECH.HasValue ?
+                new ObjectParameter("FECH", fECH) :
+                new ObjectParameter("FECH", typeof(System.DateTime));
+    
+            var dOCUParameter = dOCU.HasValue ?
+                new ObjectParameter("DOCU", dOCU) :
+                new ObjectParameter("DOCU", typeof(int));
+    
+            var moneParameter = mone != null ?
+                new ObjectParameter("Mone", mone) :
+                new ObjectParameter("Mone", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("NuevaCaja", tIPOParameter, mONTParameter, uSUAParameter, tRANSParameter, mEDIParameter, fECHParameter, dOCUParameter, moneParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> NuevoCierre(Nullable<int> usu, Nullable<float> efec, Nullable<float> tar, Nullable<float> trans, Nullable<float> che, Nullable<float> cefec, Nullable<float> ctar, Nullable<float> cfactura, Nullable<float> otros, Nullable<float> cdolares, Nullable<float> aper, Nullable<float> cONEFEDOL, Nullable<float> cONTARDOL, Nullable<float> conTraDol, Nullable<float> conCheDol, Nullable<float> sysEfeDol, Nullable<float> sysTarDol, Nullable<float> sysTraDol, Nullable<float> sysCheDol, ObjectParameter new_identity)
+        {
+            var usuParameter = usu.HasValue ?
+                new ObjectParameter("Usu", usu) :
+                new ObjectParameter("Usu", typeof(int));
+    
+            var efecParameter = efec.HasValue ?
+                new ObjectParameter("efec", efec) :
+                new ObjectParameter("efec", typeof(float));
+    
+            var tarParameter = tar.HasValue ?
+                new ObjectParameter("tar", tar) :
+                new ObjectParameter("tar", typeof(float));
+    
+            var transParameter = trans.HasValue ?
+                new ObjectParameter("trans", trans) :
+                new ObjectParameter("trans", typeof(float));
+    
+            var cheParameter = che.HasValue ?
+                new ObjectParameter("che", che) :
+                new ObjectParameter("che", typeof(float));
+    
+            var cefecParameter = cefec.HasValue ?
+                new ObjectParameter("cefec", cefec) :
+                new ObjectParameter("cefec", typeof(float));
+    
+            var ctarParameter = ctar.HasValue ?
+                new ObjectParameter("ctar", ctar) :
+                new ObjectParameter("ctar", typeof(float));
+    
+            var cfacturaParameter = cfactura.HasValue ?
+                new ObjectParameter("cfactura", cfactura) :
+                new ObjectParameter("cfactura", typeof(float));
+    
+            var otrosParameter = otros.HasValue ?
+                new ObjectParameter("Otros", otros) :
+                new ObjectParameter("Otros", typeof(float));
+    
+            var cdolaresParameter = cdolares.HasValue ?
+                new ObjectParameter("Cdolares", cdolares) :
+                new ObjectParameter("Cdolares", typeof(float));
+    
+            var aperParameter = aper.HasValue ?
+                new ObjectParameter("Aper", aper) :
+                new ObjectParameter("Aper", typeof(float));
+    
+            var cONEFEDOLParameter = cONEFEDOL.HasValue ?
+                new ObjectParameter("CONEFEDOL", cONEFEDOL) :
+                new ObjectParameter("CONEFEDOL", typeof(float));
+    
+            var cONTARDOLParameter = cONTARDOL.HasValue ?
+                new ObjectParameter("CONTARDOL", cONTARDOL) :
+                new ObjectParameter("CONTARDOL", typeof(float));
+    
+            var conTraDolParameter = conTraDol.HasValue ?
+                new ObjectParameter("ConTraDol", conTraDol) :
+                new ObjectParameter("ConTraDol", typeof(float));
+    
+            var conCheDolParameter = conCheDol.HasValue ?
+                new ObjectParameter("ConCheDol", conCheDol) :
+                new ObjectParameter("ConCheDol", typeof(float));
+    
+            var sysEfeDolParameter = sysEfeDol.HasValue ?
+                new ObjectParameter("SysEfeDol", sysEfeDol) :
+                new ObjectParameter("SysEfeDol", typeof(float));
+    
+            var sysTarDolParameter = sysTarDol.HasValue ?
+                new ObjectParameter("SysTarDol", sysTarDol) :
+                new ObjectParameter("SysTarDol", typeof(float));
+    
+            var sysTraDolParameter = sysTraDol.HasValue ?
+                new ObjectParameter("SysTraDol", sysTraDol) :
+                new ObjectParameter("SysTraDol", typeof(float));
+    
+            var sysCheDolParameter = sysCheDol.HasValue ?
+                new ObjectParameter("SysCheDol", sysCheDol) :
+                new ObjectParameter("SysCheDol", typeof(float));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("NuevoCierre", usuParameter, efecParameter, tarParameter, transParameter, cheParameter, cefecParameter, ctarParameter, cfacturaParameter, otrosParameter, cdolaresParameter, aperParameter, cONEFEDOLParameter, cONTARDOLParameter, conTraDolParameter, conCheDolParameter, sysEfeDolParameter, sysTarDolParameter, sysTraDolParameter, sysCheDolParameter, new_identity);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> NuevoMovOperacion(Nullable<int> tipo, Nullable<int> motivo, Nullable<decimal> monto, string deta, Nullable<int> uSR, ObjectParameter new_identity)
+        {
+            var tipoParameter = tipo.HasValue ?
+                new ObjectParameter("Tipo", tipo) :
+                new ObjectParameter("Tipo", typeof(int));
+    
+            var motivoParameter = motivo.HasValue ?
+                new ObjectParameter("Motivo", motivo) :
+                new ObjectParameter("Motivo", typeof(int));
+    
+            var montoParameter = monto.HasValue ?
+                new ObjectParameter("Monto", monto) :
+                new ObjectParameter("Monto", typeof(decimal));
+    
+            var detaParameter = deta != null ?
+                new ObjectParameter("Deta", deta) :
+                new ObjectParameter("Deta", typeof(string));
+    
+            var uSRParameter = uSR.HasValue ?
+                new ObjectParameter("USR", uSR) :
+                new ObjectParameter("USR", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("NuevoMovOperacion", tipoParameter, motivoParameter, montoParameter, detaParameter, uSRParameter, new_identity);
+        }
+    
+        public virtual ObjectResult<MOVIMIENTOS_CAJA_Result> MOVIMIENTOS_CAJA(Nullable<int> elUsuario)
+        {
+            var elUsuarioParameter = elUsuario.HasValue ?
+                new ObjectParameter("ElUsuario", elUsuario) :
+                new ObjectParameter("ElUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MOVIMIENTOS_CAJA_Result>("MOVIMIENTOS_CAJA", elUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<DESGLOSE_ENTRADAS_SALIDAS_Result> DESGLOSE_ENTRADAS_SALIDAS(string tipo, Nullable<int> numero, Nullable<System.DateTime> desde, Nullable<System.DateTime> hasta)
+        {
+            var tipoParameter = tipo != null ?
+                new ObjectParameter("Tipo", tipo) :
+                new ObjectParameter("Tipo", typeof(string));
+    
+            var numeroParameter = numero.HasValue ?
+                new ObjectParameter("Numero", numero) :
+                new ObjectParameter("Numero", typeof(int));
+    
+            var desdeParameter = desde.HasValue ?
+                new ObjectParameter("Desde", desde) :
+                new ObjectParameter("Desde", typeof(System.DateTime));
+    
+            var hastaParameter = hasta.HasValue ?
+                new ObjectParameter("Hasta", hasta) :
+                new ObjectParameter("Hasta", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DESGLOSE_ENTRADAS_SALIDAS_Result>("DESGLOSE_ENTRADAS_SALIDAS", tipoParameter, numeroParameter, desdeParameter, hastaParameter);
         }
     }
 }

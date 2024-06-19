@@ -71,6 +71,7 @@
     <Compile Include="CLIENTES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Cajas.cs" />
     <Compile Include="Controllers\GestionClientes.cs" />
     <Compile Include="Controllers\Impresiones.cs" />
     <Compile Include="Controllers\Lecturas.cs" />
@@ -85,9 +86,13 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Datos\Cobros.cs" />
+    <Compile Include="Datos\CorreoElectronico.cs" />
     <Compile Include="Datos\ImpresionWeb.cs" />
     <Compile Include="Datos\ParametrosPagos.cs" />
     <Compile Include="Datos\Respuesta.cs" />
+    <Compile Include="DESGLOSE_ENTRADAS_SALIDAS_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="DETALLE_CTZ.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -100,6 +105,12 @@
     <Compile Include="GENERA_FACTURACION_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="IMPRESORAS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMPRESORASxUSUARIO.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="INVENTARIO.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -107,6 +118,9 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="LISTA_PRECIOS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MOVIMIENTOS_CAJA_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="ObtenerBloques_Result.cs">
@@ -119,6 +133,9 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="PAJAS_PENDIENTES_PAGO_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PROCESO_CAJA_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,6 +162,33 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FacturaTiquete.rpt</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RPTs\IngEgrDetallados.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IngEgrDetallados.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RPTs\IngresoEgresoCaja.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IngresoEgresoCaja.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RPTs\MovCajaDetallados.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MovCajaDetallados.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RPTs\MovCajaResumidos.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MovCajaResumidos.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="R_CIERRE.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="SmartPos.Context.cs">
       <AutoGen>True</AutoGen>
@@ -183,6 +227,9 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\TarifaController.cs" />
+    <Compile Include="TRANSACCIONES.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="USUARIOS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -232,6 +279,22 @@
     <EmbeddedResource Include="RPTs\FacturaTiquete.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>FacturaTiquete.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RPTs\IngEgrDetallados.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>IngEgrDetallados.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RPTs\IngresoEgresoCaja.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>IngresoEgresoCaja.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RPTs\MovCajaDetallados.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>MovCajaDetallados.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RPTs\MovCajaResumidos.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>MovCajaResumidos.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

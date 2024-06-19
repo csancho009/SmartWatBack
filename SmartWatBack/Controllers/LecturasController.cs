@@ -77,6 +77,14 @@ namespace SmartWatBack.Controllers
             return Ok(L.PreImpresion(P));
         }
 
+        [Route("api/Lecturas/EnviarCobroCorreo")]
+        [HttpPost]
+        public IHttpActionResult EnviarCobroCorreo([FromBody] ParametrosPagos P)
+        {
+            Lecturas L = new Lecturas();
+            return Ok(L.EnviarCobroCorreo(P));
+        }
+
         public class DatosIniciales
         {
          

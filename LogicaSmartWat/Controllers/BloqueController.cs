@@ -47,7 +47,7 @@ namespace LogicaSmartWat
                         db.Database.Connection.Open();
                     }
                     db.Database.Connection.ChangeDatabase(BDCia);
-                    var Bs = from B in db.BLOQUES join Z in db.ZONAS.OrderBy(o=>o.NOMBRE) on B.ID_ZON equals Z.ID_ZON select new { B.ID_BLO, Nombre = B.NOMBRE + " (" + Z.NOMBRE + ")" };
+                    var Bs = from B in db.BLOQUES join Z in db.ZONAS.OrderBy(o=>o.NOMBRE) on B.ID_ZON equals Z.ID_ZON select new { B.ID_BLO, Nombre = B.NOMBRE , Z.ID_ZON};
                     R.Objeto = Bs.ToList();
                     R.Codigo = 0;
                     R.Mensaje = "Ok";
@@ -61,6 +61,8 @@ namespace LogicaSmartWat
             }
             return R;
         }
+
+
 
         public Respuesta IngresarBloques(BLOQUES bloque, string BDCia)
         {
@@ -107,6 +109,10 @@ namespace LogicaSmartWat
             {
                 using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
                 {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
                     db.Database.Connection.ChangeDatabase(BaseDeDatos);
                     BLOQUES bloqueE = db.BLOQUES.First(b => b.ID_BLO == bloque.ID_BLO);
                     if (bloqueE != null)
@@ -130,8 +136,47 @@ namespace LogicaSmartWat
             catch (Exception ex)
             {
                 R.Codigo = -1;
-                R.Mensaje = "Alerta " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+                R.Mensaje = "Alerta  " + ex.Message + "  " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
             }
+            return R;
+        }
+
+        public Respuesta EliminarBloque(int IdBloque, String BaseDeDatos)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BaseDeDatos);
+                    BLOQUES Bloque = db.BLOQUES.First(b => b.ID_BLO == IdBloque);
+
+                    if (Bloque != null)
+                    {
+                        db.Entry(Bloque).State = System.Data.Entity.EntityState.Deleted;
+                        db.SaveChanges();
+
+                        R.Codigo = 1;
+                        R.Mensaje = "Se ha Eliminado con éxito";
+                    }
+                    else
+                    {
+
+                        R.Codigo = -2;
+                        R.Mensaje = "El Bloque no existe";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta " + ex.Message + " " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+
             return R;
         }
     }

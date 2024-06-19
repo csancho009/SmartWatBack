@@ -10,12 +10,14 @@
 namespace LogicaSmartWat
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class Sp_ObtenerBloques_Result
+    public partial class IMPRESORASxUSUARIO
     {
-        public int ID_BLO { get; set; }
-        public string NombreZona { get; set; }
-        public string Nombre { get; set; }
-        public int ID_ZON { get; set; }
+        public int USUARIO { get; set; }
+        public string TAMANO { get; set; }
+        public int IMPRESORA { get; set; }
+    
+        public virtual IMPRESORAS IMPRESORAS { get; set; }
     }
 }

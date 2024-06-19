@@ -15,12 +15,7 @@ namespace SmartWatBack.Controllers
     public class BloquesController : ApiController
     {
 
-        [HttpGet]
-        public IHttpActionResult ObtenerBloques(int id_zon, string BDCia)
-        {
-            BloqueController bloques = new BloqueController();
-            return Ok(bloques.ObtenerBloques(id_zon, BDCia));
-        }
+       
 
         [HttpGet]
         public IHttpActionResult TodosBloques( string BDCia)
@@ -35,7 +30,18 @@ namespace SmartWatBack.Controllers
             BloqueController bloques = new BloqueController();
             return Ok(bloques.IngresarBloques(bloque, BDCia));
         }
+        [HttpPatch]
+        public IHttpActionResult ActualizarBloque([FromBody] BLOQUES bloque, string BDCia)
+        {
+            BloqueController bloques = new BloqueController();
+            return Ok(bloques.ActualizarBloques(bloque, BDCia));
+        }
+        [HttpDelete]
+        public IHttpActionResult EliminarBloque(string BDCia, int IdBloque)
+        {
+            BloqueController bloques = new BloqueController();
+            return Ok(bloques.EliminarBloque(IdBloque, BDCia));
+        }
 
-      
     }
 }

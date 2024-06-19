@@ -11,11 +11,12 @@ namespace LogicaSmartWat
 {
     using System;
     
-    public partial class Sp_ObtenerBloques_Result
+    public partial class DESGLOSE_ENTRADAS_SALIDAS_Result
     {
-        public int ID_BLO { get; set; }
-        public string NombreZona { get; set; }
-        public string Nombre { get; set; }
-        public int ID_ZON { get; set; }
+        public string USUARIO { get; set; }
+        public string DETALLE { get; set; }
+        public Nullable<System.DateTime> FECHA { get; set; }
+        public Nullable<float> Monto { get; set; }
+        public string Medio { get; set; }
     }
 }

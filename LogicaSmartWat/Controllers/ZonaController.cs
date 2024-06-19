@@ -112,5 +112,44 @@ namespace LogicaSmartWat
             return R;
         }
 
+        public Respuesta EliminarZona(int IdZona, String BaseDeDatos)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BaseDeDatos);
+                    ZONAS zonaE = db.ZONAS.First(b => b.ID_ZON == IdZona);
+
+                    if (zonaE != null)
+                    {
+                        db.Entry(zonaE).State = System.Data.Entity.EntityState.Deleted;
+                        db.SaveChanges();
+
+                        R.Codigo = 1;
+                        R.Mensaje = "Se ha Eliminado con éxito";
+                    }
+                    else
+                    {
+                        
+                        R.Codigo = -2;
+                        R.Mensaje = "La zona no existe";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta " + ex.Message + " " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+
+            return R;
+        }
+
     }
 }
