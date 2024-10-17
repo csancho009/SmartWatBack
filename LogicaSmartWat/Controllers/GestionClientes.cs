@@ -15,7 +15,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -64,7 +64,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -95,7 +95,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -118,7 +118,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -163,7 +163,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -213,7 +213,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -238,7 +238,7 @@ namespace LogicaSmartWat.Controllers
             ArregloProvCantDist Ubicacion = new ArregloProvCantDist();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -274,7 +274,7 @@ namespace LogicaSmartWat.Controllers
             try
             {
 
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -302,7 +302,7 @@ namespace LogicaSmartWat.Controllers
             try
             {
 
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -326,7 +326,7 @@ namespace LogicaSmartWat.Controllers
 
         public object GetCliente(string nombre)
         {
-            using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+            using (POLTAEntities db = new POLTAEntities())
             {
                 if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                 {

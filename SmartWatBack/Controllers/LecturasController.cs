@@ -23,6 +23,14 @@ namespace SmartWatBack.Controllers
             return Ok(L.TablaLecturas(mes,annio,BDCia));
         }
 
+        [Route("api/Lecturas/AnularFactura")]
+        [HttpGet]
+        public IHttpActionResult AnularFactura(int NumFact, string BDCia)
+        {
+            Lecturas L = new Lecturas();
+            return Ok(L.AnularFactura(NumFact, BDCia));
+        }
+
         [Route("api/Lecturas/IniciaDatos")]
         [HttpGet]
         public IHttpActionResult IniciaDatos()
@@ -67,6 +75,14 @@ namespace SmartWatBack.Controllers
         {
             Lecturas L = new Lecturas();
             return Ok(L.AplicaPago(P));
+        }
+
+        [Route("api/Lecturas/ReciboEspecial")]
+        [HttpPost]
+        public IHttpActionResult ReciboEspecial([FromBody] ParametrosReciboEspecial P)
+        {
+            Lecturas L = new Lecturas();
+            return Ok(L.ReciboEspecial(P));
         }
 
         [Route("api/Lecturas/PreImpresion")]

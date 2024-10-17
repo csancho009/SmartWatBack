@@ -16,7 +16,7 @@ namespace LogicaSmartWat
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -37,6 +37,33 @@ namespace LogicaSmartWat
             return R;
         }
 
+        public Respuesta ObtenerPrecioTarifa(string BaseDeDatos, string CodigoTarifa)
+        {
+            Respuesta R = new Respuesta();
+            try
+            {
+                using (POLTAEntities db = new POLTAEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BaseDeDatos);
+                    var tarifasT = from T in db.TARIFAS.Where(d=>d.ID_TAR== CodigoTarifa) select new { T.ID_TAR, T.NOMBRE, T.RESIDENCIAL, T.COMERCIAL };
+                    R.Codigo = 0;
+                    R.Mensaje = "Ok";
+                    R.Objeto = tarifasT.ToList();
+                    db.Database.Connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7);
+            }
+            return R;
+        }
+
         public Respuesta ActualizarTarifas(List<TARIFAS> tarifas, string BaseDeDatos)
         {
             Respuesta R = new Respuesta();
@@ -45,7 +72,7 @@ namespace LogicaSmartWat
             {
                 foreach (var tarifa in tarifas)
                 {
-                    using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                    using (POLTAEntities db = new POLTAEntities())
                     {
                         if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                         {

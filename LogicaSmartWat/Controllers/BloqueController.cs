@@ -14,17 +14,29 @@ namespace LogicaSmartWat
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
-                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    try
                     {
-                        db.Database.Connection.Open();
+                        if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                        {
+                            db.Database.Connection.Open();
+                        }
+                        db.Database.Connection.ChangeDatabase(BDCia);
+                        R.Codigo = 75;
+                        R.Mensaje = "Ok";
+                        R.Objeto = db.Sp_ObtenerBloques(id_zon).ToList();
                     }
-                    db.Database.Connection.ChangeDatabase(BDCia);
-                    R.Codigo = 75;
-                    R.Mensaje = "Ok";
-                    R.Objeto = db.Sp_ObtenerBloques(id_zon).ToList();
-                    db.Database.Connection.Close();
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    finally
+                    {
+                        db.Database.Connection.Close();
+                    }
+
                 }
             }
             catch(Exception ex)
@@ -40,18 +52,31 @@ namespace LogicaSmartWat
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
-                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    try
                     {
-                        db.Database.Connection.Open();
+                        if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                        {
+                            db.Database.Connection.Open();
+                        }
+                        db.Database.Connection.ChangeDatabase(BDCia);
+                        var Bs = from B in db.BLOQUES join Z in db.ZONAS.OrderBy(o => o.NOMBRE) on B.ID_ZON equals Z.ID_ZON select new { B.ID_BLO, Nombre = B.NOMBRE, Z.ID_ZON };
+                        R.Objeto = Bs.ToList();
+                        R.Codigo = 0;
+                        R.Mensaje = "Ok";
                     }
-                    db.Database.Connection.ChangeDatabase(BDCia);
-                    var Bs = from B in db.BLOQUES join Z in db.ZONAS.OrderBy(o=>o.NOMBRE) on B.ID_ZON equals Z.ID_ZON select new { B.ID_BLO, Nombre = B.NOMBRE , Z.ID_ZON};
-                    R.Objeto = Bs.ToList();
-                    R.Codigo = 0;
-                    R.Mensaje = "Ok";
-                    db.Database.Connection.Close();
+                    catch (Exception)
+                    {
+
+                      
+                    }
+                    finally
+                    {
+                        db.Database.Connection.Close();
+                    }
+                   
+                   
                 }
             }
             catch (Exception ex)
@@ -69,7 +94,7 @@ namespace LogicaSmartWat
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -107,7 +132,7 @@ namespace LogicaSmartWat
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -146,7 +171,7 @@ namespace LogicaSmartWat
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {

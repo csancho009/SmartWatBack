@@ -11,16 +11,9 @@ namespace LogicaSmartWat
 {
     using System;
     
-    public partial class PAJAS_PENDIENTES_PAGO_Result
+    public partial class ANULA_FACTURA_Result
     {
-        public int CODIGO { get; set; }
-        public string NOMBRE { get; set; }
-        public string Periodo { get; set; }
-        public Nullable<double> Total { get; set; }
-        public string MEDIDOR { get; set; }
-        public string IDENTIFICACION { get; set; }
-        public int Factura { get; set; }
-        public int EstadoHacienda { get; set; }
-        public string EstadoCorreo { get; set; }
+        public string Mensaje { get; set; }
+        public Nullable<int> id { get; set; }
     }
 }

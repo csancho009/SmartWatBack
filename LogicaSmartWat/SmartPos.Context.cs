@@ -15,10 +15,10 @@ namespace LogicaSmartWat
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class POLTA_PRUEBASEntities : DbContext
+    public partial class POLTAEntities : DbContext
     {
-        public POLTA_PRUEBASEntities()
-            : base("name=POLTA_PRUEBASEntities")
+        public POLTAEntities()
+            : base("name=POLTAEntities")
         {
         }
     
@@ -27,63 +27,72 @@ namespace LogicaSmartWat
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<TARIFAS> TARIFAS { get; set; }
-        public virtual DbSet<CLIENTES> CLIENTES { get; set; }
         public virtual DbSet<BLOQUES> BLOQUES { get; set; }
-        public virtual DbSet<PAJAS> PAJAS { get; set; }
-        public virtual DbSet<ZONAS> ZONAS { get; set; }
+        public virtual DbSet<BODEGAS> BODEGAS { get; set; }
+        public virtual DbSet<CIA> CIA { get; set; }
+        public virtual DbSet<CLIENTES> CLIENTES { get; set; }
+        public virtual DbSet<COTIZACIONES> COTIZACIONES { get; set; }
+        public virtual DbSet<CUENTAS_BANCO> CUENTAS_BANCO { get; set; }
+        public virtual DbSet<DATAFONOS> DATAFONOS { get; set; }
+        public virtual DbSet<DETALLE_CTZ> DETALLE_CTZ { get; set; }
+        public virtual DbSet<FACTURAS> FACTURAS { get; set; }
+        public virtual DbSet<IMPRESORAS> IMPRESORAS { get; set; }
+        public virtual DbSet<IMPRESORASxUSUARIO> IMPRESORASxUSUARIO { get; set; }
+        public virtual DbSet<INVENTARIO> INVENTARIO { get; set; }
+        public virtual DbSet<LECTURAS> LECTURAS { get; set; }
         public virtual DbSet<LISTA_PRECIOS> LISTA_PRECIOS { get; set; }
+        public virtual DbSet<PAJAS> PAJAS { get; set; }
+        public virtual DbSet<R_CIERRE> R_CIERRE { get; set; }
+        public virtual DbSet<ROLES> ROLES { get; set; }
+        public virtual DbSet<TARIFAS> TARIFAS { get; set; }
+        public virtual DbSet<USUARIOS> USUARIOS { get; set; }
+        public virtual DbSet<ZONAS> ZONAS { get; set; }
         public virtual DbSet<CANTONES> CANTONES { get; set; }
         public virtual DbSet<DISTRITOS> DISTRITOS { get; set; }
         public virtual DbSet<PROVINCIAS> PROVINCIAS { get; set; }
-        public virtual DbSet<CIA> CIA { get; set; }
-        public virtual DbSet<LECTURAS> LECTURAS { get; set; }
-        public virtual DbSet<DATAFONOS> DATAFONOS { get; set; }
-        public virtual DbSet<CUENTAS_BANCO> CUENTAS_BANCO { get; set; }
-        public virtual DbSet<USUARIOS> USUARIOS { get; set; }
-        public virtual DbSet<COTIZACIONES> COTIZACIONES { get; set; }
-        public virtual DbSet<FACTURAS> FACTURAS { get; set; }
-        public virtual DbSet<DETALLE_CTZ> DETALLE_CTZ { get; set; }
-        public virtual DbSet<INVENTARIO> INVENTARIO { get; set; }
-        public virtual DbSet<R_CIERRE> R_CIERRE { get; set; }
         public virtual DbSet<TRANSACCIONES> TRANSACCIONES { get; set; }
-        public virtual DbSet<IMPRESORASxUSUARIO> IMPRESORASxUSUARIO { get; set; }
-        public virtual DbSet<IMPRESORAS> IMPRESORAS { get; set; }
     
-        public virtual ObjectResult<ObtenerBloques_Result> ObtenerBloques()
+        public virtual ObjectResult<ANULA_FACTURA_Result> ANULA_FACTURA(Nullable<int> numFact)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ObtenerBloques_Result>("ObtenerBloques");
+            var numFactParameter = numFact.HasValue ?
+                new ObjectParameter("NumFact", numFact) :
+                new ObjectParameter("NumFact", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ANULA_FACTURA_Result>("ANULA_FACTURA", numFactParameter);
         }
     
-        public virtual ObjectResult<Sp_BuscarCliente_Result> Sp_BuscarCliente(string nombre)
+        public virtual int AplicarPermisoUsuarioRol(Nullable<int> usuario, Nullable<int> rol)
         {
-            var nombreParameter = nombre != null ?
-                new ObjectParameter("nombre", nombre) :
-                new ObjectParameter("nombre", typeof(string));
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarCliente_Result>("Sp_BuscarCliente", nombreParameter);
+            var rolParameter = rol.HasValue ?
+                new ObjectParameter("Rol", rol) :
+                new ObjectParameter("Rol", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AplicarPermisoUsuarioRol", usuarioParameter, rolParameter);
         }
     
-        public virtual ObjectResult<Sp_BuscarPaja_Result> Sp_BuscarPaja(string buscador)
+        public virtual ObjectResult<DESGLOSE_ENTRADAS_SALIDAS_Result> DESGLOSE_ENTRADAS_SALIDAS(string tipo, Nullable<int> numero, Nullable<System.DateTime> desde, Nullable<System.DateTime> hasta)
         {
-            var buscadorParameter = buscador != null ?
-                new ObjectParameter("buscador", buscador) :
-                new ObjectParameter("buscador", typeof(string));
+            var tipoParameter = tipo != null ?
+                new ObjectParameter("Tipo", tipo) :
+                new ObjectParameter("Tipo", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarPaja_Result>("Sp_BuscarPaja", buscadorParameter);
-        }
+            var numeroParameter = numero.HasValue ?
+                new ObjectParameter("Numero", numero) :
+                new ObjectParameter("Numero", typeof(int));
     
-        public virtual ObjectResult<TablaLecturas_Result> TablaLecturas(Nullable<int> mes, Nullable<int> annio)
-        {
-            var mesParameter = mes.HasValue ?
-                new ObjectParameter("mes", mes) :
-                new ObjectParameter("mes", typeof(int));
+            var desdeParameter = desde.HasValue ?
+                new ObjectParameter("Desde", desde) :
+                new ObjectParameter("Desde", typeof(System.DateTime));
     
-            var annioParameter = annio.HasValue ?
-                new ObjectParameter("annio", annio) :
-                new ObjectParameter("annio", typeof(int));
+            var hastaParameter = hasta.HasValue ?
+                new ObjectParameter("Hasta", hasta) :
+                new ObjectParameter("Hasta", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TablaLecturas_Result>("TablaLecturas", mesParameter, annioParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DESGLOSE_ENTRADAS_SALIDAS_Result>("DESGLOSE_ENTRADAS_SALIDAS", tipoParameter, numeroParameter, desdeParameter, hastaParameter);
         }
     
         public virtual ObjectResult<GENERA_FACTURACION_Result> GENERA_FACTURACION(Nullable<int> usuario)
@@ -95,149 +104,13 @@ namespace LogicaSmartWat
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GENERA_FACTURACION_Result>("GENERA_FACTURACION", usuarioParameter);
         }
     
-        public virtual ObjectResult<SP_BUSCAR_PAJA_PARAMETROS_Result> SP_BUSCAR_PAJA_PARAMETROS(string codigo, string cedula, string nombre, string numMedidor)
+        public virtual ObjectResult<MOVIMIENTOS_CAJA_Result> MOVIMIENTOS_CAJA(Nullable<int> elUsuario)
         {
-            var codigoParameter = codigo != null ?
-                new ObjectParameter("Codigo", codigo) :
-                new ObjectParameter("Codigo", typeof(string));
+            var elUsuarioParameter = elUsuario.HasValue ?
+                new ObjectParameter("ElUsuario", elUsuario) :
+                new ObjectParameter("ElUsuario", typeof(int));
     
-            var cedulaParameter = cedula != null ?
-                new ObjectParameter("Cedula", cedula) :
-                new ObjectParameter("Cedula", typeof(string));
-    
-            var nombreParameter = nombre != null ?
-                new ObjectParameter("Nombre", nombre) :
-                new ObjectParameter("Nombre", typeof(string));
-    
-            var numMedidorParameter = numMedidor != null ?
-                new ObjectParameter("NumMedidor", numMedidor) :
-                new ObjectParameter("NumMedidor", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BUSCAR_PAJA_PARAMETROS_Result>("SP_BUSCAR_PAJA_PARAMETROS", codigoParameter, cedulaParameter, nombreParameter, numMedidorParameter);
-        }
-    
-        public virtual ObjectResult<RECTIFICA_LECTURA_MEDIDOR_Result> RECTIFICA_LECTURA_MEDIDOR(Nullable<int> usuario, Nullable<int> numLectura)
-        {
-            var usuarioParameter = usuario.HasValue ?
-                new ObjectParameter("Usuario", usuario) :
-                new ObjectParameter("Usuario", typeof(int));
-    
-            var numLecturaParameter = numLectura.HasValue ?
-                new ObjectParameter("NumLectura", numLectura) :
-                new ObjectParameter("NumLectura", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RECTIFICA_LECTURA_MEDIDOR_Result>("RECTIFICA_LECTURA_MEDIDOR", usuarioParameter, numLecturaParameter);
-        }
-    
-        public virtual ObjectResult<TablaPrecios_Result> TablaPrecios(Nullable<int> coti)
-        {
-            var cotiParameter = coti.HasValue ?
-                new ObjectParameter("coti", coti) :
-                new ObjectParameter("coti", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TablaPrecios_Result>("TablaPrecios", cotiParameter);
-        }
-    
-        public virtual ObjectResult<PAGO_LECTURA_Result> PAGO_LECTURA(Nullable<int> numCoti, Nullable<int> usuario, Nullable<float> montoEfectivo, Nullable<float> montoTransfer, Nullable<int> numCtaBco, string numTransfer, Nullable<float> montoTarejeta, Nullable<int> numDatafono, string voucher)
-        {
-            var numCotiParameter = numCoti.HasValue ?
-                new ObjectParameter("NumCoti", numCoti) :
-                new ObjectParameter("NumCoti", typeof(int));
-    
-            var usuarioParameter = usuario.HasValue ?
-                new ObjectParameter("Usuario", usuario) :
-                new ObjectParameter("Usuario", typeof(int));
-    
-            var montoEfectivoParameter = montoEfectivo.HasValue ?
-                new ObjectParameter("MontoEfectivo", montoEfectivo) :
-                new ObjectParameter("MontoEfectivo", typeof(float));
-    
-            var montoTransferParameter = montoTransfer.HasValue ?
-                new ObjectParameter("MontoTransfer", montoTransfer) :
-                new ObjectParameter("MontoTransfer", typeof(float));
-    
-            var numCtaBcoParameter = numCtaBco.HasValue ?
-                new ObjectParameter("NumCtaBco", numCtaBco) :
-                new ObjectParameter("NumCtaBco", typeof(int));
-    
-            var numTransferParameter = numTransfer != null ?
-                new ObjectParameter("NumTransfer", numTransfer) :
-                new ObjectParameter("NumTransfer", typeof(string));
-    
-            var montoTarejetaParameter = montoTarejeta.HasValue ?
-                new ObjectParameter("MontoTarejeta", montoTarejeta) :
-                new ObjectParameter("MontoTarejeta", typeof(float));
-    
-            var numDatafonoParameter = numDatafono.HasValue ?
-                new ObjectParameter("NumDatafono", numDatafono) :
-                new ObjectParameter("NumDatafono", typeof(int));
-    
-            var voucherParameter = voucher != null ?
-                new ObjectParameter("Voucher", voucher) :
-                new ObjectParameter("Voucher", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAGO_LECTURA_Result>("PAGO_LECTURA", numCotiParameter, usuarioParameter, montoEfectivoParameter, montoTransferParameter, numCtaBcoParameter, numTransferParameter, montoTarejetaParameter, numDatafonoParameter, voucherParameter);
-        }
-    
-        public virtual ObjectResult<PAJAS_PENDIENTES_PAGO_Result> PAJAS_PENDIENTES_PAGO(string nombreCliente, string cedula, Nullable<int> estado)
-        {
-            var nombreClienteParameter = nombreCliente != null ?
-                new ObjectParameter("NombreCliente", nombreCliente) :
-                new ObjectParameter("NombreCliente", typeof(string));
-    
-            var cedulaParameter = cedula != null ?
-                new ObjectParameter("Cedula", cedula) :
-                new ObjectParameter("Cedula", typeof(string));
-    
-            var estadoParameter = estado.HasValue ?
-                new ObjectParameter("Estado", estado) :
-                new ObjectParameter("Estado", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAJAS_PENDIENTES_PAGO_Result>("PAJAS_PENDIENTES_PAGO", nombreClienteParameter, cedulaParameter, estadoParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> ObtenerLecturaAnterior(Nullable<int> iDPAJ, Nullable<int> iDLEC)
-        {
-            var iDPAJParameter = iDPAJ.HasValue ?
-                new ObjectParameter("IDPAJ", iDPAJ) :
-                new ObjectParameter("IDPAJ", typeof(int));
-    
-            var iDLECParameter = iDLEC.HasValue ?
-                new ObjectParameter("IDLEC", iDLEC) :
-                new ObjectParameter("IDLEC", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ObtenerLecturaAnterior", iDPAJParameter, iDLECParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<System.DateTime>> ObtenernerFechaLecturaAnterior(Nullable<int> iDPAJ, Nullable<int> iDLEC)
-        {
-            var iDPAJParameter = iDPAJ.HasValue ?
-                new ObjectParameter("IDPAJ", iDPAJ) :
-                new ObjectParameter("IDPAJ", typeof(int));
-    
-            var iDLECParameter = iDLEC.HasValue ?
-                new ObjectParameter("IDLEC", iDLEC) :
-                new ObjectParameter("IDLEC", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("ObtenernerFechaLecturaAnterior", iDPAJParameter, iDLECParameter);
-        }
-    
-        public virtual ObjectResult<Sp_ObtenerBloques_Result> Sp_ObtenerBloques(Nullable<int> id_zona)
-        {
-            var id_zonaParameter = id_zona.HasValue ?
-                new ObjectParameter("id_zona", id_zona) :
-                new ObjectParameter("id_zona", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_ObtenerBloques_Result>("Sp_ObtenerBloques", id_zonaParameter);
-        }
-    
-        public virtual ObjectResult<PROCESO_CAJA_Result> PROCESO_CAJA(Nullable<int> usu)
-        {
-            var usuParameter = usu.HasValue ?
-                new ObjectParameter("Usu", usu) :
-                new ObjectParameter("Usu", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PROCESO_CAJA_Result>("PROCESO_CAJA", usuParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MOVIMIENTOS_CAJA_Result>("MOVIMIENTOS_CAJA", elUsuarioParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> NuevaCaja(Nullable<int> tIPO, Nullable<float> mONT, Nullable<int> uSUA, Nullable<int> tRANS, Nullable<int> mEDI, Nullable<System.DateTime> fECH, Nullable<int> dOCU, string mone)
@@ -383,34 +256,262 @@ namespace LogicaSmartWat
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("NuevoMovOperacion", tipoParameter, motivoParameter, montoParameter, detaParameter, uSRParameter, new_identity);
         }
     
-        public virtual ObjectResult<MOVIMIENTOS_CAJA_Result> MOVIMIENTOS_CAJA(Nullable<int> elUsuario)
+        public virtual ObjectResult<Nullable<int>> NuevoUsuario(string nOMB, string cEDU, string tELE, string dIRE, string uSUA, string pASS, Nullable<int> pERMI, Nullable<int> eSTA, Nullable<int> vEND, Nullable<int> bOD, ObjectParameter new_identity)
         {
-            var elUsuarioParameter = elUsuario.HasValue ?
-                new ObjectParameter("ElUsuario", elUsuario) :
-                new ObjectParameter("ElUsuario", typeof(int));
+            var nOMBParameter = nOMB != null ?
+                new ObjectParameter("NOMB", nOMB) :
+                new ObjectParameter("NOMB", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MOVIMIENTOS_CAJA_Result>("MOVIMIENTOS_CAJA", elUsuarioParameter);
+            var cEDUParameter = cEDU != null ?
+                new ObjectParameter("CEDU", cEDU) :
+                new ObjectParameter("CEDU", typeof(string));
+    
+            var tELEParameter = tELE != null ?
+                new ObjectParameter("TELE", tELE) :
+                new ObjectParameter("TELE", typeof(string));
+    
+            var dIREParameter = dIRE != null ?
+                new ObjectParameter("DIRE", dIRE) :
+                new ObjectParameter("DIRE", typeof(string));
+    
+            var uSUAParameter = uSUA != null ?
+                new ObjectParameter("USUA", uSUA) :
+                new ObjectParameter("USUA", typeof(string));
+    
+            var pASSParameter = pASS != null ?
+                new ObjectParameter("PASS", pASS) :
+                new ObjectParameter("PASS", typeof(string));
+    
+            var pERMIParameter = pERMI.HasValue ?
+                new ObjectParameter("PERMI", pERMI) :
+                new ObjectParameter("PERMI", typeof(int));
+    
+            var eSTAParameter = eSTA.HasValue ?
+                new ObjectParameter("ESTA", eSTA) :
+                new ObjectParameter("ESTA", typeof(int));
+    
+            var vENDParameter = vEND.HasValue ?
+                new ObjectParameter("VEND", vEND) :
+                new ObjectParameter("VEND", typeof(int));
+    
+            var bODParameter = bOD.HasValue ?
+                new ObjectParameter("BOD", bOD) :
+                new ObjectParameter("BOD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("NuevoUsuario", nOMBParameter, cEDUParameter, tELEParameter, dIREParameter, uSUAParameter, pASSParameter, pERMIParameter, eSTAParameter, vENDParameter, bODParameter, new_identity);
         }
     
-        public virtual ObjectResult<DESGLOSE_ENTRADAS_SALIDAS_Result> DESGLOSE_ENTRADAS_SALIDAS(string tipo, Nullable<int> numero, Nullable<System.DateTime> desde, Nullable<System.DateTime> hasta)
+        public virtual ObjectResult<Nullable<int>> ObtenerLecturaAnterior(Nullable<int> iDPAJ, Nullable<int> iDLEC)
         {
-            var tipoParameter = tipo != null ?
-                new ObjectParameter("Tipo", tipo) :
-                new ObjectParameter("Tipo", typeof(string));
+            var iDPAJParameter = iDPAJ.HasValue ?
+                new ObjectParameter("IDPAJ", iDPAJ) :
+                new ObjectParameter("IDPAJ", typeof(int));
     
-            var numeroParameter = numero.HasValue ?
-                new ObjectParameter("Numero", numero) :
-                new ObjectParameter("Numero", typeof(int));
+            var iDLECParameter = iDLEC.HasValue ?
+                new ObjectParameter("IDLEC", iDLEC) :
+                new ObjectParameter("IDLEC", typeof(int));
     
-            var desdeParameter = desde.HasValue ?
-                new ObjectParameter("Desde", desde) :
-                new ObjectParameter("Desde", typeof(System.DateTime));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ObtenerLecturaAnterior", iDPAJParameter, iDLECParameter);
+        }
     
-            var hastaParameter = hasta.HasValue ?
-                new ObjectParameter("Hasta", hasta) :
-                new ObjectParameter("Hasta", typeof(System.DateTime));
+        public virtual ObjectResult<Nullable<System.DateTime>> ObtenernerFechaLecturaAnterior(Nullable<int> iDPAJ, Nullable<int> iDLEC)
+        {
+            var iDPAJParameter = iDPAJ.HasValue ?
+                new ObjectParameter("IDPAJ", iDPAJ) :
+                new ObjectParameter("IDPAJ", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DESGLOSE_ENTRADAS_SALIDAS_Result>("DESGLOSE_ENTRADAS_SALIDAS", tipoParameter, numeroParameter, desdeParameter, hastaParameter);
+            var iDLECParameter = iDLEC.HasValue ?
+                new ObjectParameter("IDLEC", iDLEC) :
+                new ObjectParameter("IDLEC", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("ObtenernerFechaLecturaAnterior", iDPAJParameter, iDLECParameter);
+        }
+    
+        public virtual ObjectResult<PAGO_LECTURA_Result> PAGO_LECTURA(Nullable<int> numCoti, Nullable<int> usuario, Nullable<float> montoEfectivo, Nullable<float> montoTransfer, Nullable<int> numCtaBco, string numTransfer, Nullable<float> montoTarejeta, Nullable<int> numDatafono, string voucher)
+        {
+            var numCotiParameter = numCoti.HasValue ?
+                new ObjectParameter("NumCoti", numCoti) :
+                new ObjectParameter("NumCoti", typeof(int));
+    
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
+    
+            var montoEfectivoParameter = montoEfectivo.HasValue ?
+                new ObjectParameter("MontoEfectivo", montoEfectivo) :
+                new ObjectParameter("MontoEfectivo", typeof(float));
+    
+            var montoTransferParameter = montoTransfer.HasValue ?
+                new ObjectParameter("MontoTransfer", montoTransfer) :
+                new ObjectParameter("MontoTransfer", typeof(float));
+    
+            var numCtaBcoParameter = numCtaBco.HasValue ?
+                new ObjectParameter("NumCtaBco", numCtaBco) :
+                new ObjectParameter("NumCtaBco", typeof(int));
+    
+            var numTransferParameter = numTransfer != null ?
+                new ObjectParameter("NumTransfer", numTransfer) :
+                new ObjectParameter("NumTransfer", typeof(string));
+    
+            var montoTarejetaParameter = montoTarejeta.HasValue ?
+                new ObjectParameter("MontoTarejeta", montoTarejeta) :
+                new ObjectParameter("MontoTarejeta", typeof(float));
+    
+            var numDatafonoParameter = numDatafono.HasValue ?
+                new ObjectParameter("NumDatafono", numDatafono) :
+                new ObjectParameter("NumDatafono", typeof(int));
+    
+            var voucherParameter = voucher != null ?
+                new ObjectParameter("Voucher", voucher) :
+                new ObjectParameter("Voucher", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAGO_LECTURA_Result>("PAGO_LECTURA", numCotiParameter, usuarioParameter, montoEfectivoParameter, montoTransferParameter, numCtaBcoParameter, numTransferParameter, montoTarejetaParameter, numDatafonoParameter, voucherParameter);
+        }
+    
+        public virtual ObjectResult<PAGO_RECIBO_ESPECIAL_Result> PAGO_RECIBO_ESPECIAL(Nullable<int> usuario, string codigoArticulo, Nullable<int> cliente, Nullable<float> monto, string nota, string medioPago, Nullable<int> ctaBanco, Nullable<int> datafono)
+        {
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
+    
+            var codigoArticuloParameter = codigoArticulo != null ?
+                new ObjectParameter("CodigoArticulo", codigoArticulo) :
+                new ObjectParameter("CodigoArticulo", typeof(string));
+    
+            var clienteParameter = cliente.HasValue ?
+                new ObjectParameter("Cliente", cliente) :
+                new ObjectParameter("Cliente", typeof(int));
+    
+            var montoParameter = monto.HasValue ?
+                new ObjectParameter("Monto", monto) :
+                new ObjectParameter("Monto", typeof(float));
+    
+            var notaParameter = nota != null ?
+                new ObjectParameter("Nota", nota) :
+                new ObjectParameter("Nota", typeof(string));
+    
+            var medioPagoParameter = medioPago != null ?
+                new ObjectParameter("MedioPago", medioPago) :
+                new ObjectParameter("MedioPago", typeof(string));
+    
+            var ctaBancoParameter = ctaBanco.HasValue ?
+                new ObjectParameter("CtaBanco", ctaBanco) :
+                new ObjectParameter("CtaBanco", typeof(int));
+    
+            var datafonoParameter = datafono.HasValue ?
+                new ObjectParameter("Datafono", datafono) :
+                new ObjectParameter("Datafono", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAGO_RECIBO_ESPECIAL_Result>("PAGO_RECIBO_ESPECIAL", usuarioParameter, codigoArticuloParameter, clienteParameter, montoParameter, notaParameter, medioPagoParameter, ctaBancoParameter, datafonoParameter);
+        }
+    
+        public virtual ObjectResult<PROCESO_CAJA_Result> PROCESO_CAJA(Nullable<int> usu)
+        {
+            var usuParameter = usu.HasValue ?
+                new ObjectParameter("Usu", usu) :
+                new ObjectParameter("Usu", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PROCESO_CAJA_Result>("PROCESO_CAJA", usuParameter);
+        }
+    
+        public virtual ObjectResult<RECTIFICA_LECTURA_MEDIDOR_Result> RECTIFICA_LECTURA_MEDIDOR(Nullable<int> usuario, Nullable<int> numLectura)
+        {
+            var usuarioParameter = usuario.HasValue ?
+                new ObjectParameter("Usuario", usuario) :
+                new ObjectParameter("Usuario", typeof(int));
+    
+            var numLecturaParameter = numLectura.HasValue ?
+                new ObjectParameter("NumLectura", numLectura) :
+                new ObjectParameter("NumLectura", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RECTIFICA_LECTURA_MEDIDOR_Result>("RECTIFICA_LECTURA_MEDIDOR", usuarioParameter, numLecturaParameter);
+        }
+    
+        public virtual ObjectResult<SP_BUSCAR_PAJA_PARAMETROS_Result> SP_BUSCAR_PAJA_PARAMETROS(string codigo, string cedula, string nombre, string numMedidor)
+        {
+            var codigoParameter = codigo != null ?
+                new ObjectParameter("Codigo", codigo) :
+                new ObjectParameter("Codigo", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var numMedidorParameter = numMedidor != null ?
+                new ObjectParameter("NumMedidor", numMedidor) :
+                new ObjectParameter("NumMedidor", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BUSCAR_PAJA_PARAMETROS_Result>("SP_BUSCAR_PAJA_PARAMETROS", codigoParameter, cedulaParameter, nombreParameter, numMedidorParameter);
+        }
+    
+        public virtual ObjectResult<Sp_BuscarCliente_Result> Sp_BuscarCliente(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("nombre", nombre) :
+                new ObjectParameter("nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarCliente_Result>("Sp_BuscarCliente", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Sp_BuscarPaja_Result> Sp_BuscarPaja(string buscador)
+        {
+            var buscadorParameter = buscador != null ?
+                new ObjectParameter("buscador", buscador) :
+                new ObjectParameter("buscador", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_BuscarPaja_Result>("Sp_BuscarPaja", buscadorParameter);
+        }
+    
+        public virtual ObjectResult<Sp_ObtenerBloques_Result> Sp_ObtenerBloques(Nullable<int> id_zona)
+        {
+            var id_zonaParameter = id_zona.HasValue ?
+                new ObjectParameter("id_zona", id_zona) :
+                new ObjectParameter("id_zona", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_ObtenerBloques_Result>("Sp_ObtenerBloques", id_zonaParameter);
+        }
+    
+        public virtual ObjectResult<TablaLecturas_Result> TablaLecturas(Nullable<int> mes, Nullable<int> annio)
+        {
+            var mesParameter = mes.HasValue ?
+                new ObjectParameter("mes", mes) :
+                new ObjectParameter("mes", typeof(int));
+    
+            var annioParameter = annio.HasValue ?
+                new ObjectParameter("annio", annio) :
+                new ObjectParameter("annio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TablaLecturas_Result>("TablaLecturas", mesParameter, annioParameter);
+        }
+    
+        public virtual ObjectResult<TablaPrecios_Result> TablaPrecios(Nullable<int> coti)
+        {
+            var cotiParameter = coti.HasValue ?
+                new ObjectParameter("coti", coti) :
+                new ObjectParameter("coti", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TablaPrecios_Result>("TablaPrecios", cotiParameter);
+        }
+    
+        public virtual ObjectResult<PAJAS_PENDIENTES_PAGO_Result> PAJAS_PENDIENTES_PAGO(string nombreCliente, string cedula, Nullable<int> estado)
+        {
+            var nombreClienteParameter = nombreCliente != null ?
+                new ObjectParameter("NombreCliente", nombreCliente) :
+                new ObjectParameter("NombreCliente", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var estadoParameter = estado.HasValue ?
+                new ObjectParameter("Estado", estado) :
+                new ObjectParameter("Estado", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAJAS_PENDIENTES_PAGO_Result>("PAJAS_PENDIENTES_PAGO", nombreClienteParameter, cedulaParameter, estadoParameter);
         }
     }
 }

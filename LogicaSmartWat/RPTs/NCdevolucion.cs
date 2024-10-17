@@ -16,14 +16,14 @@ namespace LogicaSmartWat.RPTs {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class MovCajaDetallados : ReportClass {
+    public class NCdevolucion : ReportClass {
         
-        public MovCajaDetallados() {
+        public NCdevolucion() {
         }
         
         public override string ResourceName {
             get {
-                return "MovCajaDetallados.rpt";
+                return "NCdevolucion.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace LogicaSmartWat.RPTs {
         
         public override string FullResourceName {
             get {
-                return "LogicaSmartWat.RPTs.MovCajaDetallados.rpt";
+                return "LogicaSmartWat.RPTs.NCdevolucion.rpt";
             }
             set {
                 // Do nothing
@@ -90,7 +90,7 @@ namespace LogicaSmartWat.RPTs {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_ElUsuario {
+        public CrystalDecisions.Shared.IParameterField Parameter_Codigo {
             get {
                 return this.DataDefinition.ParameterFields[0];
             }
@@ -98,7 +98,7 @@ namespace LogicaSmartWat.RPTs {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_Usu {
+        public CrystalDecisions.Shared.IParameterField Parameter_Cia {
             get {
                 return this.DataDefinition.ParameterFields[1];
             }
@@ -106,9 +106,9 @@ namespace LogicaSmartWat.RPTs {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedMovCajaDetallados : Component, ICachedReport {
+    public class CachedNCdevolucion : Component, ICachedReport {
         
-        public CachedMovCajaDetallados() {
+        public CachedNCdevolucion() {
         }
         
         [Browsable(false)]
@@ -145,7 +145,7 @@ namespace LogicaSmartWat.RPTs {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            MovCajaDetallados rpt = new MovCajaDetallados();
+            NCdevolucion rpt = new NCdevolucion();
             rpt.Site = this.Site;
             return rpt;
         }

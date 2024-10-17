@@ -11,10 +11,9 @@ namespace LogicaSmartWat
 {
     using System;
     
-    public partial class ObtenerBloques_Result
+    public partial class PAGO_RECIBO_ESPECIAL_Result
     {
-        public int ID_BLO { get; set; }
-        public string NombreZona { get; set; }
-        public string Nombre { get; set; }
+        public string Mensaje { get; set; }
+        public Nullable<int> id { get; set; }
     }
 }

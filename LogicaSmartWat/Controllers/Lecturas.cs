@@ -15,7 +15,7 @@ namespace LogicaSmartWat.Controllers
 
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -47,7 +47,7 @@ namespace LogicaSmartWat.Controllers
 
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -92,7 +92,7 @@ namespace LogicaSmartWat.Controllers
 
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -120,7 +120,7 @@ namespace LogicaSmartWat.Controllers
 
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -143,13 +143,57 @@ namespace LogicaSmartWat.Controllers
             return R;
         }
 
+        public Respuesta AnularFactura(int NumFact, string BDCia)
+        {
+            Respuesta R= new Respuesta();
+            try
+            {
+                using (POLTAEntities db = new POLTAEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(BDCia);
+
+                    var Sp = db.ANULA_FACTURA(NumFact);
+                   
+                    foreach (var S in Sp)
+                    {
+                        R= new Respuesta { Codigo = (int) S.id, Mensaje = S.Mensaje };
+                    }
+                    db.Database.Connection.Close();
+                    if (R.Codigo >= 0)
+                    {
+                        Impresiones I = new Impresiones();
+                        var Emp = db.CIA.FirstOrDefault();
+                        Respuesta RI = I.NCDevolucion(R.Codigo, Emp.CODIGO, BDCia);
+                        if (RI.Codigo >= 0)
+                        {
+                            R.Objeto = RI.Objeto;
+                        }
+                        else
+                        {
+                            R.Objeto = "NA";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                R= new Respuesta { Codigo = -1, Mensaje = "Alerta  Anular Factura " + ex.Message + " NL " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7) };
+            }
+            return R;
+        }
+
         public Respuesta AplicaPago(ParametrosPagos P)
         {
             Respuesta R = new Respuesta();
 
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -206,6 +250,68 @@ namespace LogicaSmartWat.Controllers
             return R;
         }
 
+        public Respuesta ReciboEspecial(ParametrosReciboEspecial P)
+        {
+            Respuesta R = new Respuesta();
+
+            try
+            {
+                using (POLTAEntities db = new POLTAEntities())
+                {
+                    if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    {
+                        db.Database.Connection.Open();
+                    }
+                    db.Database.Connection.ChangeDatabase(P.BDCia);
+                    USUARIOS usr = db.USUARIOS.Where(d => d.CODIGO == P.Usuario).FirstOrDefault();
+                    if (usr.CAJA == 1)
+                    {
+                        var Repos = db.PAGO_RECIBO_ESPECIAL(P.Usuario,P.CodigoArticulo,P.Cliente,P.Monto,P.Nota,P.MedioPago,P.CtaBanco,P.Datafono);
+                        foreach (var L in Repos)
+                        {
+                            if (L.id > 0)
+                            {
+                                R.Codigo = (int)L.id;
+
+                            }
+                            else
+                            {
+                                R.Codigo = -2;
+                                R.Mensaje = "Alerta al intentar aplicar pago " + L.Mensaje;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        R.Codigo = -4;
+                        R.Mensaje = "Caja está cerrada";
+                    }
+
+                    db.Database.Connection.Close();
+                }
+                if (R.Codigo > 0)
+                {
+                    Impresiones I = new Impresiones();
+                    Respuesta R2 = I.Factura(R.Codigo, P.BDCia);
+                    R.Mensaje = "Documento creado exitosamente #" + R.Codigo.ToString();
+                    if (R2.Codigo == 0)
+                    {
+                        R.Objeto = R2.Objeto;
+                    }
+                    else
+                    {
+                        R.Mensaje = "Documento creado exitosamente #" + R.Codigo.ToString() + ", sin embargo, hubo al generar el pdf indica: " + R2.Mensaje; ;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = "Alerta Generar ReciboEspecial " + ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7) +" msg "+ ex.InnerException ;
+            }
+            return R;
+        }
+
         public Respuesta PreImpresion(ParametrosPagos P)
         {
 
@@ -213,7 +319,7 @@ namespace LogicaSmartWat.Controllers
             Impresiones I = new Impresiones();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -271,7 +377,7 @@ namespace LogicaSmartWat.Controllers
             Impresiones I = new Impresiones();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -334,7 +440,7 @@ namespace LogicaSmartWat.Controllers
               
                 try
                 {
-                    using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                    using (POLTAEntities db = new POLTAEntities())
                     {
                         if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                         {

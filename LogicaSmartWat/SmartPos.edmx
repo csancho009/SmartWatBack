@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="POLTA_PRUEBASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="POLTAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BLOQUES">
           <Key>
             <PropertyRef Name="ID_BLO" />
@@ -12,6 +12,14 @@
           <Property Name="ID_BLO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
           <Property Name="ID_ZON" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BODEGAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="ESTADO" Type="int" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -85,6 +93,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="INSTIEXO" Type="varchar" MaxLength="50" />
           <Property Name="FECHAEXO" Type="date" />
           <Property Name="PROCENTAJEEXO" Type="int" />
+          <Property Name="ConsumidorFinal" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="COTIZACIONES">
           <Key>
@@ -100,7 +109,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="MONEDA" Type="varchar" MaxLength="3" />
           <Property Name="ESTADO" Type="int" />
           <Property Name="TARJETA" Type="real" />
-          <Property Name="NTARJETA" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTARJETA" Type="nvarchar" MaxLength="400" />
         </EntityType>
         <EntityType Name="CUENTAS_BANCO">
           <Key>
@@ -277,6 +286,13 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.PROVINCIAS' no tiene definida ning
           <Property Name="CON_TAR_DOL" Type="real" />
           <Property Name="CON_TRA_DOL" Type="real" />
           <Property Name="CON_CHE_DOL" Type="real" />
+        </EntityType>
+        <EntityType Name="ROLES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="TARIFAS">
           <Key>
@@ -492,6 +508,13 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ANULA_FACTURA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NumFact" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AplicarPermisoUsuarioRol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+          <Parameter Name="Rol" Type="int" Mode="In" />
+        </Function>
         <Function Name="DESGLOSE_ENTRADAS_SALIDAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Tipo" Type="varchar" Mode="In" />
           <Parameter Name="Numero" Type="int" Mode="In" />
@@ -544,6 +567,19 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Parameter Name="USR" Type="int" Mode="In" />
           <Parameter Name="new_identity" Type="int" Mode="InOut" />
         </Function>
+        <Function Name="NuevoUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOMB" Type="nvarchar" Mode="In" />
+          <Parameter Name="CEDU" Type="nvarchar" Mode="In" />
+          <Parameter Name="TELE" Type="nvarchar" Mode="In" />
+          <Parameter Name="DIRE" Type="nvarchar" Mode="In" />
+          <Parameter Name="USUA" Type="nvarchar" Mode="In" />
+          <Parameter Name="PASS" Type="nvarchar" Mode="In" />
+          <Parameter Name="PERMI" Type="int" Mode="In" />
+          <Parameter Name="ESTA" Type="int" Mode="In" />
+          <Parameter Name="VEND" Type="int" Mode="In" />
+          <Parameter Name="BOD" Type="int" Mode="In" />
+          <Parameter Name="new_identity" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="ObtenerLecturaAnterior" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IDPAJ" Type="int" Mode="In" />
           <Parameter Name="IDLEC" Type="int" Mode="In" />
@@ -562,6 +598,16 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Parameter Name="MontoTarejeta" Type="real" Mode="In" />
           <Parameter Name="NumDatafono" Type="int" Mode="In" />
           <Parameter Name="Voucher" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PAGO_RECIBO_ESPECIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+          <Parameter Name="CodigoArticulo" Type="varchar" Mode="In" />
+          <Parameter Name="Cliente" Type="int" Mode="In" />
+          <Parameter Name="Monto" Type="real" Mode="In" />
+          <Parameter Name="Nota" Type="varchar" Mode="In" />
+          <Parameter Name="MedioPago" Type="varchar" Mode="In" />
+          <Parameter Name="CtaBanco" Type="int" Mode="In" />
+          <Parameter Name="Datafono" Type="int" Mode="In" />
         </Function>
         <Function Name="PAJAS_PENDIENTES_PAGO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreCliente" Type="varchar" Mode="In" />
@@ -597,8 +643,9 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
         <Function Name="TablaPrecios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="coti" Type="int" Mode="In" />
         </Function>
-        <EntityContainer Name="POLTA_PRUEBASModelStoreContainer">
+        <EntityContainer Name="POLTAModelStoreContainer">
           <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BODEGAS" EntityType="Self.BODEGAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIA" EntityType="Self.CIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COTIZACIONES" EntityType="Self.COTIZACIONES" Schema="dbo" store:Type="Tables" />
@@ -613,6 +660,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAJAS" EntityType="Self.PAJAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_CIERRE" EntityType="Self.R_CIERRE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ROLES" EntityType="Self.ROLES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZONAS" EntityType="Self.ZONAS" Schema="dbo" store:Type="Tables" />
@@ -704,235 +752,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="POLTA_PRUEBASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="TARIFAS">
-          <Key>
-            <PropertyRef Name="ID_TAR" />
-          </Key>
-          <Property Name="ID_TAR" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RESIDENCIAL" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="COMERCIAL" Type="Decimal" Precision="19" Scale="4" />
-        </EntityType>
-        <EntityContainer Name="POLTA_PRUEBASEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" />
-          <EntitySet Name="CLIENTES" EntityType="POLTA_PRUEBASModel.CLIENTES" />
-          <EntitySet Name="BLOQUES" EntityType="POLTA_PRUEBASModel.BLOQUES" />
-          <EntitySet Name="PAJAS" EntityType="POLTA_PRUEBASModel.PAJAS" />
-          <EntitySet Name="ZONAS" EntityType="POLTA_PRUEBASModel.ZONAS" />
-          <AssociationSet Name="FK__467f3960" Association="POLTA_PRUEBASModel.FK__467f3960">
-            <End Role="ZONAS" EntitySet="ZONAS" />
-            <End Role="BLOQUES" EntitySet="BLOQUES" />
-          </AssociationSet>
-          <AssociationSet Name="FK__4e03f6cc" Association="POLTA_PRUEBASModel.FK__4e03f6cc">
-            <End Role="BLOQUES" EntitySet="BLOQUES" />
-            <End Role="PAJAS" EntitySet="PAJAS" />
-          </AssociationSet>
-          <AssociationSet Name="FK__9d61f4d4" Association="POLTA_PRUEBASModel.FK__9d61f4d4">
-            <End Role="CLIENTES" EntitySet="CLIENTES" />
-            <End Role="PAJAS" EntitySet="PAJAS" />
-          </AssociationSet>
-          <FunctionImport Name="ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.ObtenerBloques_Result)" />
-          <EntitySet Name="LISTA_PRECIOS" EntityType="POLTA_PRUEBASModel.LISTA_PRECIOS" />
-          <EntitySet Name="CANTONES" EntityType="POLTA_PRUEBASModel.CANTONES" />
-          <EntitySet Name="DISTRITOS" EntityType="POLTA_PRUEBASModel.DISTRITOS" />
-          <EntitySet Name="PROVINCIAS" EntityType="POLTA_PRUEBASModel.PROVINCIAS" />
-          <EntitySet Name="CIA" EntityType="POLTA_PRUEBASModel.CIA" />
-          <FunctionImport Name="Sp_BuscarCliente" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarCliente_Result)">
-          <Parameter Name="nombre" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="Sp_BuscarPaja" ReturnType="Collection(POLTA_PRUEBASModel.Sp_BuscarPaja_Result)">
-          <Parameter Name="buscador" Mode="In" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="LECTURAS" EntityType="POLTA_PRUEBASModel.LECTURAS" />
-          <AssociationSet Name="FK__1bca5d8f" Association="POLTA_PRUEBASModel.FK__1bca5d8f">
-            <End Role="PAJAS" EntitySet="PAJAS" />
-            <End Role="LECTURAS" EntitySet="LECTURAS" />
-          </AssociationSet>
-          <FunctionImport Name="TablaLecturas" ReturnType="Collection(POLTA_PRUEBASModel.TablaLecturas_Result)">
-            <Parameter Name="mes" Mode="In" Type="Int32" />
-            <Parameter Name="annio" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GENERA_FACTURACION" ReturnType="Collection(POLTA_PRUEBASModel.GENERA_FACTURACION_Result)">
-          <Parameter Name="Usuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_BUSCAR_PAJA_PARAMETROS" ReturnType="Collection(POLTA_PRUEBASModel.SP_BUSCAR_PAJA_PARAMETROS_Result)">
-            <Parameter Name="Codigo" Mode="In" Type="String" />
-            <Parameter Name="Cedula" Mode="In" Type="String" />
-            <Parameter Name="Nombre" Mode="In" Type="String" />
-            <Parameter Name="NumMedidor" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="RECTIFICA_LECTURA_MEDIDOR" ReturnType="Collection(POLTA_PRUEBASModel.RECTIFICA_LECTURA_MEDIDOR_Result)">
-            <Parameter Name="Usuario" Mode="In" Type="Int32" />
-            <Parameter Name="NumLectura" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="TablaPrecios" ReturnType="Collection(POLTA_PRUEBASModel.TablaPrecios_Result)">
-          <Parameter Name="coti" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="DATAFONOS" EntityType="POLTA_PRUEBASModel.DATAFONOS" />
-          <EntitySet Name="CUENTAS_BANCO" EntityType="POLTA_PRUEBASModel.CUENTAS_BANCO" />
-          <AssociationSet Name="FK__6f58e2d3" Association="POLTA_PRUEBASModel.FK__6f58e2d3">
-            <End Role="CUENTAS_BANCO" EntitySet="CUENTAS_BANCO" />
-            <End Role="DATAFONOS" EntitySet="DATAFONOS" />
-          </AssociationSet>
-          <FunctionImport Name="PAGO_LECTURA" ReturnType="Collection(POLTA_PRUEBASModel.PAGO_LECTURA_Result)">
-            <Parameter Name="NumCoti" Mode="In" Type="Int32" />
-            <Parameter Name="Usuario" Mode="In" Type="Int32" />
-            <Parameter Name="MontoEfectivo" Mode="In" Type="Single" />
-            <Parameter Name="MontoTransfer" Mode="In" Type="Single" />
-            <Parameter Name="NumCtaBco" Mode="In" Type="Int32" />
-            <Parameter Name="NumTransfer" Mode="In" Type="String" />
-            <Parameter Name="MontoTarejeta" Mode="In" Type="Single" />
-            <Parameter Name="NumDatafono" Mode="In" Type="Int32" />
-            <Parameter Name="Voucher" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="PAJAS_PENDIENTES_PAGO" ReturnType="Collection(POLTA_PRUEBASModel.PAJAS_PENDIENTES_PAGO_Result)">
-            <Parameter Name="NombreCliente" Mode="In" Type="String" />
-            <Parameter Name="Cedula" Mode="In" Type="String" />
-            <Parameter Name="Estado" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="USUARIOS" EntityType="POLTA_PRUEBASModel.USUARIOS" />
-          <AssociationSet Name="FK__493bfcd8" Association="POLTA_PRUEBASModel.FK__493bfcd8">
-            <End Role="USUARIOS" EntitySet="USUARIOS" />
-            <End Role="LECTURAS" EntitySet="LECTURAS" />
-          </AssociationSet>
-          <EntitySet Name="COTIZACIONES" EntityType="POLTA_PRUEBASModel.COTIZACIONES" />
-          <AssociationSet Name="FK__595edfbe" Association="POLTA_PRUEBASModel.FK__595edfbe">
-            <End Role="CLIENTES" EntitySet="CLIENTES" />
-            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_COTIZACIONES_CLIENTES" Association="POLTA_PRUEBASModel.FK_COTIZACIONES_CLIENTES">
-            <End Role="CLIENTES" EntitySet="CLIENTES" />
-            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
-          </AssociationSet>
-          <AssociationSet Name="FK__39c3a648" Association="POLTA_PRUEBASModel.FK__39c3a648">
-            <End Role="USUARIOS" EntitySet="USUARIOS" />
-            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_COTIZACIONES_USUARIOS" Association="POLTA_PRUEBASModel.FK_COTIZACIONES_USUARIOS">
-            <End Role="USUARIOS" EntitySet="USUARIOS" />
-            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
-          </AssociationSet>
-          <EntitySet Name="FACTURAS" EntityType="POLTA_PRUEBASModel.FACTURAS" />
-          <AssociationSet Name="FK__0b15f0f8" Association="POLTA_PRUEBASModel.FK__0b15f0f8">
-            <End Role="CLIENTES" EntitySet="CLIENTES" />
-            <End Role="FACTURAS" EntitySet="FACTURAS" />
-          </AssociationSet>
-          <EntitySet Name="DETALLE_CTZ" EntityType="POLTA_PRUEBASModel.DETALLE_CTZ" />
-          <AssociationSet Name="FK_DETALLE_CTZ_COTIZACIONES" Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES">
-            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
-            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
-          </AssociationSet>
-          <EntitySet Name="INVENTARIO" EntityType="POLTA_PRUEBASModel.INVENTARIO" />
-          <AssociationSet Name="FK_DETALLE_CTZ_INVENTARIO" Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO">
-            <End Role="INVENTARIO" EntitySet="INVENTARIO" />
-            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
-          </AssociationSet>
-          <FunctionImport Name="ObtenerLecturaAnterior" ReturnType="Collection(Int32)">
-            <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
-            <Parameter Name="IDLEC" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="ObtenernerFechaLecturaAnterior" ReturnType="Collection(DateTime)">
-            <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
-            <Parameter Name="IDLEC" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="Sp_ObtenerBloques" ReturnType="Collection(POLTA_PRUEBASModel.Sp_ObtenerBloques_Result)">
-          <Parameter Name="id_zona" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="R_CIERRE" EntityType="POLTA_PRUEBASModel.R_CIERRE" />
-          <FunctionImport Name="PROCESO_CAJA" ReturnType="Collection(POLTA_PRUEBASModel.PROCESO_CAJA_Result)">
-          <Parameter Name="Usu" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="NuevaCaja" ReturnType="Collection(Int32)">
-            <Parameter Name="TIPO" Mode="In" Type="Int32" />
-            <Parameter Name="MONT" Mode="In" Type="Single" />
-            <Parameter Name="USUA" Mode="In" Type="Int32" />
-            <Parameter Name="TRANS" Mode="In" Type="Int32" />
-            <Parameter Name="MEDI" Mode="In" Type="Int32" />
-            <Parameter Name="FECH" Mode="In" Type="DateTime" />
-            <Parameter Name="DOCU" Mode="In" Type="Int32" />
-            <Parameter Name="Mone" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="NuevoCierre" ReturnType="Collection(Int32)">
-            <Parameter Name="Usu" Mode="In" Type="Int32" />
-            <Parameter Name="efec" Mode="In" Type="Single" />
-            <Parameter Name="tar" Mode="In" Type="Single" />
-            <Parameter Name="trans" Mode="In" Type="Single" />
-            <Parameter Name="che" Mode="In" Type="Single" />
-            <Parameter Name="cefec" Mode="In" Type="Single" />
-            <Parameter Name="ctar" Mode="In" Type="Single" />
-            <Parameter Name="cfactura" Mode="In" Type="Single" />
-            <Parameter Name="Otros" Mode="In" Type="Single" />
-            <Parameter Name="Cdolares" Mode="In" Type="Single" />
-            <Parameter Name="Aper" Mode="In" Type="Single" />
-            <Parameter Name="CONEFEDOL" Mode="In" Type="Single" />
-            <Parameter Name="CONTARDOL" Mode="In" Type="Single" />
-            <Parameter Name="ConTraDol" Mode="In" Type="Single" />
-            <Parameter Name="ConCheDol" Mode="In" Type="Single" />
-            <Parameter Name="SysEfeDol" Mode="In" Type="Single" />
-            <Parameter Name="SysTarDol" Mode="In" Type="Single" />
-            <Parameter Name="SysTraDol" Mode="In" Type="Single" />
-            <Parameter Name="SysCheDol" Mode="In" Type="Single" />
-            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="TRANSACCIONES" EntityType="POLTA_PRUEBASModel.TRANSACCIONES" />
-          <FunctionImport Name="NuevoMovOperacion" ReturnType="Collection(Int32)">
-            <Parameter Name="Tipo" Mode="In" Type="Int32" />
-            <Parameter Name="Motivo" Mode="In" Type="Int32" />
-            <Parameter Name="Monto" Mode="In" Type="Decimal" />
-            <Parameter Name="Deta" Mode="In" Type="String" />
-            <Parameter Name="USR" Mode="In" Type="Int32" />
-            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="IMPRESORASxUSUARIO" EntityType="POLTA_PRUEBASModel.IMPRESORASxUSUARIO" />
-          <EntitySet Name="IMPRESORAS" EntityType="POLTA_PRUEBASModel.IMPRESORAS" />
-          <AssociationSet Name="FK__d2eeebbb" Association="POLTA_PRUEBASModel.FK__d2eeebbb">
-            <End Role="IMPRESORAS" EntitySet="IMPRESORAS" />
-            <End Role="IMPRESORASxUSUARIO" EntitySet="IMPRESORASxUSUARIO" />
-          </AssociationSet>
-          <FunctionImport Name="MOVIMIENTOS_CAJA" ReturnType="Collection(POLTA_PRUEBASModel.MOVIMIENTOS_CAJA_Result)">
-          <Parameter Name="ElUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="DESGLOSE_ENTRADAS_SALIDAS" ReturnType="Collection(POLTA_PRUEBASModel.DESGLOSE_ENTRADAS_SALIDAS_Result)">
-            <Parameter Name="Tipo" Mode="In" Type="String" />
-            <Parameter Name="Numero" Mode="In" Type="Int32" />
-            <Parameter Name="Desde" Mode="In" Type="DateTime" />
-            <Parameter Name="Hasta" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          </EntityContainer>
-        <EntityType Name="CLIENTES">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CORREO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="TIPO" Type="Int32" />
-          <Property Name="IDENTIFICACION" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NACIMIENTO" Type="DateTime" Precision="0" />
-          <Property Name="PRECIO" Type="Int32" />
-          <Property Name="LIMITE" Type="Int32" />
-          <Property Name="FRECUENCIA" Type="Int32" />
-          <Property Name="ESTADO" Type="Int32" />
-          <Property Name="PROVINCIA" Type="Int32" />
-          <Property Name="CANTON" Type="Int32" />
-          <Property Name="DISTRITO" Type="Int32" />
-          <Property Name="BARRIO" Type="Int32" />
-          <Property Name="NombreComercial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CELULAR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DIAS" Type="Int32" />
-          <Property Name="DE_TASA_IMP" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="NUMDOCEXO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="INSTIEXO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FECHAEXO" Type="DateTime" Precision="0" />
-          <Property Name="PROCENTAJEEXO" Type="Int32" />
-          <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__9d61f4d4" FromRole="CLIENTES" ToRole="PAJAS" />
-          <NavigationProperty Name="COTIZACIONES" Relationship="POLTA_PRUEBASModel.FK__595edfbe" FromRole="CLIENTES" ToRole="COTIZACIONES" />
-          <NavigationProperty Name="COTIZACIONES1" Relationship="POLTA_PRUEBASModel.FK_COTIZACIONES_CLIENTES" FromRole="CLIENTES" ToRole="COTIZACIONES" />
-          <NavigationProperty Name="FACTURAS" Relationship="POLTA_PRUEBASModel.FK__0b15f0f8" FromRole="CLIENTES" ToRole="FACTURAS" />
-        </EntityType>
+      <Schema Namespace="POLTAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="BLOQUES">
           <Key>
             <PropertyRef Name="ID_BLO" />
@@ -940,105 +760,16 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="ID_BLO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ID_ZON" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ZONAS" Relationship="POLTA_PRUEBASModel.FK__467f3960" FromRole="BLOQUES" ToRole="ZONAS" />
-          <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__4e03f6cc" FromRole="BLOQUES" ToRole="PAJAS" />
+          <NavigationProperty Name="ZONAS" Relationship="Self.FK__467f3960" FromRole="BLOQUES" ToRole="ZONAS" />
+          <NavigationProperty Name="PAJAS" Relationship="Self.FK__4e03f6cc" FromRole="BLOQUES" ToRole="PAJAS" />
         </EntityType>
-        <EntityType Name="PAJAS">
-          <Key>
-            <PropertyRef Name="ID_PAJ" />
-          </Key>
-          <Property Name="ID_PAJ" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MEDIDOR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ID_CLI" Type="Int32" />
-          <Property Name="ID_BLO" Type="Int32" />
-          <Property Name="DIRECCION" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="TIPO_TARIFA" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="FECHA_INSTALACION" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="BLOQUES" Relationship="POLTA_PRUEBASModel.FK__4e03f6cc" FromRole="PAJAS" ToRole="BLOQUES" />
-          <NavigationProperty Name="CLIENTES" Relationship="POLTA_PRUEBASModel.FK__9d61f4d4" FromRole="PAJAS" ToRole="CLIENTES" />
-          <NavigationProperty Name="LECTURAS" Relationship="POLTA_PRUEBASModel.FK__1bca5d8f" FromRole="PAJAS" ToRole="LECTURAS" />
-        </EntityType>
-        <EntityType Name="ZONAS">
-          <Key>
-            <PropertyRef Name="ID_ZON" />
-          </Key>
-          <Property Name="ID_ZON" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="BLOQUES" Relationship="POLTA_PRUEBASModel.FK__467f3960" FromRole="ZONAS" ToRole="BLOQUES" />
-        </EntityType>
-        <Association Name="FK__467f3960">
-          <End Type="POLTA_PRUEBASModel.ZONAS" Role="ZONAS" Multiplicity="1" />
-          <End Type="POLTA_PRUEBASModel.BLOQUES" Role="BLOQUES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZONAS">
-              <PropertyRef Name="ID_ZON" />
-            </Principal>
-            <Dependent Role="BLOQUES">
-              <PropertyRef Name="ID_ZON" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__4e03f6cc">
-          <End Type="POLTA_PRUEBASModel.BLOQUES" Role="BLOQUES" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BLOQUES">
-              <PropertyRef Name="ID_BLO" />
-            </Principal>
-            <Dependent Role="PAJAS">
-              <PropertyRef Name="ID_BLO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__9d61f4d4">
-          <End Type="POLTA_PRUEBASModel.CLIENTES" Role="CLIENTES" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CLIENTES">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="PAJAS">
-              <PropertyRef Name="ID_CLI" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="ObtenerBloques_Result">
-          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
-          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <EntityType Name="LISTA_PRECIOS">
+        <EntityType Name="BODEGAS">
           <Key>
             <PropertyRef Name="CODIGO" />
           </Key>
           <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ESTADO" Type="Int32" />
-        </EntityType>
-        <EntityType Name="CANTONES">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" />
-          <Property Name="PROVINCIA" Type="Int32" />
-          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="DISTRITOS">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" />
-          <Property Name="PROVINCIA" Type="Int32" />
-          <Property Name="CANTON" Type="Int32" />
-          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="PROVINCIAS">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CIA">
           <Key>
@@ -1074,165 +805,40 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="CARPRESP" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CONDICION_REBAJA_INVENTARIO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="Sp_BuscarCliente_Result">
-          <Property Type="Int32" Name="CODIGO" Nullable="false" />
-          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="Sp_BuscarPaja_Result">
-          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
-          <Property Type="String" Name="MEDIDOR" Nullable="true" MaxLength="30" />
-          <Property Type="Int32" Name="ID_CLI" Nullable="true" />
-          <Property Type="Int32" Name="ID_BLO" Nullable="true" />
-          <Property Type="String" Name="DIRECCION" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="TIPO_TARIFA" Nullable="true" MaxLength="1" />
-          <Property Type="String" Name="ESTADO" Nullable="true" MaxLength="3" />
-          <Property Type="DateTime" Name="FECHA_INSTALACION" Nullable="true" Precision="23" />
-        </ComplexType>
-        <EntityType Name="LECTURAS">
-          <Key>
-            <PropertyRef Name="ID_LEC" />
-          </Key>
-          <Property Name="ID_LEC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ID_PAJ" Type="Int32" Nullable="false" />
-          <Property Name="FECHA" Type="DateTime" Precision="3" />
-          <Property Name="ID_USU" Type="Int32" />
-          <Property Name="MES" Type="Int32" Nullable="false" />
-          <Property Name="ANIO" Type="Int32" Nullable="false" />
-          <Property Name="LECTURA" Type="Int32" />
-          <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="PAJAS" Relationship="POLTA_PRUEBASModel.FK__1bca5d8f" FromRole="LECTURAS" ToRole="PAJAS" />
-          <NavigationProperty Name="USUARIOS" Relationship="POLTA_PRUEBASModel.FK__493bfcd8" FromRole="LECTURAS" ToRole="USUARIOS" />
-        </EntityType>
-        <Association Name="FK__1bca5d8f">
-          <End Type="POLTA_PRUEBASModel.PAJAS" Role="PAJAS" Multiplicity="1" />
-          <End Type="POLTA_PRUEBASModel.LECTURAS" Role="LECTURAS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PAJAS">
-              <PropertyRef Name="ID_PAJ" />
-            </Principal>
-            <Dependent Role="LECTURAS">
-              <PropertyRef Name="ID_PAJ" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="TablaLecturas_Result">
-          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
-          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
-          <Property Type="String" Name="Zona" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Bloque" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Estado" Nullable="false" MaxLength="3" />
-          <Property Type="Int32" Name="UltimaLectura" Nullable="true" />
-          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
-          <Property Type="Int32" Name="NumLectura" Nullable="false" />
-          <Property Type="Int32" Name="LecturaActual" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="GENERA_FACTURACION_Result">
-          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
-          <Property Type="Int32" Name="id" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="SP_BUSCAR_PAJA_PARAMETROS_Result">
-          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
-          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
-          <Property Type="String" Name="IDENTIFICACION" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="RECTIFICA_LECTURA_MEDIDOR_Result">
-          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
-          <Property Type="Int32" Name="id" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="TablaPrecios_Result">
-          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="80" />
-          <Property Type="String" Name="Precio" Nullable="true" MaxLength="30" />
-          <Property Type="Single" Name="cantidad" Nullable="true" />
-          <Property Type="Single" Name="Descuento" Nullable="true" />
-          <Property Type="String" Name="Sub" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Vendedor" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="C_" Nullable="true" />
-        </ComplexType>
-        <EntityType Name="DATAFONOS">
+        <EntityType Name="CLIENTES">
           <Key>
             <PropertyRef Name="CODIGO" />
           </Key>
           <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CUENTA" Type="Int32" />
-          <Property Name="COMISION" Type="Single" />
-          <Property Name="RETENCION" Type="Single" />
-          <NavigationProperty Name="CUENTAS_BANCO" Relationship="POLTA_PRUEBASModel.FK__6f58e2d3" FromRole="DATAFONOS" ToRole="CUENTAS_BANCO" />
-        </EntityType>
-        <EntityType Name="CUENTAS_BANCO">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BANCO" Type="Int32" Nullable="false" />
-          <Property Name="MONEDA" Type="Int16" />
-          <Property Name="CUENTA" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="SINPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="SALDO" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="DATAFONOS" Relationship="POLTA_PRUEBASModel.FK__6f58e2d3" FromRole="CUENTAS_BANCO" ToRole="DATAFONOS" />
-        </EntityType>
-        <Association Name="FK__6f58e2d3">
-          <End Type="POLTA_PRUEBASModel.CUENTAS_BANCO" Role="CUENTAS_BANCO" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.DATAFONOS" Role="DATAFONOS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CUENTAS_BANCO">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="DATAFONOS">
-              <PropertyRef Name="CUENTA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="PAGO_LECTURA_Result">
-          <Property Type="String" Name="Mensaje" Nullable="true" />
-          <Property Type="Int32" Name="id" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="PAJAS_PENDIENTES_PAGO_Result">
-          <Property Type="Int32" Name="CODIGO" Nullable="false" />
-          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
-          <Property Type="String" Name="Periodo" Nullable="true" MaxLength="61" />
-          <Property Type="Double" Name="Total" Nullable="true" />
-          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="IDENTIFICACION" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="Factura" Nullable="false" />
-        </ComplexType>
-        <EntityType Name="USUARIOS">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CEDULA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NOMBRE" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="USUARIO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CLAVE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PERMISO" Type="Int32" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CORREO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TIPO" Type="Int32" />
+          <Property Name="IDENTIFICACION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NACIMIENTO" Type="DateTime" Precision="0" />
+          <Property Name="PRECIO" Type="Int32" />
+          <Property Name="LIMITE" Type="Int32" />
+          <Property Name="FRECUENCIA" Type="Int32" />
           <Property Name="ESTADO" Type="Int32" />
-          <Property Name="UC" Type="Single" />
-          <Property Name="VENDEDOR" Type="Int32" />
-          <Property Name="COMANDO" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="CAJA" Type="Int32" />
-          <Property Name="BODEGA" Type="Int32" />
-          <Property Name="UF" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="LECTURAS" Relationship="POLTA_PRUEBASModel.FK__493bfcd8" FromRole="USUARIOS" ToRole="LECTURAS" />
-          <NavigationProperty Name="COTIZACIONES" Relationship="POLTA_PRUEBASModel.FK__39c3a648" FromRole="USUARIOS" ToRole="COTIZACIONES" />
-          <NavigationProperty Name="COTIZACIONES1" Relationship="POLTA_PRUEBASModel.FK_COTIZACIONES_USUARIOS" FromRole="USUARIOS" ToRole="COTIZACIONES" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="CANTON" Type="Int32" />
+          <Property Name="DISTRITO" Type="Int32" />
+          <Property Name="BARRIO" Type="Int32" />
+          <Property Name="NombreComercial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CELULAR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DIAS" Type="Int32" />
+          <Property Name="DE_TASA_IMP" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="NUMDOCEXO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="INSTIEXO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FECHAEXO" Type="DateTime" Precision="0" />
+          <Property Name="PROCENTAJEEXO" Type="Int32" />
+          <Property Name="ConsumidorFinal" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FACTURAS" Relationship="Self.FK__0b15f0f8" FromRole="CLIENTES" ToRole="FACTURAS" />
+          <NavigationProperty Name="COTIZACIONES" Relationship="Self.FK__595edfbe" FromRole="CLIENTES" ToRole="COTIZACIONES" />
+          <NavigationProperty Name="PAJAS" Relationship="Self.FK__9d61f4d4" FromRole="CLIENTES" ToRole="PAJAS" />
+          <NavigationProperty Name="COTIZACIONES1" Relationship="Self.FK_COTIZACIONES_CLIENTES" FromRole="CLIENTES" ToRole="COTIZACIONES" />
         </EntityType>
-        <Association Name="FK__493bfcd8">
-          <End Type="POLTA_PRUEBASModel.USUARIOS" Role="USUARIOS" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.LECTURAS" Role="LECTURAS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="USUARIOS">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="LECTURAS">
-              <PropertyRef Name="ID_USU" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="COTIZACIONES">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -1247,61 +853,52 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="MONEDA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="ESTADO" Type="Int32" />
           <Property Name="TARJETA" Type="Single" />
-          <Property Name="NTARJETA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CLIENTES" Relationship="POLTA_PRUEBASModel.FK__595edfbe" FromRole="COTIZACIONES" ToRole="CLIENTES" />
-          <NavigationProperty Name="CLIENTES1" Relationship="POLTA_PRUEBASModel.FK_COTIZACIONES_CLIENTES" FromRole="COTIZACIONES" ToRole="CLIENTES" />
-          <NavigationProperty Name="USUARIOS" Relationship="POLTA_PRUEBASModel.FK__39c3a648" FromRole="COTIZACIONES" ToRole="USUARIOS" />
-          <NavigationProperty Name="USUARIOS1" Relationship="POLTA_PRUEBASModel.FK_COTIZACIONES_USUARIOS" FromRole="COTIZACIONES" ToRole="USUARIOS" />
-          <NavigationProperty Name="DETALLE_CTZ" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" FromRole="COTIZACIONES" ToRole="DETALLE_CTZ" />
+          <Property Name="NTARJETA" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CLIENTES" Relationship="Self.FK__595edfbe" FromRole="COTIZACIONES" ToRole="CLIENTES" />
+          <NavigationProperty Name="CLIENTES1" Relationship="Self.FK_COTIZACIONES_CLIENTES" FromRole="COTIZACIONES" ToRole="CLIENTES" />
+          <NavigationProperty Name="USUARIOS" Relationship="Self.FK__39c3a648" FromRole="COTIZACIONES" ToRole="USUARIOS" />
+          <NavigationProperty Name="USUARIOS1" Relationship="Self.FK_COTIZACIONES_USUARIOS" FromRole="COTIZACIONES" ToRole="USUARIOS" />
+          <NavigationProperty Name="DETALLE_CTZ" Relationship="Self.FK_DETALLE_CTZ_COTIZACIONES" FromRole="COTIZACIONES" ToRole="DETALLE_CTZ" />
         </EntityType>
-        <Association Name="FK__595edfbe">
-          <End Type="POLTA_PRUEBASModel.CLIENTES" Role="CLIENTES" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.COTIZACIONES" Role="COTIZACIONES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CLIENTES">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="COTIZACIONES">
-              <PropertyRef Name="CLIENTE" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_COTIZACIONES_CLIENTES">
-          <End Type="POLTA_PRUEBASModel.CLIENTES" Role="CLIENTES" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.COTIZACIONES" Role="COTIZACIONES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CLIENTES">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="COTIZACIONES">
-              <PropertyRef Name="CLIENTE" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__39c3a648">
-          <End Type="POLTA_PRUEBASModel.USUARIOS" Role="USUARIOS" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.COTIZACIONES" Role="COTIZACIONES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="USUARIOS">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="COTIZACIONES">
-              <PropertyRef Name="CREADO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_COTIZACIONES_USUARIOS">
-          <End Type="POLTA_PRUEBASModel.USUARIOS" Role="USUARIOS" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.COTIZACIONES" Role="COTIZACIONES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="USUARIOS">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="COTIZACIONES">
-              <PropertyRef Name="CREADO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="CUENTAS_BANCO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BANCO" Type="Int32" Nullable="false" />
+          <Property Name="MONEDA" Type="Int16" />
+          <Property Name="CUENTA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SINPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SALDO" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="DATAFONOS" Relationship="Self.FK__6f58e2d3" FromRole="CUENTAS_BANCO" ToRole="DATAFONOS" />
+        </EntityType>
+        <EntityType Name="DATAFONOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUENTA" Type="Int32" />
+          <Property Name="COMISION" Type="Single" />
+          <Property Name="RETENCION" Type="Single" />
+          <NavigationProperty Name="CUENTAS_BANCO" Relationship="Self.FK__6f58e2d3" FromRole="DATAFONOS" ToRole="CUENTAS_BANCO" />
+        </EntityType>
+        <EntityType Name="DETALLE_CTZ">
+          <Key>
+            <PropertyRef Name="FACTURA" />
+            <PropertyRef Name="PRODUCTO" />
+          </Key>
+          <Property Name="FACTURA" Type="Int32" Nullable="false" />
+          <Property Name="PRODUCTO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PRECIO" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="IMPUESTO" Type="Single" />
+          <Property Name="CANTIDAD" Type="Single" />
+          <Property Name="VENDEDOR" Type="Int32" />
+          <Property Name="LIN" Type="Int32" />
+          <Property Name="NOMBRE" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="COTIZACIONES" Relationship="Self.FK_DETALLE_CTZ_COTIZACIONES" FromRole="DETALLE_CTZ" ToRole="COTIZACIONES" />
+          <NavigationProperty Name="INVENTARIO" Relationship="Self.FK_DETALLE_CTZ_INVENTARIO" FromRole="DETALLE_CTZ" ToRole="INVENTARIO" />
+        </EntityType>
         <EntityType Name="FACTURAS">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -1321,53 +918,33 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="CLAVE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CONSECUTIVO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ESTADO_HACIENDA" Type="Int32" />
-          <NavigationProperty Name="CLIENTES" Relationship="POLTA_PRUEBASModel.FK__0b15f0f8" FromRole="FACTURAS" ToRole="CLIENTES" />
+          <NavigationProperty Name="CLIENTES" Relationship="Self.FK__0b15f0f8" FromRole="FACTURAS" ToRole="CLIENTES" />
         </EntityType>
-        <Association Name="FK__0b15f0f8">
-          <End Type="POLTA_PRUEBASModel.CLIENTES" Role="CLIENTES" Multiplicity="0..1" />
-          <End Type="POLTA_PRUEBASModel.FACTURAS" Role="FACTURAS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CLIENTES">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="FACTURAS">
-              <PropertyRef Name="CLIENTE" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="DETALLE_CTZ">
+        <EntityType Name="IMPRESORAS">
           <Key>
-            <PropertyRef Name="FACTURA" />
-            <PropertyRef Name="PRODUCTO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="FACTURA" Type="Int32" Nullable="false" />
-          <Property Name="PRODUCTO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PRECIO" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="IMPUESTO" Type="Single" />
-          <Property Name="CANTIDAD" Type="Single" />
-          <Property Name="VENDEDOR" Type="Int32" />
-          <Property Name="LIN" Type="Int32" />
-          <Property Name="NOMBRE" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="COTIZACIONES" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" FromRole="DETALLE_CTZ" ToRole="COTIZACIONES" />
-          <NavigationProperty Name="INVENTARIO" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" FromRole="DETALLE_CTZ" ToRole="INVENTARIO" />
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ESTADO" Type="Int32" />
+          <Property Name="REDUCIDA" Type="Int32" />
+          <NavigationProperty Name="IMPRESORASxUSUARIO" Relationship="Self.FK__d2eeebbb" FromRole="IMPRESORAS" ToRole="IMPRESORASxUSUARIO" />
         </EntityType>
-        <Association Name="FK_DETALLE_CTZ_COTIZACIONES">
-          <End Type="POLTA_PRUEBASModel.COTIZACIONES" Role="COTIZACIONES" Multiplicity="1" />
-          <End Type="POLTA_PRUEBASModel.DETALLE_CTZ" Role="DETALLE_CTZ" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="COTIZACIONES">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="DETALLE_CTZ">
-              <PropertyRef Name="FACTURA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="IMPRESORASxUSUARIO">
+          <Key>
+            <PropertyRef Name="USUARIO" />
+            <PropertyRef Name="IMPRESORA" />
+          </Key>
+          <Property Name="USUARIO" Type="Int32" Nullable="false" />
+          <Property Name="TAMANO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IMPRESORA" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="IMPRESORAS" Relationship="Self.FK__d2eeebbb" FromRole="IMPRESORASxUSUARIO" ToRole="IMPRESORAS" />
+        </EntityType>
         <EntityType Name="INVENTARIO">
           <Key>
             <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CODIGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="NOMBRE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="UTILIDAD" Type="Int32" />
           <Property Name="COD_IMPUESTO" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
@@ -1385,26 +962,47 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="GARANTIA" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="IMPRESORA" Type="Int32" />
           <Property Name="CABYS" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DETALLE_CTZ" Relationship="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" FromRole="INVENTARIO" ToRole="DETALLE_CTZ" />
+          <NavigationProperty Name="DETALLE_CTZ" Relationship="Self.FK_DETALLE_CTZ_INVENTARIO" FromRole="INVENTARIO" ToRole="DETALLE_CTZ" />
         </EntityType>
-        <Association Name="FK_DETALLE_CTZ_INVENTARIO">
-          <End Type="POLTA_PRUEBASModel.INVENTARIO" Role="INVENTARIO" Multiplicity="1" />
-          <End Type="POLTA_PRUEBASModel.DETALLE_CTZ" Role="DETALLE_CTZ" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="INVENTARIO">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="DETALLE_CTZ">
-              <PropertyRef Name="PRODUCTO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="Sp_ObtenerBloques_Result">
-          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
-          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="ID_ZON" Nullable="false" />
-        </ComplexType>
+        <EntityType Name="LECTURAS">
+          <Key>
+            <PropertyRef Name="ID_LEC" />
+          </Key>
+          <Property Name="ID_LEC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_PAJ" Type="Int32" Nullable="false" />
+          <Property Name="FECHA" Type="DateTime" Precision="3" />
+          <Property Name="ID_USU" Type="Int32" />
+          <Property Name="MES" Type="Int32" Nullable="false" />
+          <Property Name="ANIO" Type="Int32" Nullable="false" />
+          <Property Name="LECTURA" Type="Int32" />
+          <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PAJAS" Relationship="Self.FK__1bca5d8f" FromRole="LECTURAS" ToRole="PAJAS" />
+          <NavigationProperty Name="USUARIOS" Relationship="Self.FK__493bfcd8" FromRole="LECTURAS" ToRole="USUARIOS" />
+        </EntityType>
+        <EntityType Name="LISTA_PRECIOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ESTADO" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PAJAS">
+          <Key>
+            <PropertyRef Name="ID_PAJ" />
+          </Key>
+          <Property Name="ID_PAJ" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MEDIDOR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ID_CLI" Type="Int32" />
+          <Property Name="ID_BLO" Type="Int32" />
+          <Property Name="DIRECCION" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="TIPO_TARIFA" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_INSTALACION" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="BLOQUES" Relationship="Self.FK__4e03f6cc" FromRole="PAJAS" ToRole="BLOQUES" />
+          <NavigationProperty Name="CLIENTES" Relationship="Self.FK__9d61f4d4" FromRole="PAJAS" ToRole="CLIENTES" />
+          <NavigationProperty Name="LECTURAS" Relationship="Self.FK__1bca5d8f" FromRole="PAJAS" ToRole="LECTURAS" />
+        </EntityType>
         <EntityType Name="R_CIERRE">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -1431,6 +1029,503 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="CON_TRA_DOL" Type="Single" />
           <Property Name="CON_CHE_DOL" Type="Single" />
         </EntityType>
+        <EntityType Name="ROLES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TARIFAS">
+          <Key>
+            <PropertyRef Name="ID_TAR" />
+          </Key>
+          <Property Name="ID_TAR" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RESIDENCIAL" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="COMERCIAL" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEDULA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DIRECCION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="USUARIO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CLAVE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PERMISO" Type="Int32" />
+          <Property Name="ESTADO" Type="Int32" />
+          <Property Name="UC" Type="Single" />
+          <Property Name="VENDEDOR" Type="Int32" />
+          <Property Name="COMANDO" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="CAJA" Type="Int32" />
+          <Property Name="BODEGA" Type="Int32" />
+          <Property Name="UF" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="COTIZACIONES" Relationship="Self.FK__39c3a648" FromRole="USUARIOS" ToRole="COTIZACIONES" />
+          <NavigationProperty Name="COTIZACIONES1" Relationship="Self.FK_COTIZACIONES_USUARIOS" FromRole="USUARIOS" ToRole="COTIZACIONES" />
+          <NavigationProperty Name="LECTURAS" Relationship="Self.FK__493bfcd8" FromRole="USUARIOS" ToRole="LECTURAS" />
+        </EntityType>
+        <EntityType Name="ZONAS">
+          <Key>
+            <PropertyRef Name="ID_ZON" />
+          </Key>
+          <Property Name="ID_ZON" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BLOQUES" Relationship="Self.FK__467f3960" FromRole="ZONAS" ToRole="BLOQUES" />
+        </EntityType>
+        <EntityType Name="CANTONES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DISTRITOS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" />
+          <Property Name="PROVINCIA" Type="Int32" />
+          <Property Name="CANTON" Type="Int32" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PROVINCIAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TRANSACCIONES">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TIPO" Type="Int32" />
+        </EntityType>
+        <Association Name="FK__467f3960">
+          <End Role="ZONAS" Type="Self.ZONAS" Multiplicity="1" />
+          <End Role="BLOQUES" Type="Self.BLOQUES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZONAS">
+              <PropertyRef Name="ID_ZON" />
+            </Principal>
+            <Dependent Role="BLOQUES">
+              <PropertyRef Name="ID_ZON" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__4e03f6cc">
+          <End Role="BLOQUES" Type="Self.BLOQUES" Multiplicity="0..1" />
+          <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BLOQUES">
+              <PropertyRef Name="ID_BLO" />
+            </Principal>
+            <Dependent Role="PAJAS">
+              <PropertyRef Name="ID_BLO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__0b15f0f8">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
+          <End Role="FACTURAS" Type="Self.FACTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="FACTURAS">
+              <PropertyRef Name="CLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__595edfbe">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
+          <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="COTIZACIONES">
+              <PropertyRef Name="CLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__9d61f4d4">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
+          <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="PAJAS">
+              <PropertyRef Name="ID_CLI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_COTIZACIONES_CLIENTES">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
+          <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="COTIZACIONES">
+              <PropertyRef Name="CLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__39c3a648">
+          <End Role="USUARIOS" Type="Self.USUARIOS" Multiplicity="0..1" />
+          <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIOS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="COTIZACIONES">
+              <PropertyRef Name="CREADO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_COTIZACIONES_USUARIOS">
+          <End Role="USUARIOS" Type="Self.USUARIOS" Multiplicity="0..1" />
+          <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIOS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="COTIZACIONES">
+              <PropertyRef Name="CREADO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLE_CTZ_COTIZACIONES">
+          <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="1" />
+          <End Role="DETALLE_CTZ" Type="Self.DETALLE_CTZ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COTIZACIONES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DETALLE_CTZ">
+              <PropertyRef Name="FACTURA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__6f58e2d3">
+          <End Role="CUENTAS_BANCO" Type="Self.CUENTAS_BANCO" Multiplicity="0..1" />
+          <End Role="DATAFONOS" Type="Self.DATAFONOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUENTAS_BANCO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DATAFONOS">
+              <PropertyRef Name="CUENTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLE_CTZ_INVENTARIO">
+          <End Role="INVENTARIO" Type="Self.INVENTARIO" Multiplicity="1" />
+          <End Role="DETALLE_CTZ" Type="Self.DETALLE_CTZ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="INVENTARIO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="DETALLE_CTZ">
+              <PropertyRef Name="PRODUCTO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__d2eeebbb">
+          <End Role="IMPRESORAS" Type="Self.IMPRESORAS" Multiplicity="1" />
+          <End Role="IMPRESORASxUSUARIO" Type="Self.IMPRESORASxUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IMPRESORAS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="IMPRESORASxUSUARIO">
+              <PropertyRef Name="IMPRESORA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__1bca5d8f">
+          <End Role="PAJAS" Type="Self.PAJAS" Multiplicity="1" />
+          <End Role="LECTURAS" Type="Self.LECTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAJAS">
+              <PropertyRef Name="ID_PAJ" />
+            </Principal>
+            <Dependent Role="LECTURAS">
+              <PropertyRef Name="ID_PAJ" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__493bfcd8">
+          <End Role="USUARIOS" Type="Self.USUARIOS" Multiplicity="0..1" />
+          <End Role="LECTURAS" Type="Self.LECTURAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIOS">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="LECTURAS">
+              <PropertyRef Name="ID_USU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="POLTAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" />
+          <EntitySet Name="BODEGAS" EntityType="Self.BODEGAS" />
+          <EntitySet Name="CIA" EntityType="Self.CIA" />
+          <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" />
+          <EntitySet Name="COTIZACIONES" EntityType="Self.COTIZACIONES" />
+          <EntitySet Name="CUENTAS_BANCO" EntityType="Self.CUENTAS_BANCO" />
+          <EntitySet Name="DATAFONOS" EntityType="Self.DATAFONOS" />
+          <EntitySet Name="DETALLE_CTZ" EntityType="Self.DETALLE_CTZ" />
+          <EntitySet Name="FACTURAS" EntityType="Self.FACTURAS" />
+          <EntitySet Name="IMPRESORAS" EntityType="Self.IMPRESORAS" />
+          <EntitySet Name="IMPRESORASxUSUARIO" EntityType="Self.IMPRESORASxUSUARIO" />
+          <EntitySet Name="INVENTARIO" EntityType="Self.INVENTARIO" />
+          <EntitySet Name="LECTURAS" EntityType="Self.LECTURAS" />
+          <EntitySet Name="LISTA_PRECIOS" EntityType="Self.LISTA_PRECIOS" />
+          <EntitySet Name="PAJAS" EntityType="Self.PAJAS" />
+          <EntitySet Name="R_CIERRE" EntityType="Self.R_CIERRE" />
+          <EntitySet Name="ROLES" EntityType="Self.ROLES" />
+          <EntitySet Name="TARIFAS" EntityType="Self.TARIFAS" />
+          <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" />
+          <EntitySet Name="ZONAS" EntityType="Self.ZONAS" />
+          <EntitySet Name="CANTONES" EntityType="Self.CANTONES" />
+          <EntitySet Name="DISTRITOS" EntityType="Self.DISTRITOS" />
+          <EntitySet Name="PROVINCIAS" EntityType="Self.PROVINCIAS" />
+          <EntitySet Name="TRANSACCIONES" EntityType="Self.TRANSACCIONES" />
+          <AssociationSet Name="FK__467f3960" Association="Self.FK__467f3960">
+            <End Role="ZONAS" EntitySet="ZONAS" />
+            <End Role="BLOQUES" EntitySet="BLOQUES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__4e03f6cc" Association="Self.FK__4e03f6cc">
+            <End Role="BLOQUES" EntitySet="BLOQUES" />
+            <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__0b15f0f8" Association="Self.FK__0b15f0f8">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="FACTURAS" EntitySet="FACTURAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__595edfbe" Association="Self.FK__595edfbe">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__9d61f4d4" Association="Self.FK__9d61f4d4">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="PAJAS" EntitySet="PAJAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COTIZACIONES_CLIENTES" Association="Self.FK_COTIZACIONES_CLIENTES">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__39c3a648" Association="Self.FK__39c3a648">
+            <End Role="USUARIOS" EntitySet="USUARIOS" />
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COTIZACIONES_USUARIOS" Association="Self.FK_COTIZACIONES_USUARIOS">
+            <End Role="USUARIOS" EntitySet="USUARIOS" />
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLE_CTZ_COTIZACIONES" Association="Self.FK_DETALLE_CTZ_COTIZACIONES">
+            <End Role="COTIZACIONES" EntitySet="COTIZACIONES" />
+            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__6f58e2d3" Association="Self.FK__6f58e2d3">
+            <End Role="CUENTAS_BANCO" EntitySet="CUENTAS_BANCO" />
+            <End Role="DATAFONOS" EntitySet="DATAFONOS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLE_CTZ_INVENTARIO" Association="Self.FK_DETALLE_CTZ_INVENTARIO">
+            <End Role="INVENTARIO" EntitySet="INVENTARIO" />
+            <End Role="DETALLE_CTZ" EntitySet="DETALLE_CTZ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__d2eeebbb" Association="Self.FK__d2eeebbb">
+            <End Role="IMPRESORAS" EntitySet="IMPRESORAS" />
+            <End Role="IMPRESORASxUSUARIO" EntitySet="IMPRESORASxUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK__1bca5d8f" Association="Self.FK__1bca5d8f">
+            <End Role="PAJAS" EntitySet="PAJAS" />
+            <End Role="LECTURAS" EntitySet="LECTURAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__493bfcd8" Association="Self.FK__493bfcd8">
+            <End Role="USUARIOS" EntitySet="USUARIOS" />
+            <End Role="LECTURAS" EntitySet="LECTURAS" />
+          </AssociationSet>
+          <FunctionImport Name="ANULA_FACTURA" ReturnType="Collection(POLTAModel.ANULA_FACTURA_Result)">
+          <Parameter Name="NumFact" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AplicarPermisoUsuarioRol">
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="Rol" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DESGLOSE_ENTRADAS_SALIDAS" ReturnType="Collection(POLTAModel.DESGLOSE_ENTRADAS_SALIDAS_Result)">
+            <Parameter Name="Tipo" Mode="In" Type="String" />
+            <Parameter Name="Numero" Mode="In" Type="Int32" />
+            <Parameter Name="Desde" Mode="In" Type="DateTime" />
+            <Parameter Name="Hasta" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GENERA_FACTURACION" ReturnType="Collection(POLTAModel.GENERA_FACTURACION_Result)">
+          <Parameter Name="Usuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MOVIMIENTOS_CAJA" ReturnType="Collection(POLTAModel.MOVIMIENTOS_CAJA_Result)">
+          <Parameter Name="ElUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="NuevaCaja" ReturnType="Collection(Int32)">
+            <Parameter Name="TIPO" Mode="In" Type="Int32" />
+            <Parameter Name="MONT" Mode="In" Type="Single" />
+            <Parameter Name="USUA" Mode="In" Type="Int32" />
+            <Parameter Name="TRANS" Mode="In" Type="Int32" />
+            <Parameter Name="MEDI" Mode="In" Type="Int32" />
+            <Parameter Name="FECH" Mode="In" Type="DateTime" />
+            <Parameter Name="DOCU" Mode="In" Type="Int32" />
+            <Parameter Name="Mone" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="NuevoCierre" ReturnType="Collection(Int32)">
+            <Parameter Name="Usu" Mode="In" Type="Int32" />
+            <Parameter Name="efec" Mode="In" Type="Single" />
+            <Parameter Name="tar" Mode="In" Type="Single" />
+            <Parameter Name="trans" Mode="In" Type="Single" />
+            <Parameter Name="che" Mode="In" Type="Single" />
+            <Parameter Name="cefec" Mode="In" Type="Single" />
+            <Parameter Name="ctar" Mode="In" Type="Single" />
+            <Parameter Name="cfactura" Mode="In" Type="Single" />
+            <Parameter Name="Otros" Mode="In" Type="Single" />
+            <Parameter Name="Cdolares" Mode="In" Type="Single" />
+            <Parameter Name="Aper" Mode="In" Type="Single" />
+            <Parameter Name="CONEFEDOL" Mode="In" Type="Single" />
+            <Parameter Name="CONTARDOL" Mode="In" Type="Single" />
+            <Parameter Name="ConTraDol" Mode="In" Type="Single" />
+            <Parameter Name="ConCheDol" Mode="In" Type="Single" />
+            <Parameter Name="SysEfeDol" Mode="In" Type="Single" />
+            <Parameter Name="SysTarDol" Mode="In" Type="Single" />
+            <Parameter Name="SysTraDol" Mode="In" Type="Single" />
+            <Parameter Name="SysCheDol" Mode="In" Type="Single" />
+            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="NuevoMovOperacion" ReturnType="Collection(Int32)">
+            <Parameter Name="Tipo" Mode="In" Type="Int32" />
+            <Parameter Name="Motivo" Mode="In" Type="Int32" />
+            <Parameter Name="Monto" Mode="In" Type="Decimal" />
+            <Parameter Name="Deta" Mode="In" Type="String" />
+            <Parameter Name="USR" Mode="In" Type="Int32" />
+            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="NuevoUsuario" ReturnType="Collection(Int32)">
+            <Parameter Name="NOMB" Mode="In" Type="String" />
+            <Parameter Name="CEDU" Mode="In" Type="String" />
+            <Parameter Name="TELE" Mode="In" Type="String" />
+            <Parameter Name="DIRE" Mode="In" Type="String" />
+            <Parameter Name="USUA" Mode="In" Type="String" />
+            <Parameter Name="PASS" Mode="In" Type="String" />
+            <Parameter Name="PERMI" Mode="In" Type="Int32" />
+            <Parameter Name="ESTA" Mode="In" Type="Int32" />
+            <Parameter Name="VEND" Mode="In" Type="Int32" />
+            <Parameter Name="BOD" Mode="In" Type="Int32" />
+            <Parameter Name="new_identity" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ObtenerLecturaAnterior" ReturnType="Collection(Int32)">
+            <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
+            <Parameter Name="IDLEC" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ObtenernerFechaLecturaAnterior" ReturnType="Collection(DateTime)">
+            <Parameter Name="IDPAJ" Mode="In" Type="Int32" />
+            <Parameter Name="IDLEC" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PAGO_LECTURA" ReturnType="Collection(POLTAModel.PAGO_LECTURA_Result)">
+            <Parameter Name="NumCoti" Mode="In" Type="Int32" />
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="MontoEfectivo" Mode="In" Type="Single" />
+            <Parameter Name="MontoTransfer" Mode="In" Type="Single" />
+            <Parameter Name="NumCtaBco" Mode="In" Type="Int32" />
+            <Parameter Name="NumTransfer" Mode="In" Type="String" />
+            <Parameter Name="MontoTarejeta" Mode="In" Type="Single" />
+            <Parameter Name="NumDatafono" Mode="In" Type="Int32" />
+            <Parameter Name="Voucher" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PAGO_RECIBO_ESPECIAL" ReturnType="Collection(POLTAModel.PAGO_RECIBO_ESPECIAL_Result)">
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
+            <Parameter Name="Cliente" Mode="In" Type="Int32" />
+            <Parameter Name="Monto" Mode="In" Type="Single" />
+            <Parameter Name="Nota" Mode="In" Type="String" />
+            <Parameter Name="MedioPago" Mode="In" Type="String" />
+            <Parameter Name="CtaBanco" Mode="In" Type="Int32" />
+            <Parameter Name="Datafono" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PROCESO_CAJA" ReturnType="Collection(POLTAModel.PROCESO_CAJA_Result)">
+          <Parameter Name="Usu" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RECTIFICA_LECTURA_MEDIDOR" ReturnType="Collection(POLTAModel.RECTIFICA_LECTURA_MEDIDOR_Result)">
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="NumLectura" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_BUSCAR_PAJA_PARAMETROS" ReturnType="Collection(POLTAModel.SP_BUSCAR_PAJA_PARAMETROS_Result)">
+            <Parameter Name="Codigo" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="NumMedidor" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_BuscarCliente" ReturnType="Collection(POLTAModel.Sp_BuscarCliente_Result)">
+          <Parameter Name="nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_BuscarPaja" ReturnType="Collection(POLTAModel.Sp_BuscarPaja_Result)">
+          <Parameter Name="buscador" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_ObtenerBloques" ReturnType="Collection(POLTAModel.Sp_ObtenerBloques_Result)">
+          <Parameter Name="id_zona" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="TablaLecturas" ReturnType="Collection(POLTAModel.TablaLecturas_Result)">
+            <Parameter Name="mes" Mode="In" Type="Int32" />
+            <Parameter Name="annio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="TablaPrecios" ReturnType="Collection(POLTAModel.TablaPrecios_Result)">
+          <Parameter Name="coti" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PAJAS_PENDIENTES_PAGO" ReturnType="Collection(POLTAModel.PAJAS_PENDIENTES_PAGO_Result)">
+            <Parameter Name="NombreCliente" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Estado" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="ANULA_FACTURA_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="id" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="DESGLOSE_ENTRADAS_SALIDAS_Result">
+          <Property Type="String" Name="USUARIO" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DETALLE" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="FECHA" Nullable="true" Precision="23" />
+          <Property Type="Single" Name="Monto" Nullable="true" />
+          <Property Type="String" Name="Medio" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="GENERA_FACTURACION_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
+          <Property Type="Int32" Name="id" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="MOVIMIENTOS_CAJA_Result">
+          <Property Type="Int32" Name="codigo" Nullable="false" />
+          <Property Type="String" Name="Monto" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Documento" Nullable="true" />
+          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="Transaccion" Nullable="false" MaxLength="22" />
+          <Property Type="String" Name="Medio" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="MONEDA" Nullable="true" MaxLength="3" />
+        </ComplexType>
+        <ComplexType Name="PAGO_LECTURA_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PAGO_RECIBO_ESPECIAL_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="PROCESO_CAJA_Result">
           <Property Type="Single" Name="Efectivo" Nullable="true" />
           <Property Type="Single" Name="Tarjeta" Nullable="true" />
@@ -1444,71 +1539,350 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Type="Single" Name="ChequeDol" Nullable="true" />
           <Property Type="Single" Name="AperturaDol" Nullable="true" />
         </ComplexType>
-        <EntityType Name="TRANSACCIONES">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TIPO" Type="Int32" />
-        </EntityType>
-        <EntityType Name="IMPRESORASxUSUARIO">
-          <Key>
-            <PropertyRef Name="USUARIO" />
-            <PropertyRef Name="IMPRESORA" />
-          </Key>
-          <Property Name="USUARIO" Type="Int32" Nullable="false" />
-          <Property Name="TAMANO" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="IMPRESORA" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="IMPRESORAS" Relationship="POLTA_PRUEBASModel.FK__d2eeebbb" FromRole="IMPRESORASxUSUARIO" ToRole="IMPRESORAS" />
-        </EntityType>
-        <EntityType Name="IMPRESORAS">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ESTADO" Type="Int32" />
-          <Property Name="REDUCIDA" Type="Int32" />
-          <NavigationProperty Name="IMPRESORASxUSUARIO" Relationship="POLTA_PRUEBASModel.FK__d2eeebbb" FromRole="IMPRESORAS" ToRole="IMPRESORASxUSUARIO" />
-        </EntityType>
-        <Association Name="FK__d2eeebbb">
-          <End Type="POLTA_PRUEBASModel.IMPRESORAS" Role="IMPRESORAS" Multiplicity="1" />
-          <End Type="POLTA_PRUEBASModel.IMPRESORASxUSUARIO" Role="IMPRESORASxUSUARIO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="IMPRESORAS">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="IMPRESORASxUSUARIO">
-              <PropertyRef Name="IMPRESORA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="MOVIMIENTOS_CAJA_Result">
-          <Property Type="Int32" Name="codigo" Nullable="false" />
-          <Property Type="String" Name="Monto" Nullable="true" MaxLength="30" />
-          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="Documento" Nullable="true" />
-          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="11" />
-          <Property Type="String" Name="Transaccion" Nullable="false" MaxLength="22" />
-          <Property Type="String" Name="Medio" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="MONEDA" Nullable="true" MaxLength="3" />
+        <ComplexType Name="RECTIFICA_LECTURA_MEDIDOR_Result">
+          <Property Type="String" Name="Mensaje" Nullable="true" MaxLength="2000" />
+          <Property Type="Int32" Name="id" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="DESGLOSE_ENTRADAS_SALIDAS_Result">
-          <Property Type="String" Name="USUARIO" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="DETALLE" Nullable="true" MaxLength="250" />
-          <Property Type="DateTime" Name="FECHA" Nullable="true" Precision="23" />
-          <Property Type="Single" Name="Monto" Nullable="true" />
-          <Property Type="String" Name="Medio" Nullable="false" MaxLength="8" />
+        <ComplexType Name="SP_BUSCAR_PAJA_PARAMETROS_Result">
+          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="IDENTIFICACION" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
         </ComplexType>
-        </Schema>
+        <ComplexType Name="Sp_BuscarCliente_Result">
+          <Property Type="Int32" Name="CODIGO" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+        </ComplexType>
+        <ComplexType Name="Sp_BuscarPaja_Result">
+          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="ID_CLI" Nullable="true" />
+          <Property Type="Int32" Name="ID_BLO" Nullable="true" />
+          <Property Type="String" Name="DIRECCION" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TIPO_TARIFA" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="ESTADO" Nullable="true" MaxLength="3" />
+          <Property Type="DateTime" Name="FECHA_INSTALACION" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Sp_ObtenerBloques_Result">
+          <Property Type="Int32" Name="ID_BLO" Nullable="false" />
+          <Property Type="String" Name="NombreZona" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ID_ZON" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="TablaLecturas_Result">
+          <Property Type="Int32" Name="ID_PAJ" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Zona" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Bloque" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="UltimaLectura" Nullable="true" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="NumLectura" Nullable="false" />
+          <Property Type="Int32" Name="LecturaActual" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="TablaPrecios_Result">
+          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="80" />
+          <Property Type="String" Name="Precio" Nullable="true" MaxLength="30" />
+          <Property Type="Single" Name="cantidad" Nullable="true" />
+          <Property Type="Single" Name="Descuento" Nullable="true" />
+          <Property Type="String" Name="Sub" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Vendedor" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="C_" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PAJAS_PENDIENTES_PAGO_Result">
+          <Property Type="Int32" Name="CODIGO" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Periodo" Nullable="true" MaxLength="61" />
+          <Property Type="Double" Name="Total" Nullable="true" />
+          <Property Type="String" Name="MEDIDOR" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="IDENTIFICACION" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Factura" Nullable="false" />
+          <Property Type="Int32" Name="EstadoHacienda" Nullable="false" />
+          <Property Type="String" Name="EstadoCorreo" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="POLTA_PRUEBASModelStoreContainer" CdmEntityContainer="POLTA_PRUEBASEntities">
+        <EntityContainerMapping StorageEntityContainer="POLTAModelStoreContainer" CdmEntityContainer="POLTAEntities">
+          <EntitySetMapping Name="BLOQUES">
+            <EntityTypeMapping TypeName="POLTAModel.BLOQUES">
+              <MappingFragment StoreEntitySet="BLOQUES">
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BODEGAS">
+            <EntityTypeMapping TypeName="POLTAModel.BODEGAS">
+              <MappingFragment StoreEntitySet="BODEGAS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CIA">
+            <EntityTypeMapping TypeName="POLTAModel.CIA">
+              <MappingFragment StoreEntitySet="CIA">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
+                <ScalarProperty Name="FANTASIA" ColumnName="FANTASIA" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="LIMITE" ColumnName="LIMITE" />
+                <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+                <ScalarProperty Name="SERVIDOR" ColumnName="SERVIDOR" />
+                <ScalarProperty Name="PUERTO" ColumnName="PUERTO" />
+                <ScalarProperty Name="SSL" ColumnName="SSL" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
+                <ScalarProperty Name="DISTRITO" ColumnName="DISTRITO" />
+                <ScalarProperty Name="BARRIO" ColumnName="BARRIO" />
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+                <ScalarProperty Name="TOKEN" ColumnName="TOKEN" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+                <ScalarProperty Name="CLAVE_CERT" ColumnName="CLAVE_CERT" />
+                <ScalarProperty Name="SUCURSAL" ColumnName="SUCURSAL" />
+                <ScalarProperty Name="USUARIO_FE" ColumnName="USUARIO_FE" />
+                <ScalarProperty Name="AMBIENTE" ColumnName="AMBIENTE" />
+                <ScalarProperty Name="NOMBRE_CORREO" ColumnName="NOMBRE_CORREO" />
+                <ScalarProperty Name="CODIGO_ACTIVIDAD" ColumnName="CODIGO_ACTIVIDAD" />
+                <ScalarProperty Name="FACTURAR_NEGATIVO" ColumnName="FACTURAR_NEGATIVO" />
+                <ScalarProperty Name="CARPRESP" ColumnName="CARPRESP" />
+                <ScalarProperty Name="CONDICION_REBAJA_INVENTARIO" ColumnName="CONDICION_REBAJA_INVENTARIO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CLIENTES">
+            <EntityTypeMapping TypeName="POLTAModel.CLIENTES">
+              <MappingFragment StoreEntitySet="CLIENTES">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
+                <ScalarProperty Name="NACIMIENTO" ColumnName="NACIMIENTO" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="LIMITE" ColumnName="LIMITE" />
+                <ScalarProperty Name="FRECUENCIA" ColumnName="FRECUENCIA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
+                <ScalarProperty Name="DISTRITO" ColumnName="DISTRITO" />
+                <ScalarProperty Name="BARRIO" ColumnName="BARRIO" />
+                <ScalarProperty Name="NombreComercial" ColumnName="NombreComercial" />
+                <ScalarProperty Name="CELULAR" ColumnName="CELULAR" />
+                <ScalarProperty Name="DIAS" ColumnName="DIAS" />
+                <ScalarProperty Name="DE_TASA_IMP" ColumnName="DE_TASA_IMP" />
+                <ScalarProperty Name="NUMDOCEXO" ColumnName="NUMDOCEXO" />
+                <ScalarProperty Name="INSTIEXO" ColumnName="INSTIEXO" />
+                <ScalarProperty Name="FECHAEXO" ColumnName="FECHAEXO" />
+                <ScalarProperty Name="PROCENTAJEEXO" ColumnName="PROCENTAJEEXO" />
+                <ScalarProperty Name="ConsumidorFinal" ColumnName="ConsumidorFinal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COTIZACIONES">
+            <EntityTypeMapping TypeName="POLTAModel.COTIZACIONES">
+              <MappingFragment StoreEntitySet="COTIZACIONES">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="CLIENTE" ColumnName="CLIENTE" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="CREADO" ColumnName="CREADO" />
+                <ScalarProperty Name="CANCELADO" ColumnName="CANCELADO" />
+                <ScalarProperty Name="FORMA_PAGO" ColumnName="FORMA_PAGO" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="TARJETA" ColumnName="TARJETA" />
+                <ScalarProperty Name="NTARJETA" ColumnName="NTARJETA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CUENTAS_BANCO">
+            <EntityTypeMapping TypeName="POLTAModel.CUENTAS_BANCO">
+              <MappingFragment StoreEntitySet="CUENTAS_BANCO">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="BANCO" ColumnName="BANCO" />
+                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
+                <ScalarProperty Name="CUENTA" ColumnName="CUENTA" />
+                <ScalarProperty Name="SINPE" ColumnName="SINPE" />
+                <ScalarProperty Name="SALDO" ColumnName="SALDO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DATAFONOS">
+            <EntityTypeMapping TypeName="POLTAModel.DATAFONOS">
+              <MappingFragment StoreEntitySet="DATAFONOS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CUENTA" ColumnName="CUENTA" />
+                <ScalarProperty Name="COMISION" ColumnName="COMISION" />
+                <ScalarProperty Name="RETENCION" ColumnName="RETENCION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DETALLE_CTZ">
+            <EntityTypeMapping TypeName="POLTAModel.DETALLE_CTZ">
+              <MappingFragment StoreEntitySet="DETALLE_CTZ">
+                <ScalarProperty Name="FACTURA" ColumnName="FACTURA" />
+                <ScalarProperty Name="PRODUCTO" ColumnName="PRODUCTO" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="IMPUESTO" ColumnName="IMPUESTO" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+                <ScalarProperty Name="VENDEDOR" ColumnName="VENDEDOR" />
+                <ScalarProperty Name="LIN" ColumnName="LIN" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FACTURAS">
+            <EntityTypeMapping TypeName="POLTAModel.FACTURAS">
+              <MappingFragment StoreEntitySet="FACTURAS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="CLIENTE" ColumnName="CLIENTE" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="CREADO" ColumnName="CREADO" />
+                <ScalarProperty Name="USU_CAN" ColumnName="USU_CAN" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="FECHA_CAN" ColumnName="FECHA_CAN" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="TC" ColumnName="TC" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="COMENTARIO" ColumnName="COMENTARIO" />
+                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+                <ScalarProperty Name="CONSECUTIVO" ColumnName="CONSECUTIVO" />
+                <ScalarProperty Name="ESTADO_HACIENDA" ColumnName="ESTADO_HACIENDA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IMPRESORAS">
+            <EntityTypeMapping TypeName="POLTAModel.IMPRESORAS">
+              <MappingFragment StoreEntitySet="IMPRESORAS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="REDUCIDA" ColumnName="REDUCIDA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IMPRESORASxUSUARIO">
+            <EntityTypeMapping TypeName="POLTAModel.IMPRESORASxUSUARIO">
+              <MappingFragment StoreEntitySet="IMPRESORASxUSUARIO">
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="TAMANO" ColumnName="TAMANO" />
+                <ScalarProperty Name="IMPRESORA" ColumnName="IMPRESORA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INVENTARIO">
+            <EntityTypeMapping TypeName="POLTAModel.INVENTARIO">
+              <MappingFragment StoreEntitySet="INVENTARIO">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="UTILIDAD" ColumnName="UTILIDAD" />
+                <ScalarProperty Name="COD_IMPUESTO" ColumnName="COD_IMPUESTO" />
+                <ScalarProperty Name="CENTRO_COSTO" ColumnName="CENTRO_COSTO" />
+                <ScalarProperty Name="GRAVADO" ColumnName="GRAVADO" />
+                <ScalarProperty Name="UNIDAD" ColumnName="UNIDAD" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="TALLA" ColumnName="TALLA" />
+                <ScalarProperty Name="PRE_PROVE" ColumnName="PRE_PROVE" />
+                <ScalarProperty Name="IMPUESTOS" ColumnName="IMPUESTOS" />
+                <ScalarProperty Name="COD_CORTO" ColumnName="COD_CORTO" />
+                <ScalarProperty Name="COD_TARIFA" ColumnName="COD_TARIFA" />
+                <ScalarProperty Name="FAMILIA" ColumnName="FAMILIA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="GARANTIA" ColumnName="GARANTIA" />
+                <ScalarProperty Name="IMPRESORA" ColumnName="IMPRESORA" />
+                <ScalarProperty Name="CABYS" ColumnName="CABYS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LECTURAS">
+            <EntityTypeMapping TypeName="POLTAModel.LECTURAS">
+              <MappingFragment StoreEntitySet="LECTURAS">
+                <ScalarProperty Name="ID_LEC" ColumnName="ID_LEC" />
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="ID_USU" ColumnName="ID_USU" />
+                <ScalarProperty Name="MES" ColumnName="MES" />
+                <ScalarProperty Name="ANIO" ColumnName="ANIO" />
+                <ScalarProperty Name="LECTURA" ColumnName="LECTURA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LISTA_PRECIOS">
+            <EntityTypeMapping TypeName="POLTAModel.LISTA_PRECIOS">
+              <MappingFragment StoreEntitySet="LISTA_PRECIOS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PAJAS">
+            <EntityTypeMapping TypeName="POLTAModel.PAJAS">
+              <MappingFragment StoreEntitySet="PAJAS">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="ID_CLI" ColumnName="ID_CLI" />
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="R_CIERRE">
+            <EntityTypeMapping TypeName="POLTAModel.R_CIERRE">
+              <MappingFragment StoreEntitySet="R_CIERRE">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="EFECTIVO" ColumnName="EFECTIVO" />
+                <ScalarProperty Name="TARJETA" ColumnName="TARJETA" />
+                <ScalarProperty Name="TRANSFERENCIA" ColumnName="TRANSFERENCIA" />
+                <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+                <ScalarProperty Name="CEFECTIVO" ColumnName="CEFECTIVO" />
+                <ScalarProperty Name="CTARJETA" ColumnName="CTARJETA" />
+                <ScalarProperty Name="CFACTURA" ColumnName="CFACTURA" />
+                <ScalarProperty Name="COTROS" ColumnName="COTROS" />
+                <ScalarProperty Name="CDOLARES" ColumnName="CDOLARES" />
+                <ScalarProperty Name="APERTURA" ColumnName="APERTURA" />
+                <ScalarProperty Name="EFEC_DOL" ColumnName="EFEC_DOL" />
+                <ScalarProperty Name="TARJ_DOL" ColumnName="TARJ_DOL" />
+                <ScalarProperty Name="TRANS_DOL" ColumnName="TRANS_DOL" />
+                <ScalarProperty Name="CHEQ_DOL" ColumnName="CHEQ_DOL" />
+                <ScalarProperty Name="CON_EFE_DOL" ColumnName="CON_EFE_DOL" />
+                <ScalarProperty Name="CON_TAR_DOL" ColumnName="CON_TAR_DOL" />
+                <ScalarProperty Name="CON_TRA_DOL" ColumnName="CON_TRA_DOL" />
+                <ScalarProperty Name="CON_CHE_DOL" ColumnName="CON_CHE_DOL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ROLES">
+            <EntityTypeMapping TypeName="POLTAModel.ROLES">
+              <MappingFragment StoreEntitySet="ROLES">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TARIFAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.TARIFAS">
+            <EntityTypeMapping TypeName="POLTAModel.TARIFAS">
               <MappingFragment StoreEntitySet="TARIFAS">
                 <ScalarProperty Name="ID_TAR" ColumnName="ID_TAR" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
@@ -1517,412 +1891,138 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CLIENTES">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CLIENTES">
-              <MappingFragment StoreEntitySet="CLIENTES">
-                <ScalarProperty Name="PROCENTAJEEXO" ColumnName="PROCENTAJEEXO" />
-                <ScalarProperty Name="FECHAEXO" ColumnName="FECHAEXO" />
-                <ScalarProperty Name="INSTIEXO" ColumnName="INSTIEXO" />
-                <ScalarProperty Name="NUMDOCEXO" ColumnName="NUMDOCEXO" />
-                <ScalarProperty Name="DE_TASA_IMP" ColumnName="DE_TASA_IMP" />
-                <ScalarProperty Name="DIAS" ColumnName="DIAS" />
-                <ScalarProperty Name="CELULAR" ColumnName="CELULAR" />
-                <ScalarProperty Name="NombreComercial" ColumnName="NombreComercial" />
-                <ScalarProperty Name="BARRIO" ColumnName="BARRIO" />
-                <ScalarProperty Name="DISTRITO" ColumnName="DISTRITO" />
-                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
-                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="FRECUENCIA" ColumnName="FRECUENCIA" />
-                <ScalarProperty Name="LIMITE" ColumnName="LIMITE" />
-                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
-                <ScalarProperty Name="NACIMIENTO" ColumnName="NACIMIENTO" />
-                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
-                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
-                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+          <EntitySetMapping Name="USUARIOS">
+            <EntityTypeMapping TypeName="POLTAModel.USUARIOS">
+              <MappingFragment StoreEntitySet="USUARIOS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
                 <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
                 <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BLOQUES">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.BLOQUES">
-              <MappingFragment StoreEntitySet="BLOQUES">
-                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PAJAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.PAJAS">
-              <MappingFragment StoreEntitySet="PAJAS">
-                <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+                <ScalarProperty Name="PERMISO" ColumnName="PERMISO" />
                 <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
-                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
-                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
-                <ScalarProperty Name="ID_CLI" ColumnName="ID_CLI" />
-                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
-                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="UC" ColumnName="UC" />
+                <ScalarProperty Name="VENDEDOR" ColumnName="VENDEDOR" />
+                <ScalarProperty Name="COMANDO" ColumnName="COMANDO" />
+                <ScalarProperty Name="CAJA" ColumnName="CAJA" />
+                <ScalarProperty Name="BODEGA" ColumnName="BODEGA" />
+                <ScalarProperty Name="UF" ColumnName="UF" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ZONAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.ZONAS">
+            <EntityTypeMapping TypeName="POLTAModel.ZONAS">
               <MappingFragment StoreEntitySet="ZONAS">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LISTA_PRECIOS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.LISTA_PRECIOS">
-              <MappingFragment StoreEntitySet="LISTA_PRECIOS">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CANTONES">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CANTONES">
+            <EntityTypeMapping TypeName="POLTAModel.CANTONES">
               <MappingFragment StoreEntitySet="CANTONES">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DISTRITOS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.DISTRITOS">
+            <EntityTypeMapping TypeName="POLTAModel.DISTRITOS">
               <MappingFragment StoreEntitySet="DISTRITOS">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
-                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PROVINCIAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.PROVINCIAS">
+            <EntityTypeMapping TypeName="POLTAModel.PROVINCIAS">
               <MappingFragment StoreEntitySet="PROVINCIAS">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CIA">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CIA">
-              <MappingFragment StoreEntitySet="CIA">
-                <ScalarProperty Name="CONDICION_REBAJA_INVENTARIO" ColumnName="CONDICION_REBAJA_INVENTARIO" />
-                <ScalarProperty Name="CARPRESP" ColumnName="CARPRESP" />
-                <ScalarProperty Name="FACTURAR_NEGATIVO" ColumnName="FACTURAR_NEGATIVO" />
-                <ScalarProperty Name="CODIGO_ACTIVIDAD" ColumnName="CODIGO_ACTIVIDAD" />
-                <ScalarProperty Name="NOMBRE_CORREO" ColumnName="NOMBRE_CORREO" />
-                <ScalarProperty Name="AMBIENTE" ColumnName="AMBIENTE" />
-                <ScalarProperty Name="USUARIO_FE" ColumnName="USUARIO_FE" />
-                <ScalarProperty Name="SUCURSAL" ColumnName="SUCURSAL" />
-                <ScalarProperty Name="CLAVE_CERT" ColumnName="CLAVE_CERT" />
-                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
-                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
-                <ScalarProperty Name="TOKEN" ColumnName="TOKEN" />
-                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
-                <ScalarProperty Name="BARRIO" ColumnName="BARRIO" />
-                <ScalarProperty Name="DISTRITO" ColumnName="DISTRITO" />
-                <ScalarProperty Name="CANTON" ColumnName="CANTON" />
-                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+          <EntitySetMapping Name="TRANSACCIONES">
+            <EntityTypeMapping TypeName="POLTAModel.TRANSACCIONES">
+              <MappingFragment StoreEntitySet="TRANSACCIONES">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="TIPO" ColumnName="TIPO" />
-                <ScalarProperty Name="SSL" ColumnName="SSL" />
-                <ScalarProperty Name="PUERTO" ColumnName="PUERTO" />
-                <ScalarProperty Name="SERVIDOR" ColumnName="SERVIDOR" />
-                <ScalarProperty Name="LOGO" ColumnName="LOGO" />
-                <ScalarProperty Name="LIMITE" ColumnName="LIMITE" />
-                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
-                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
-                <ScalarProperty Name="FANTASIA" ColumnName="FANTASIA" />
-                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Sp_BuscarCliente" FunctionName="POLTA_PRUEBASModel.Store.Sp_BuscarCliente">
+          <FunctionImportMapping FunctionImportName="ANULA_FACTURA" FunctionName="POLTAModel.Store.ANULA_FACTURA">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_BuscarCliente_Result">
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="Sp_BuscarPaja" FunctionName="POLTA_PRUEBASModel.Store.Sp_BuscarPaja">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_BuscarPaja_Result">
-                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
-                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
-                <ScalarProperty Name="ID_CLI" ColumnName="ID_CLI" />
-                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
-                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
-                <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <EntitySetMapping Name="LECTURAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.LECTURAS">
-              <MappingFragment StoreEntitySet="LECTURAS">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="LECTURA" ColumnName="LECTURA" />
-                <ScalarProperty Name="ANIO" ColumnName="ANIO" />
-                <ScalarProperty Name="MES" ColumnName="MES" />
-                <ScalarProperty Name="ID_USU" ColumnName="ID_USU" />
-                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
-                <ScalarProperty Name="ID_LEC" ColumnName="ID_LEC" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="TablaLecturas" FunctionName="POLTA_PRUEBASModel.Store.TablaLecturas">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.TablaLecturas_Result">
-                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="Zona" ColumnName="Zona" />
-                <ScalarProperty Name="Bloque" ColumnName="Bloque" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="UltimaLectura" ColumnName="UltimaLectura" />
-                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
-                <ScalarProperty Name="NumLectura" ColumnName="NumLectura" />
-                <ScalarProperty Name="LecturaActual" ColumnName="LecturaActual" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GENERA_FACTURACION" FunctionName="POLTA_PRUEBASModel.Store.GENERA_FACTURACION">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.GENERA_FACTURACION_Result">
+              <ComplexTypeMapping TypeName="POLTAModel.ANULA_FACTURA_Result">
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_BUSCAR_PAJA_PARAMETROS" FunctionName="POLTA_PRUEBASModel.Store.SP_BUSCAR_PAJA_PARAMETROS">
+          <FunctionImportMapping FunctionImportName="AplicarPermisoUsuarioRol" FunctionName="POLTAModel.Store.AplicarPermisoUsuarioRol" />
+          <FunctionImportMapping FunctionImportName="DESGLOSE_ENTRADAS_SALIDAS" FunctionName="POLTAModel.Store.DESGLOSE_ENTRADAS_SALIDAS">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.SP_BUSCAR_PAJA_PARAMETROS_Result">
-                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
-                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+              <ComplexTypeMapping TypeName="POLTAModel.DESGLOSE_ENTRADAS_SALIDAS_Result">
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="DETALLE" ColumnName="DETALLE" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Medio" ColumnName="Medio" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="RECTIFICA_LECTURA_MEDIDOR" FunctionName="POLTA_PRUEBASModel.Store.RECTIFICA_LECTURA_MEDIDOR">
+          <FunctionImportMapping FunctionImportName="GENERA_FACTURACION" FunctionName="POLTAModel.Store.GENERA_FACTURACION">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.RECTIFICA_LECTURA_MEDIDOR_Result">
+              <ComplexTypeMapping TypeName="POLTAModel.GENERA_FACTURACION_Result">
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="TablaPrecios" FunctionName="POLTA_PRUEBASModel.Store.TablaPrecios">
+          <FunctionImportMapping FunctionImportName="MOVIMIENTOS_CAJA" FunctionName="POLTAModel.Store.MOVIMIENTOS_CAJA">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.TablaPrecios_Result">
-                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Precio" ColumnName="Precio" />
-                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
-                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
-                <ScalarProperty Name="Sub" ColumnName="Sub" />
-                <ScalarProperty Name="Vendedor" ColumnName="Vendedor" />
-                <ScalarProperty Name="C_" ColumnName="#" />
+              <ComplexTypeMapping TypeName="POLTAModel.MOVIMIENTOS_CAJA_Result">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Transaccion" ColumnName="Transaccion" />
+                <ScalarProperty Name="Medio" ColumnName="Medio" />
+                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="DATAFONOS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.DATAFONOS">
-              <MappingFragment StoreEntitySet="DATAFONOS">
-                <ScalarProperty Name="RETENCION" ColumnName="RETENCION" />
-                <ScalarProperty Name="COMISION" ColumnName="COMISION" />
-                <ScalarProperty Name="CUENTA" ColumnName="CUENTA" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CUENTAS_BANCO">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.CUENTAS_BANCO">
-              <MappingFragment StoreEntitySet="CUENTAS_BANCO">
-                <ScalarProperty Name="SALDO" ColumnName="SALDO" />
-                <ScalarProperty Name="SINPE" ColumnName="SINPE" />
-                <ScalarProperty Name="CUENTA" ColumnName="CUENTA" />
-                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
-                <ScalarProperty Name="BANCO" ColumnName="BANCO" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PAGO_LECTURA" FunctionName="POLTA_PRUEBASModel.Store.PAGO_LECTURA">
+          <FunctionImportMapping FunctionImportName="NuevaCaja" FunctionName="POLTAModel.Store.NuevaCaja" />
+          <FunctionImportMapping FunctionImportName="NuevoCierre" FunctionName="POLTAModel.Store.NuevoCierre" />
+          <FunctionImportMapping FunctionImportName="NuevoMovOperacion" FunctionName="POLTAModel.Store.NuevoMovOperacion" />
+          <FunctionImportMapping FunctionImportName="NuevoUsuario" FunctionName="POLTAModel.Store.NuevoUsuario" />
+          <FunctionImportMapping FunctionImportName="ObtenerLecturaAnterior" FunctionName="POLTAModel.Store.ObtenerLecturaAnterior" />
+          <FunctionImportMapping FunctionImportName="ObtenernerFechaLecturaAnterior" FunctionName="POLTAModel.Store.ObtenernerFechaLecturaAnterior" />
+          <FunctionImportMapping FunctionImportName="PAGO_LECTURA" FunctionName="POLTAModel.Store.PAGO_LECTURA">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.PAGO_LECTURA_Result">
+              <ComplexTypeMapping TypeName="POLTAModel.PAGO_LECTURA_Result">
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="PAJAS_PENDIENTES_PAGO" FunctionName="POLTA_PRUEBASModel.Store.PAJAS_PENDIENTES_PAGO">
+          <FunctionImportMapping FunctionImportName="PAGO_RECIBO_ESPECIAL" FunctionName="POLTAModel.Store.PAGO_RECIBO_ESPECIAL">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.PAJAS_PENDIENTES_PAGO_Result">
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="Periodo" ColumnName="Periodo" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
-                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
-                <ScalarProperty Name="Factura" ColumnName="Factura" />
+              <ComplexTypeMapping TypeName="POLTAModel.PAGO_RECIBO_ESPECIAL_Result">
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="USUARIOS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.USUARIOS">
-              <MappingFragment StoreEntitySet="USUARIOS">
-                <ScalarProperty Name="UF" ColumnName="UF" />
-                <ScalarProperty Name="BODEGA" ColumnName="BODEGA" />
-                <ScalarProperty Name="CAJA" ColumnName="CAJA" />
-                <ScalarProperty Name="COMANDO" ColumnName="COMANDO" />
-                <ScalarProperty Name="VENDEDOR" ColumnName="VENDEDOR" />
-                <ScalarProperty Name="UC" ColumnName="UC" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="PERMISO" ColumnName="PERMISO" />
-                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
-                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
-                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
-                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
-                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="COTIZACIONES">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.COTIZACIONES">
-              <MappingFragment StoreEntitySet="COTIZACIONES">
-                <ScalarProperty Name="NTARJETA" ColumnName="NTARJETA" />
-                <ScalarProperty Name="TARJETA" ColumnName="TARJETA" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
-                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
-                <ScalarProperty Name="FORMA_PAGO" ColumnName="FORMA_PAGO" />
-                <ScalarProperty Name="CANCELADO" ColumnName="CANCELADO" />
-                <ScalarProperty Name="CREADO" ColumnName="CREADO" />
-                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-                <ScalarProperty Name="CLIENTE" ColumnName="CLIENTE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FACTURAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.FACTURAS">
-              <MappingFragment StoreEntitySet="FACTURAS">
-                <ScalarProperty Name="ESTADO_HACIENDA" ColumnName="ESTADO_HACIENDA" />
-                <ScalarProperty Name="CONSECUTIVO" ColumnName="CONSECUTIVO" />
-                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
-                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
-                <ScalarProperty Name="COMENTARIO" ColumnName="COMENTARIO" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="TC" ColumnName="TC" />
-                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
-                <ScalarProperty Name="FECHA_CAN" ColumnName="FECHA_CAN" />
-                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-                <ScalarProperty Name="USU_CAN" ColumnName="USU_CAN" />
-                <ScalarProperty Name="CREADO" ColumnName="CREADO" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="CLIENTE" ColumnName="CLIENTE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DETALLE_CTZ">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.DETALLE_CTZ">
-              <MappingFragment StoreEntitySet="DETALLE_CTZ">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="LIN" ColumnName="LIN" />
-                <ScalarProperty Name="VENDEDOR" ColumnName="VENDEDOR" />
-                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
-                <ScalarProperty Name="IMPUESTO" ColumnName="IMPUESTO" />
-                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
-                <ScalarProperty Name="PRODUCTO" ColumnName="PRODUCTO" />
-                <ScalarProperty Name="FACTURA" ColumnName="FACTURA" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="INVENTARIO">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.INVENTARIO">
-              <MappingFragment StoreEntitySet="INVENTARIO">
-                <ScalarProperty Name="CABYS" ColumnName="CABYS" />
-                <ScalarProperty Name="IMPRESORA" ColumnName="IMPRESORA" />
-                <ScalarProperty Name="GARANTIA" ColumnName="GARANTIA" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="FAMILIA" ColumnName="FAMILIA" />
-                <ScalarProperty Name="COD_TARIFA" ColumnName="COD_TARIFA" />
-                <ScalarProperty Name="COD_CORTO" ColumnName="COD_CORTO" />
-                <ScalarProperty Name="IMPUESTOS" ColumnName="IMPUESTOS" />
-                <ScalarProperty Name="PRE_PROVE" ColumnName="PRE_PROVE" />
-                <ScalarProperty Name="TALLA" ColumnName="TALLA" />
-                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
-                <ScalarProperty Name="UNIDAD" ColumnName="UNIDAD" />
-                <ScalarProperty Name="GRAVADO" ColumnName="GRAVADO" />
-                <ScalarProperty Name="CENTRO_COSTO" ColumnName="CENTRO_COSTO" />
-                <ScalarProperty Name="COD_IMPUESTO" ColumnName="COD_IMPUESTO" />
-                <ScalarProperty Name="UTILIDAD" ColumnName="UTILIDAD" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ObtenerLecturaAnterior" FunctionName="POLTA_PRUEBASModel.Store.ObtenerLecturaAnterior" />
-          <FunctionImportMapping FunctionImportName="ObtenernerFechaLecturaAnterior" FunctionName="POLTA_PRUEBASModel.Store.ObtenernerFechaLecturaAnterior" />
-          <FunctionImportMapping FunctionImportName="Sp_ObtenerBloques" FunctionName="POLTA_PRUEBASModel.Store.Sp_ObtenerBloques">
+          <FunctionImportMapping FunctionImportName="PROCESO_CAJA" FunctionName="POLTAModel.Store.PROCESO_CAJA">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.Sp_ObtenerBloques_Result">
-                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
-                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <EntitySetMapping Name="R_CIERRE">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.R_CIERRE">
-              <MappingFragment StoreEntitySet="R_CIERRE">
-                <ScalarProperty Name="CON_CHE_DOL" ColumnName="CON_CHE_DOL" />
-                <ScalarProperty Name="CON_TRA_DOL" ColumnName="CON_TRA_DOL" />
-                <ScalarProperty Name="CON_TAR_DOL" ColumnName="CON_TAR_DOL" />
-                <ScalarProperty Name="CON_EFE_DOL" ColumnName="CON_EFE_DOL" />
-                <ScalarProperty Name="CHEQ_DOL" ColumnName="CHEQ_DOL" />
-                <ScalarProperty Name="TRANS_DOL" ColumnName="TRANS_DOL" />
-                <ScalarProperty Name="TARJ_DOL" ColumnName="TARJ_DOL" />
-                <ScalarProperty Name="EFEC_DOL" ColumnName="EFEC_DOL" />
-                <ScalarProperty Name="APERTURA" ColumnName="APERTURA" />
-                <ScalarProperty Name="CDOLARES" ColumnName="CDOLARES" />
-                <ScalarProperty Name="COTROS" ColumnName="COTROS" />
-                <ScalarProperty Name="CFACTURA" ColumnName="CFACTURA" />
-                <ScalarProperty Name="CTARJETA" ColumnName="CTARJETA" />
-                <ScalarProperty Name="CEFECTIVO" ColumnName="CEFECTIVO" />
-                <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
-                <ScalarProperty Name="TRANSFERENCIA" ColumnName="TRANSFERENCIA" />
-                <ScalarProperty Name="TARJETA" ColumnName="TARJETA" />
-                <ScalarProperty Name="EFECTIVO" ColumnName="EFECTIVO" />
-                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
-                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PROCESO_CAJA" FunctionName="POLTA_PRUEBASModel.Store.PROCESO_CAJA">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.PROCESO_CAJA_Result">
+              <ComplexTypeMapping TypeName="POLTAModel.PROCESO_CAJA_Result">
                 <ScalarProperty Name="Efectivo" ColumnName="Efectivo" />
                 <ScalarProperty Name="Tarjeta" ColumnName="Tarjeta" />
                 <ScalarProperty Name="Transfer" ColumnName="Transfer" />
@@ -1937,59 +2037,97 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="NuevaCaja" FunctionName="POLTA_PRUEBASModel.Store.NuevaCaja" />
-          <FunctionImportMapping FunctionImportName="NuevoCierre" FunctionName="POLTA_PRUEBASModel.Store.NuevoCierre" />
-          <EntitySetMapping Name="TRANSACCIONES">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.TRANSACCIONES">
-              <MappingFragment StoreEntitySet="TRANSACCIONES">
-                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="NuevoMovOperacion" FunctionName="POLTA_PRUEBASModel.Store.NuevoMovOperacion" />
-          <EntitySetMapping Name="IMPRESORASxUSUARIO">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.IMPRESORASxUSUARIO">
-              <MappingFragment StoreEntitySet="IMPRESORASxUSUARIO">
-                <ScalarProperty Name="IMPRESORA" ColumnName="IMPRESORA" />
-                <ScalarProperty Name="TAMANO" ColumnName="TAMANO" />
-                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IMPRESORAS">
-            <EntityTypeMapping TypeName="POLTA_PRUEBASModel.IMPRESORAS">
-              <MappingFragment StoreEntitySet="IMPRESORAS">
-                <ScalarProperty Name="REDUCIDA" ColumnName="REDUCIDA" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="MOVIMIENTOS_CAJA" FunctionName="POLTA_PRUEBASModel.Store.MOVIMIENTOS_CAJA">
+          <FunctionImportMapping FunctionImportName="RECTIFICA_LECTURA_MEDIDOR" FunctionName="POLTAModel.Store.RECTIFICA_LECTURA_MEDIDOR">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.MOVIMIENTOS_CAJA_Result">
-                <ScalarProperty Name="codigo" ColumnName="codigo" />
-                <ScalarProperty Name="Monto" ColumnName="Monto" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="Documento" ColumnName="Documento" />
-                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
-                <ScalarProperty Name="Transaccion" ColumnName="Transaccion" />
-                <ScalarProperty Name="Medio" ColumnName="Medio" />
-                <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
+              <ComplexTypeMapping TypeName="POLTAModel.RECTIFICA_LECTURA_MEDIDOR_Result">
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="DESGLOSE_ENTRADAS_SALIDAS" FunctionName="POLTA_PRUEBASModel.Store.DESGLOSE_ENTRADAS_SALIDAS">
+          <FunctionImportMapping FunctionImportName="SP_BUSCAR_PAJA_PARAMETROS" FunctionName="POLTAModel.Store.SP_BUSCAR_PAJA_PARAMETROS">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="POLTA_PRUEBASModel.DESGLOSE_ENTRADAS_SALIDAS_Result">
-                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
-                <ScalarProperty Name="DETALLE" ColumnName="DETALLE" />
-                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-                <ScalarProperty Name="Monto" ColumnName="Monto" />
-                <ScalarProperty Name="Medio" ColumnName="Medio" />
+              <ComplexTypeMapping TypeName="POLTAModel.SP_BUSCAR_PAJA_PARAMETROS_Result">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_BuscarCliente" FunctionName="POLTAModel.Store.Sp_BuscarCliente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTAModel.Sp_BuscarCliente_Result">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_BuscarPaja" FunctionName="POLTAModel.Store.Sp_BuscarPaja">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTAModel.Sp_BuscarPaja_Result">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="ID_CLI" ColumnName="ID_CLI" />
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TIPO_TARIFA" ColumnName="TIPO_TARIFA" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA_INSTALACION" ColumnName="FECHA_INSTALACION" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_ObtenerBloques" FunctionName="POLTAModel.Store.Sp_ObtenerBloques">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTAModel.Sp_ObtenerBloques_Result">
+                <ScalarProperty Name="ID_BLO" ColumnName="ID_BLO" />
+                <ScalarProperty Name="NombreZona" ColumnName="NombreZona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID_ZON" ColumnName="ID_ZON" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TablaLecturas" FunctionName="POLTAModel.Store.TablaLecturas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTAModel.TablaLecturas_Result">
+                <ScalarProperty Name="ID_PAJ" ColumnName="ID_PAJ" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="Zona" ColumnName="Zona" />
+                <ScalarProperty Name="Bloque" ColumnName="Bloque" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="UltimaLectura" ColumnName="UltimaLectura" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="NumLectura" ColumnName="NumLectura" />
+                <ScalarProperty Name="LecturaActual" ColumnName="LecturaActual" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TablaPrecios" FunctionName="POLTAModel.Store.TablaPrecios">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTAModel.TablaPrecios_Result">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
+                <ScalarProperty Name="Sub" ColumnName="Sub" />
+                <ScalarProperty Name="Vendedor" ColumnName="Vendedor" />
+                <ScalarProperty Name="C_" ColumnName="#" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PAJAS_PENDIENTES_PAGO" FunctionName="POLTAModel.Store.PAJAS_PENDIENTES_PAGO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="POLTAModel.PAJAS_PENDIENTES_PAGO_Result">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="Periodo" ColumnName="Periodo" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="MEDIDOR" ColumnName="MEDIDOR" />
+                <ScalarProperty Name="IDENTIFICACION" ColumnName="IDENTIFICACION" />
+                <ScalarProperty Name="Factura" ColumnName="Factura" />
+                <ScalarProperty Name="EstadoHacienda" ColumnName="EstadoHacienda" />
+                <ScalarProperty Name="EstadoCorreo" ColumnName="EstadoCorreo" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

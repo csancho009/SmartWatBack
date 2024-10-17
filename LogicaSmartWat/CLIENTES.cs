@@ -17,10 +17,10 @@ namespace LogicaSmartWat
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CLIENTES()
         {
-            this.PAJAS = new HashSet<PAJAS>();
-            this.COTIZACIONES = new HashSet<COTIZACIONES>();
-            this.COTIZACIONES1 = new HashSet<COTIZACIONES>();
             this.FACTURAS = new HashSet<FACTURAS>();
+            this.COTIZACIONES = new HashSet<COTIZACIONES>();
+            this.PAJAS = new HashSet<PAJAS>();
+            this.COTIZACIONES1 = new HashSet<COTIZACIONES>();
         }
     
         public int CODIGO { get; set; }
@@ -47,14 +47,15 @@ namespace LogicaSmartWat
         public string INSTIEXO { get; set; }
         public Nullable<System.DateTime> FECHAEXO { get; set; }
         public Nullable<int> PROCENTAJEEXO { get; set; }
+        public string ConsumidorFinal { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PAJAS> PAJAS { get; set; }
+        public virtual ICollection<FACTURAS> FACTURAS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<COTIZACIONES> COTIZACIONES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<COTIZACIONES> COTIZACIONES1 { get; set; }
+        public virtual ICollection<PAJAS> PAJAS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FACTURAS> FACTURAS { get; set; }
+        public virtual ICollection<COTIZACIONES> COTIZACIONES1 { get; set; }
     }
 }

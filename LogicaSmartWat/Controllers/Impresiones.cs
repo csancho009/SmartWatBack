@@ -46,6 +46,39 @@ namespace LogicaSmartWat.Controllers
 
         }
 
+        public Respuesta NCDevolucion(int Numero, int IdCia, string BD)
+        {
+            Respuesta R = new Respuesta();
+            ReportDocument Reporte = new ReportDocument();
+            try
+            {
+                Reporte = new NCdevolucion();
+                Reporte.SetParameterValue(0, Numero);
+                Reporte.SetParameterValue(1, IdCia);
+                Conecta_Reporte(ref Reporte, BD);
+                Stream reportStream = Reporte.ExportToStream(ExportFormatType.PortableDocFormat);
+                byte[] pdfBytes;
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    reportStream.CopyTo(memoryStream);
+                    pdfBytes = memoryStream.ToArray();
+                }
+                R.Objeto = Convert.ToBase64String(pdfBytes);
+                R.Codigo = 0;
+                R.Mensaje = "OK";
+                Reporte.Dispose();
+                Reporte.Close();
+                Reporte = null;
+            }
+            catch (Exception ex)
+            {
+                R.Codigo = -1;
+                R.Mensaje = ex.Message;
+            }
+            return R;
+
+        }
+
         public Respuesta PrefacturaFactura(int NumeroCoti, int NumPaja, int NumLectura, string BD)
         {
             Respuesta R = new Respuesta();
@@ -106,7 +139,7 @@ namespace LogicaSmartWat.Controllers
                 Reporte.Export();
 
                 CorreoElectronico C = new CorreoElectronico();
-                var EC = C.EnviarCorreo("electronicocr@hotmail.com", "", "<h4>Estimado Abonado</h4><p>Se adjunta la orden de cobro correspondiente al consumo de agua</p>", "Consumo de agua", Archivo);
+                var EC = C.EnviarCorreo(Destinatario, "", "<h4>Estimado Abonado</h4><p>Se adjunta la orden de cobro correspondiente al consumo de agua</p>", "Consumo de agua", Archivo);
                 File.Delete(Archivo);
 
                 R.Codigo = 0;
@@ -161,7 +194,7 @@ namespace LogicaSmartWat.Controllers
             string NombreImpresora = "";
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -237,28 +270,28 @@ namespace LogicaSmartWat.Controllers
         public Respuesta ImprimeIngresoEgreso(int NumMov, int usuario, string BD)
         {
             Respuesta R = new Respuesta();
-            string NombreImpresora = "";
+           // string NombreImpresora = "";
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
                         db.Database.Connection.Open();
                     }
                     db.Database.Connection.ChangeDatabase(BD);
-                    List<IMPRESORASxUSUARIO> iu = db.IMPRESORASxUSUARIO.Where(d => d.USUARIO == usuario).ToList();
-                    foreach (var I in iu)
-                    {
-                        if (NombreImpresora == "")
-                        {
-                            NombreImpresora = I.IMPRESORAS.NOMBRE;
-                        }
-                        if (I.IMPRESORAS.REDUCIDA == 0)
-                        {
-                            NombreImpresora = I.IMPRESORAS.NOMBRE;
-                        }
-                    }
+                    //List<IMPRESORASxUSUARIO> iu = db.IMPRESORASxUSUARIO.Where(d => d.USUARIO == usuario).ToList();
+                    //foreach (var I in iu)
+                    //{
+                    //    if (NombreImpresora == "")
+                    //    {
+                    //        NombreImpresora = I.IMPRESORAS.NOMBRE;
+                    //    }
+                    //    if (I.IMPRESORAS.REDUCIDA == 0)
+                    //    {
+                    //        NombreImpresora = I.IMPRESORAS.NOMBRE;
+                    //    }
+                    //}
                     ReportDocument Reporte = new ReportDocument();
                     try
                     {
@@ -266,8 +299,14 @@ namespace LogicaSmartWat.Controllers
                         Reporte.SetParameterValue(0, NumMov);
                         Conecta_Reporte(ref Reporte, BD);
 
-                        Reporte.PrintOptions.PrinterName = NombreImpresora;
-                        Reporte.PrintToPrinter(1, false, 0, 0);
+                        Stream reportStream2 = Reporte.ExportToStream(ExportFormatType.PortableDocFormat);
+                        byte[] pdfBytes2;
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            reportStream2.CopyTo(memoryStream);
+                            pdfBytes2 = memoryStream.ToArray();
+                        }
+                        R.Objeto = Convert.ToBase64String(pdfBytes2);
                         R.Codigo = 0;
                         R.Mensaje = "Impresión Exitosa";
 
@@ -299,28 +338,28 @@ namespace LogicaSmartWat.Controllers
         public Respuesta MovimientosCaja(int usuario, string Tipo, int MiUsuario, string BD)
         {
             Respuesta R = new Respuesta();
-            string NombreImpresora = "";
+            //string NombreImpresora = "";
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
                         db.Database.Connection.Open();
                     }
                     db.Database.Connection.ChangeDatabase(BD);
-                    List<IMPRESORASxUSUARIO> iu = db.IMPRESORASxUSUARIO.Where(d => d.USUARIO == MiUsuario).ToList();
-                    foreach (var I in iu)
-                    {
-                        if (NombreImpresora == "")
-                        {
-                            NombreImpresora = I.IMPRESORAS.NOMBRE;
-                        }
-                        if (I.IMPRESORAS.REDUCIDA == 0)
-                        {
-                            NombreImpresora = I.IMPRESORAS.NOMBRE;
-                        }
-                    }
+                    //List<IMPRESORASxUSUARIO> iu = db.IMPRESORASxUSUARIO.Where(d => d.USUARIO == MiUsuario).ToList();
+                    //foreach (var I in iu)
+                    //{
+                    //    if (NombreImpresora == "")
+                    //    {
+                    //        NombreImpresora = I.IMPRESORAS.NOMBRE;
+                    //    }
+                    //    if (I.IMPRESORAS.REDUCIDA == 0)
+                    //    {
+                    //        NombreImpresora = I.IMPRESORAS.NOMBRE;
+                    //    }
+                    //}
 
                     ReportDocument Reporte = new ReportDocument();
                     if (Tipo == "Deta")
@@ -336,8 +375,14 @@ namespace LogicaSmartWat.Controllers
                     Reporte.SetParameterValue(0, usuario);
 
                     Conecta_Reporte(ref Reporte, BD);
-                    Reporte.PrintOptions.PrinterName = NombreImpresora;
-                    Reporte.PrintToPrinter(1, false, 0, 0);
+                    Stream reportStream2 = Reporte.ExportToStream(ExportFormatType.PortableDocFormat);
+                        byte[] pdfBytes2;
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            reportStream2.CopyTo(memoryStream);
+                            pdfBytes2 = memoryStream.ToArray();
+                        }
+                    R.Objeto = Convert.ToBase64String(pdfBytes2);
                     R.Codigo = 0;
                     R.Mensaje = "Impresión Exitosa";
                     Reporte.Dispose();

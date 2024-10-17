@@ -15,6 +15,8 @@ namespace LogicaSmartWat.Datos
         public string MEDIDOR { get; set; }
         public string IDENTIFICACION { get; set; }
         public int Factura { get; set; }
+        public string EstadoFE { get; set; }
+        public string EstadoCorreo { get; set; }
         public List<DetalleCobros> Detalle = new List<DetalleCobros>();
     }
 

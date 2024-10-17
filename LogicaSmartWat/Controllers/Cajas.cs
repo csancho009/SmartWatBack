@@ -16,7 +16,7 @@ namespace LogicaSmartWat.Controllers
             try
             {
                 List<Respuesta> R = new List<Respuesta>();
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -50,7 +50,7 @@ namespace LogicaSmartWat.Controllers
             Respuesta M = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -127,7 +127,7 @@ namespace LogicaSmartWat.Controllers
             
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -150,7 +150,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -172,7 +172,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -195,7 +195,7 @@ namespace LogicaSmartWat.Controllers
         {
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -226,7 +226,7 @@ namespace LogicaSmartWat.Controllers
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {
@@ -254,6 +254,7 @@ namespace LogicaSmartWat.Controllers
                                 var RespImpr = I.ImprimeIngresoEgreso(Numcaja, usr.CODIGO, BDCia);
                                 R.Codigo = Numcaja;
                                 R.Mensaje = "Moviento creado, " + RespImpr.Mensaje;
+                                R.Objeto = RespImpr.Objeto;
                             }
                             else
                             {
@@ -290,7 +291,7 @@ namespace LogicaSmartWat.Controllers
             Respuesta R = new Respuesta();
             try
             {
-                using (POLTA_PRUEBASEntities db = new POLTA_PRUEBASEntities())
+                using (POLTAEntities db = new POLTAEntities())
                 {
                     if (db.Database.Connection.State == System.Data.ConnectionState.Closed)
                     {

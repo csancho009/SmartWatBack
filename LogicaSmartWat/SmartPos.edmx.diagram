@@ -4,44 +4,46 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ade900478362475e861dd5d04c4db624" Name="Diagram1">
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.TARIFAS" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.CLIENTES" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.BLOQUES" Width="1.5" PointX="5.625" PointY="1.5" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.PAJAS" Width="1.5" PointX="7.875" PointY="4" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.ZONAS" Width="1.5" PointX="3.375" PointY="1.625" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__467f3960" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__4e03f6cc" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__9d61f4d4" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.LISTA_PRECIOS" Width="1.5" PointX="3.375" PointY="4.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.CANTONES" Width="1.5" PointX="3.375" PointY="7.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.DISTRITOS" Width="1.5" PointX="5.375" PointY="7.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.PROVINCIAS" Width="1.5" PointX="7.375" PointY="7.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.CIA" Width="1.5" PointX="9.375" PointY="7.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.LECTURAS" Width="1.5" PointX="10.125" PointY="4.25" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__1bca5d8f" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.DATAFONOS" Width="1.5" PointX="10.375" PointY="0.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.CUENTAS_BANCO" Width="1.5" PointX="8.125" PointY="0.75" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__6f58e2d3" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.USUARIOS" Width="1.5" PointX="0.75" PointY="11" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__493bfcd8" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.COTIZACIONES" Width="1.5" PointX="3" PointY="10.625" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__595edfbe" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK_COTIZACIONES_CLIENTES" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__39c3a648" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK_COTIZACIONES_USUARIOS" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.FACTURAS" Width="1.5" PointX="3" PointY="15.875" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__0b15f0f8" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.DETALLE_CTZ" Width="1.5" PointX="6.125" PointY="10.75" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_COTIZACIONES" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.INVENTARIO" Width="1.5" PointX="11.375" PointY="9" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK_DETALLE_CTZ_INVENTARIO" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.R_CIERRE" Width="1.5" PointX="12.375" PointY="0.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.TRANSACCIONES" Width="1.5" PointX="13.375" PointY="6.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.IMPRESORASxUSUARIO" Width="1.5" PointX="13.375" PointY="9.75" />
-        <EntityTypeShape EntityType="POLTA_PRUEBASModel.IMPRESORAS" Width="1.5" PointX="11.125" PointY="15.625" />
-        <AssociationConnector Association="POLTA_PRUEBASModel.FK__d2eeebbb" />
-        </Diagram>
+      <Diagram DiagramId="ed145d069d36496eb0834384c273fd25" Name="Diagram1">
+        <EntityTypeShape EntityType="POLTAModel.BLOQUES" Width="1.5" PointX="3.75" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.BODEGAS" Width="1.5" PointX="2.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.CIA" Width="1.5" PointX="10.75" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.CLIENTES" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.COTIZACIONES" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.CUENTAS_BANCO" Width="1.5" PointX="5.75" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.DATAFONOS" Width="1.5" PointX="8" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.DETALLE_CTZ" Width="1.5" PointX="8.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.FACTURAS" Width="1.5" PointX="3" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.IMPRESORAS" Width="1.5" PointX="8.75" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.IMPRESORASxUSUARIO" Width="1.5" PointX="11" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.INVENTARIO" Width="1.5" PointX="6" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.LECTURAS" Width="1.5" PointX="11.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.LISTA_PRECIOS" Width="1.5" PointX="8.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.PAJAS" Width="1.5" PointX="6" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.R_CIERRE" Width="1.5" PointX="12.75" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.ROLES" Width="1.5" PointX="10.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.TARIFAS" Width="1.5" PointX="12.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.USUARIOS" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.ZONAS" Width="1.5" PointX="1.5" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.CANTONES" Width="1.5" PointX="13.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.DISTRITOS" Width="1.5" PointX="13.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.PROVINCIAS" Width="1.5" PointX="14.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="POLTAModel.TRANSACCIONES" Width="1.5" PointX="5.75" PointY="16.875" IsExpanded="true" />
+        <AssociationConnector Association="POLTAModel.FK__467f3960" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__4e03f6cc" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__0b15f0f8" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__595edfbe" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__9d61f4d4" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK_COTIZACIONES_CLIENTES" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__39c3a648" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK_COTIZACIONES_USUARIOS" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK_DETALLE_CTZ_COTIZACIONES" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__6f58e2d3" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK_DETALLE_CTZ_INVENTARIO" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__d2eeebbb" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__1bca5d8f" ManuallyRouted="false" />
+        <AssociationConnector Association="POLTAModel.FK__493bfcd8" ManuallyRouted="false" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -40,15 +40,65 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FirebaseAdmin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=97c8d00c348326ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\FirebaseAdmin.3.0.0\lib\net462\FirebaseAdmin.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Api.Gax, Version=4.8.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Api.Gax.4.8.0\lib\net462\Google.Api.Gax.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Api.Gax.Rest, Version=4.8.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Api.Gax.Rest.4.8.0\lib\net462\Google.Api.Gax.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.67.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.67.0\lib\net462\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.67.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.67.0\lib\net462\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.67.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.67.0\lib\net462\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.6.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.CodeDom, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.CodeDom.7.0.0\lib\net462\System.CodeDom.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.8.0.0\lib\net462\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,25 +107,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANULA_FACTURA_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="BLOQUES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\BloqueController.cs" />
+    <Compile Include="BODEGAS.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="CANTONES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="CIA.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
     <Compile Include="CLIENTES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\BloqueController.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Controllers\BodegasBD.cs" />
     <Compile Include="Controllers\Cajas.cs" />
     <Compile Include="Controllers\GestionClientes.cs" />
     <Compile Include="Controllers\Impresiones.cs" />
     <Compile Include="Controllers\Lecturas.cs" />
     <Compile Include="Controllers\PajaController.cs" />
+    <Compile Include="Controllers\UsuariosBD.cs" />
     <Compile Include="COTIZACIONES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -89,6 +147,7 @@
     <Compile Include="Datos\CorreoElectronico.cs" />
     <Compile Include="Datos\ImpresionWeb.cs" />
     <Compile Include="Datos\ParametrosPagos.cs" />
+    <Compile Include="Datos\ParametrosReciboEspecial.cs" />
     <Compile Include="Datos\Respuesta.cs" />
     <Compile Include="DESGLOSE_ENTRADAS_SALIDAS_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
@@ -123,10 +182,10 @@
     <Compile Include="MOVIMIENTOS_CAJA_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="ObtenerBloques_Result.cs">
+    <Compile Include="PAGO_LECTURA_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="PAGO_LECTURA_Result.cs">
+    <Compile Include="PAGO_RECIBO_ESPECIAL_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="PAJAS.cs">
@@ -143,6 +202,9 @@
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="RECTIFICA_LECTURA_MEDIDOR_Result.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ROLES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
     <Compile Include="RPTs\CierreTiquete.cs">
@@ -187,6 +249,14 @@
       <DependentUpon>MovCajaResumidos.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="RPTs\NCdevolucion.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NCdevolucion.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controllers\TarifaController.cs" />
+    <Compile Include="Controllers\ZonaController.cs" />
     <Compile Include="R_CIERRE.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -226,7 +296,6 @@
     <Compile Include="TARIFAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\TarifaController.cs" />
     <Compile Include="TRANSACCIONES.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -236,32 +305,17 @@
     <Compile Include="ZONAS.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\ZonaController.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="SmartPos.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SmartPos.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
     <None Include="packages.config" />
+    <EntityDeploy Include="SmartPos.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SmartPos.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="SmartPos.edmx.diagram">
       <DependentUpon>SmartPos.edmx</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SmartPos.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SmartPos.Context.cs</LastGenOutput>
-      <DependentUpon>SmartPos.edmx</DependentUpon>
-    </Content>
-    <Content Include="SmartPos.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SmartPos.edmx</DependentUpon>
-      <LastGenOutput>SmartPos.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -296,6 +350,22 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MovCajaResumidos.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="RPTs\NCdevolucion.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>NCdevolucion.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SmartPos.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SmartPos.edmx</DependentUpon>
+      <LastGenOutput>SmartPos.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="SmartPos.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SmartPos.edmx</DependentUpon>
+      <LastGenOutput>SmartPos.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -22,6 +22,14 @@ namespace SmartWatBack.Controllers
             return Ok(tarifa.ObtenerTarifas(BaseDeDatos));
 
         }
+        [Route("api/tarifas/ObtenerPrecioTarifa")]
+        [HttpGet]
+        public IHttpActionResult ObtenerPrecioTarifa(string BaseDeDatos, string CodigoTarifa)
+        {
+            TarifaController tarifa = new TarifaController();
+            return Ok(tarifa.ObtenerPrecioTarifa(BaseDeDatos, CodigoTarifa));
+
+        }
         [Route("api/tarifas/ActualizarTarifa")]
         [HttpPut]
         public IHttpActionResult ActualizarTarifa([FromBody] List<TARIFAS> tarifas, string BaseDeDatos)
