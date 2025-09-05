@@ -142,8 +142,18 @@ namespace LogicaSmartWat.Controllers
                 var EC = C.EnviarCorreo(Destinatario, "", "<h4>Estimado Abonado</h4><p>Se adjunta la orden de cobro correspondiente al consumo de agua</p>", "Consumo de agua", Archivo);
                 File.Delete(Archivo);
 
-                R.Codigo = 0;
-                R.Mensaje = "OK";
+                if (EC.Codigo==0)
+                {
+                    R.Codigo = 0;
+                    R.Mensaje = "Correo enviado con éxito";
+                }
+                else
+                {
+                    R.Codigo = -1;
+                    R.Mensaje =EC.Mensaje;
+                }
+                    
+                
                 Reporte.Dispose();
                 Reporte.Close();
                 Reporte = null;

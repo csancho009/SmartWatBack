@@ -22,6 +22,7 @@ namespace LogicaSmartWat
         public Nullable<int> VENDEDOR { get; set; }
         public Nullable<int> LIN { get; set; }
         public string NOMBRE { get; set; }
+        public Nullable<int> BODEGA { get; set; }
     
         public virtual COTIZACIONES COTIZACIONES { get; set; }
         public virtual INVENTARIO INVENTARIO { get; set; }

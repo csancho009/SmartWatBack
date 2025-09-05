@@ -26,6 +26,7 @@ namespace LogicaSmartWat
         public string CUENTA { get; set; }
         public string SINPE { get; set; }
         public Nullable<decimal> SALDO { get; set; }
+        public string SinpeMovil { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DATAFONOS> DATAFONOS { get; set; }

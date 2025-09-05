@@ -29,6 +29,7 @@ namespace LogicaSmartWat
         public string CLAVE { get; set; }
         public string CONSECUTIVO { get; set; }
         public Nullable<int> ESTADO_HACIENDA { get; set; }
+        public string ACTIVIDAD_CLIENTE { get; set; }
     
         public virtual CLIENTES CLIENTES { get; set; }
     }

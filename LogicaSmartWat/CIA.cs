@@ -43,5 +43,7 @@ namespace LogicaSmartWat
         public Nullable<int> FACTURAR_NEGATIVO { get; set; }
         public string CARPRESP { get; set; }
         public string CONDICION_REBAJA_INVENTARIO { get; set; }
+        public string SincFEAuto { get; set; }
+        public string UrlFE { get; set; }
     }
 }

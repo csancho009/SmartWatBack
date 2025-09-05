@@ -47,8 +47,11 @@ namespace LogicaSmartWat
         public string INSTIEXO { get; set; }
         public Nullable<System.DateTime> FECHAEXO { get; set; }
         public Nullable<int> PROCENTAJEEXO { get; set; }
+        public Nullable<float> IVA { get; set; }
         public string ConsumidorFinal { get; set; }
-    
+      
+      
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FACTURAS> FACTURAS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -38,6 +38,9 @@ namespace LogicaSmartWat
         public string GARANTIA { get; set; }
         public Nullable<int> IMPRESORA { get; set; }
         public string CABYS { get; set; }
+        public string RegistroMedicamento { get; set; }
+        public string FormaFarmaceutica { get; set; }
+        public string ADMITE_IVA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DETALLE_CTZ> DETALLE_CTZ { get; set; }

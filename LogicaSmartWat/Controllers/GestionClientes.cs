@@ -47,7 +47,9 @@ namespace LogicaSmartWat.Controllers
                                 C.NUMDOCEXO,
                                 C.INSTIEXO,
                                 C.FECHAEXO,
-                                C.PROCENTAJEEXO
+                                C.PROCENTAJEEXO,
+                                C.IVA,
+                                C.ConsumidorFinal
                             };
                     db.Database.Connection.Close();
                     return new { Codigo = 1, Mensaje = "OK", Objeto = R.ToList() };
@@ -149,6 +151,8 @@ namespace LogicaSmartWat.Controllers
                     CL.INSTIEXO = C.INSTIEXO;
                     CL.FECHAEXO = C.FECHAEXO;
                     CL.PROCENTAJEEXO = C.PROCENTAJEEXO;
+                    CL.IVA = C.IVA;
+                    CL.ConsumidorFinal = C.ConsumidorFinal;
                     db.SaveChanges();
                     db.Database.Connection.Close();
                     return new { Codigo = C.CODIGO, Mensaje = "OK" };

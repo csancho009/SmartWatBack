@@ -64,6 +64,8 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="FACTURAR_NEGATIVO" Type="int" />
           <Property Name="CARPRESP" Type="varchar" MaxLength="200" />
           <Property Name="CONDICION_REBAJA_INVENTARIO" Type="varchar" MaxLength="3" />
+          <Property Name="SincFEAuto" Type="varchar" MaxLength="1" />
+          <Property Name="UrlFE" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="CLIENTES">
           <Key>
@@ -93,6 +95,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="INSTIEXO" Type="varchar" MaxLength="50" />
           <Property Name="FECHAEXO" Type="date" />
           <Property Name="PROCENTAJEEXO" Type="int" />
+          <Property Name="IVA" Type="real" />
           <Property Name="ConsumidorFinal" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="COTIZACIONES">
@@ -121,6 +124,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="CUENTA" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="SINPE" Type="nvarchar" MaxLength="255" />
           <Property Name="SALDO" Type="money" />
+          <Property Name="SinpeMovil" Type="varchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="DATAFONOS">
           <Key>
@@ -145,6 +149,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.CANTONES' no tiene definida ningun
           <Property Name="VENDEDOR" Type="int" />
           <Property Name="LIN" Type="int" />
           <Property Name="NOMBRE" Type="nvarchar" MaxLength="80" />
+          <Property Name="BODEGA" Type="int" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -171,11 +176,12 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ningu
           <Property Name="TIPO" Type="int" />
           <Property Name="TC" Type="real" />
           <Property Name="NOMBRE" Type="nvarchar" MaxLength="500" />
-          <Property Name="COMENTARIO" Type="nvarchar" MaxLength="300" />
+          <Property Name="COMENTARIO" Type="nvarchar" MaxLength="500" />
           <Property Name="MONEDA" Type="nvarchar" MaxLength="5" />
           <Property Name="CLAVE" Type="nvarchar" MaxLength="100" />
           <Property Name="CONSECUTIVO" Type="nvarchar" MaxLength="100" />
           <Property Name="ESTADO_HACIENDA" Type="int" />
+          <Property Name="ACTIVIDAD_CLIENTE" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="IMPRESORAS">
           <Key>
@@ -206,7 +212,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ningu
           <Property Name="CENTRO_COSTO" Type="int" />
           <Property Name="GRAVADO" Type="int" />
           <Property Name="UNIDAD" Type="int" />
-          <Property Name="TIPO" Type="smallint" />
+          <Property Name="TIPO" Type="int" />
           <Property Name="TALLA" Type="nvarchar" MaxLength="150" />
           <Property Name="PRE_PROVE" Type="real" />
           <Property Name="IMPUESTOS" Type="real" />
@@ -217,6 +223,9 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.DISTRITOS' no tiene definida ningu
           <Property Name="GARANTIA" Type="char" MaxLength="1" />
           <Property Name="IMPRESORA" Type="int" />
           <Property Name="CABYS" Type="varchar" MaxLength="15" />
+          <Property Name="RegistroMedicamento" Type="varchar" MaxLength="100" />
+          <Property Name="FormaFarmaceutica" Type="varchar" MaxLength="3" />
+          <Property Name="ADMITE_IVA" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="LECTURAS">
           <Key>
@@ -804,6 +813,8 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="FACTURAR_NEGATIVO" Type="Int32" />
           <Property Name="CARPRESP" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CONDICION_REBAJA_INVENTARIO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="SincFEAuto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="UrlFE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CLIENTES">
           <Key>
@@ -838,6 +849,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <NavigationProperty Name="COTIZACIONES" Relationship="Self.FK__595edfbe" FromRole="CLIENTES" ToRole="COTIZACIONES" />
           <NavigationProperty Name="PAJAS" Relationship="Self.FK__9d61f4d4" FromRole="CLIENTES" ToRole="PAJAS" />
           <NavigationProperty Name="COTIZACIONES1" Relationship="Self.FK_COTIZACIONES_CLIENTES" FromRole="CLIENTES" ToRole="COTIZACIONES" />
+          <Property Name="IVA" Type="Single" />
         </EntityType>
         <EntityType Name="COTIZACIONES">
           <Key>
@@ -871,6 +883,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="SINPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="SALDO" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="DATAFONOS" Relationship="Self.FK__6f58e2d3" FromRole="CUENTAS_BANCO" ToRole="DATAFONOS" />
+          <Property Name="SinpeMovil" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DATAFONOS">
           <Key>
@@ -898,6 +911,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="NOMBRE" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="COTIZACIONES" Relationship="Self.FK_DETALLE_CTZ_COTIZACIONES" FromRole="DETALLE_CTZ" ToRole="COTIZACIONES" />
           <NavigationProperty Name="INVENTARIO" Relationship="Self.FK_DETALLE_CTZ_INVENTARIO" FromRole="DETALLE_CTZ" ToRole="INVENTARIO" />
+          <Property Name="BODEGA" Type="Int32" />
         </EntityType>
         <EntityType Name="FACTURAS">
           <Key>
@@ -913,12 +927,13 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="TIPO" Type="Int32" />
           <Property Name="TC" Type="Single" />
           <Property Name="NOMBRE" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="COMENTARIO" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="COMENTARIO" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="MONEDA" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="CLAVE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CONSECUTIVO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ESTADO_HACIENDA" Type="Int32" />
           <NavigationProperty Name="CLIENTES" Relationship="Self.FK__0b15f0f8" FromRole="FACTURAS" ToRole="CLIENTES" />
+          <Property Name="ACTIVIDAD_CLIENTE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="IMPRESORAS">
           <Key>
@@ -963,6 +978,9 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Name="IMPRESORA" Type="Int32" />
           <Property Name="CABYS" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="DETALLE_CTZ" Relationship="Self.FK_DETALLE_CTZ_INVENTARIO" FromRole="INVENTARIO" ToRole="DETALLE_CTZ" />
+          <Property Name="RegistroMedicamento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FormaFarmaceutica" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="ADMITE_IVA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LECTURAS">
           <Key>
@@ -1628,6 +1646,8 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySetMapping Name="CIA">
             <EntityTypeMapping TypeName="POLTAModel.CIA">
               <MappingFragment StoreEntitySet="CIA">
+                <ScalarProperty Name="UrlFE" ColumnName="UrlFE" />
+                <ScalarProperty Name="SincFEAuto" ColumnName="SincFEAuto" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
@@ -1663,6 +1683,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySetMapping Name="CLIENTES">
             <EntityTypeMapping TypeName="POLTAModel.CLIENTES">
               <MappingFragment StoreEntitySet="CLIENTES">
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
@@ -1711,6 +1732,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySetMapping Name="CUENTAS_BANCO">
             <EntityTypeMapping TypeName="POLTAModel.CUENTAS_BANCO">
               <MappingFragment StoreEntitySet="CUENTAS_BANCO">
+                <ScalarProperty Name="SinpeMovil" ColumnName="SinpeMovil" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
                 <ScalarProperty Name="BANCO" ColumnName="BANCO" />
                 <ScalarProperty Name="MONEDA" ColumnName="MONEDA" />
@@ -1734,6 +1756,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySetMapping Name="DETALLE_CTZ">
             <EntityTypeMapping TypeName="POLTAModel.DETALLE_CTZ">
               <MappingFragment StoreEntitySet="DETALLE_CTZ">
+                <ScalarProperty Name="BODEGA" ColumnName="BODEGA" />
                 <ScalarProperty Name="FACTURA" ColumnName="FACTURA" />
                 <ScalarProperty Name="PRODUCTO" ColumnName="PRODUCTO" />
                 <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
@@ -1748,6 +1771,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySetMapping Name="FACTURAS">
             <EntityTypeMapping TypeName="POLTAModel.FACTURAS">
               <MappingFragment StoreEntitySet="FACTURAS">
+                <ScalarProperty Name="ACTIVIDAD_CLIENTE" ColumnName="ACTIVIDAD_CLIENTE" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
                 <ScalarProperty Name="CLIENTE" ColumnName="CLIENTE" />
                 <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
@@ -1788,6 +1812,9 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <EntitySetMapping Name="INVENTARIO">
             <EntityTypeMapping TypeName="POLTAModel.INVENTARIO">
               <MappingFragment StoreEntitySet="INVENTARIO">
+                <ScalarProperty Name="ADMITE_IVA" ColumnName="ADMITE_IVA" />
+                <ScalarProperty Name="FormaFarmaceutica" ColumnName="FormaFarmaceutica" />
+                <ScalarProperty Name="RegistroMedicamento" ColumnName="RegistroMedicamento" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="UTILIDAD" ColumnName="UTILIDAD" />

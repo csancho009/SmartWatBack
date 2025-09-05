@@ -410,7 +410,7 @@ namespace LogicaSmartWat.Controllers
                             if (R2.Codigo == 0)
                             {
                                 R.Codigo = 0;
-                                R.Mensaje = "OK";
+                                R.Mensaje = R2.Mensaje;
                                 R.Objeto = R2.Objeto;
                             }
                             else
