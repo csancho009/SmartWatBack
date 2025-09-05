@@ -204,7 +204,7 @@ namespace LogicaSmartWat.Controllers
                     if (usr.CAJA == 1)
                     {
                         var Repos = db.PAGO_LECTURA(P.NunCoti, P.Usuario, P.EfectivoReal, P.Transfer, P.Cuenta,
-                        P.NumTransfer, P.Tarjeta, P.Datafono, P.Voucher);
+                        P.NumTransfer, P.Tarjeta, P.Datafono, P.Voucher, P.ACTIVIDAD_CLIENTE );
                         foreach (var L in Repos)
                         {
                             if (L.id > 0)

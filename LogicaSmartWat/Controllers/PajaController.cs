@@ -200,7 +200,9 @@ namespace LogicaSmartWat
                                                Precio = L.Precio,
                                                Sub = L.Sub,
                                                Vendedor = L.Vendedor
-                                           }).ToList()
+                                           }).ToList(),
+                                Actividades=(from A in db.ACTIVIDADES_CLIENTE.Where(d=>d.CODIGO_CLIENTE== (int)P.CLIENTE).ToList() 
+                                             select new LasActividades { CODIGO_ACTIVIDAD=A.CODIGO_ACTIVIDAD, NOMBRE_ACTIVIDAD=A.NOMBRE_ACTIVIDAD}).ToList()
                             }); ;
                         }
 

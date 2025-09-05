@@ -18,6 +18,7 @@ namespace LogicaSmartWat.Datos
         public string EstadoFE { get; set; }
         public string EstadoCorreo { get; set; }
         public List<DetalleCobros> Detalle = new List<DetalleCobros>();
+        public List<LasActividades> Actividades = new List<LasActividades>();
     }
 
     public class DetalleCobros

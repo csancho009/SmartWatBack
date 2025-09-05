@@ -157,6 +157,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACTIVIDADES_CLIENTE.cs">
+      <DependentUpon>SmartPos.tt</DependentUpon>
+    </Compile>
     <Compile Include="ANULA_FACTURA_Result.cs">
       <DependentUpon>SmartPos.tt</DependentUpon>
     </Compile>
@@ -196,6 +199,7 @@
     <Compile Include="Datos\Cobros.cs" />
     <Compile Include="Datos\CorreoElectronico.cs" />
     <Compile Include="Datos\ImpresionWeb.cs" />
+    <Compile Include="Datos\LasActividades.cs" />
     <Compile Include="Datos\ParametrosPagos.cs" />
     <Compile Include="Datos\ParametrosReciboEspecial.cs" />
     <Compile Include="Datos\Respuesta.cs" />
@@ -361,7 +365,6 @@
     <None Include="packages.config" />
     <EntityDeploy Include="SmartPos.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SmartPos.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="SmartPos.edmx.diagram">
       <DependentUpon>SmartPos.edmx</DependentUpon>

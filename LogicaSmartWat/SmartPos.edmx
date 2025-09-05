@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="POLTAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ACTIVIDADES_CLIENTE">
+          <Key>
+            <PropertyRef Name="CODIGO_CLIENTE" />
+            <PropertyRef Name="CODIGO_ACTIVIDAD" />
+          </Key>
+          <Property Name="CODIGO_CLIENTE" Type="int" Nullable="false" />
+          <Property Name="CODIGO_ACTIVIDAD" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="NOMBRE_ACTIVIDAD" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="BLOQUES">
           <Key>
             <PropertyRef Name="ID_BLO" />
@@ -469,6 +478,18 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CLI_ACTIVIDAD">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="1" />
+          <End Role="ACTIVIDADES_CLIENTE" Type="Self.ACTIVIDADES_CLIENTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ACTIVIDADES_CLIENTE">
+              <PropertyRef Name="CODIGO_CLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_COTIZACIONES_CLIENTES">
           <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
           <End Role="COTIZACIONES" Type="Self.COTIZACIONES" Multiplicity="*" />
@@ -607,6 +628,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Parameter Name="MontoTarejeta" Type="real" Mode="In" />
           <Parameter Name="NumDatafono" Type="int" Mode="In" />
           <Parameter Name="Voucher" Type="varchar" Mode="In" />
+          <Parameter Name="ActividadCliente" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PAGO_RECIBO_ESPECIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Usuario" Type="int" Mode="In" />
@@ -653,6 +675,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Parameter Name="coti" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="POLTAModelStoreContainer">
+          <EntitySet Name="ACTIVIDADES_CLIENTE" EntityType="Self.ACTIVIDADES_CLIENTE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BLOQUES" EntityType="Self.BLOQUES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BODEGAS" EntityType="Self.BODEGAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIA" EntityType="Self.CIA" Schema="dbo" store:Type="Tables" />
@@ -740,6 +763,10 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <AssociationSet Name="FK__d2eeebbb" Association="Self.FK__d2eeebbb">
             <End Role="IMPRESORAS" EntitySet="IMPRESORAS" />
             <End Role="IMPRESORASxUSUARIO" EntitySet="IMPRESORASxUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CLI_ACTIVIDAD" Association="Self.FK_CLI_ACTIVIDAD">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="ACTIVIDADES_CLIENTE" EntitySet="ACTIVIDADES_CLIENTE" />
           </AssociationSet>
           <AssociationSet Name="FK_COTIZACIONES_CLIENTES" Association="Self.FK_COTIZACIONES_CLIENTES">
             <End Role="CLIENTES" EntitySet="CLIENTES" />
@@ -850,6 +877,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <NavigationProperty Name="PAJAS" Relationship="Self.FK__9d61f4d4" FromRole="CLIENTES" ToRole="PAJAS" />
           <NavigationProperty Name="COTIZACIONES1" Relationship="Self.FK_COTIZACIONES_CLIENTES" FromRole="CLIENTES" ToRole="COTIZACIONES" />
           <Property Name="IVA" Type="Single" />
+          <NavigationProperty Name="ACTIVIDADES_CLIENTE" Relationship="POLTAModel.FK_CLI_ACTIVIDAD" FromRole="CLIENTES" ToRole="ACTIVIDADES_CLIENTE" />
         </EntityType>
         <EntityType Name="COTIZACIONES">
           <Key>
@@ -1465,6 +1493,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
             <Parameter Name="MontoTarejeta" Mode="In" Type="Single" />
             <Parameter Name="NumDatafono" Mode="In" Type="Int32" />
             <Parameter Name="Voucher" Mode="In" Type="String" />
+            <Parameter Name="ActividadCliente" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PAGO_RECIBO_ESPECIAL" ReturnType="Collection(POLTAModel.PAGO_RECIBO_ESPECIAL_Result)">
             <Parameter Name="Usuario" Mode="In" Type="Int32" />
@@ -1505,6 +1534,11 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <FunctionImport Name="TablaPrecios" ReturnType="Collection(POLTAModel.TablaPrecios_Result)">
           <Parameter Name="coti" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="ACTIVIDADES_CLIENTE" EntityType="POLTAModel.ACTIVIDADES_CLIENTE" />
+          <AssociationSet Name="FK_CLI_ACTIVIDAD" Association="POLTAModel.FK_CLI_ACTIVIDAD">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="ACTIVIDADES_CLIENTE" EntitySet="ACTIVIDADES_CLIENTE" />
+          </AssociationSet>
           <FunctionImport Name="PAJAS_PENDIENTES_PAGO" ReturnType="Collection(POLTAModel.PAJAS_PENDIENTES_PAGO_Result)">
             <Parameter Name="NombreCliente" Mode="In" Type="String" />
             <Parameter Name="Cedula" Mode="In" Type="String" />
@@ -1608,6 +1642,28 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Type="String" Name="Vendedor" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="C_" Nullable="true" />
         </ComplexType>
+        <EntityType Name="ACTIVIDADES_CLIENTE">
+          <Key>
+            <PropertyRef Name="CODIGO_CLIENTE" />
+            <PropertyRef Name="CODIGO_ACTIVIDAD" />
+          </Key>
+          <Property Name="CODIGO_CLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="CODIGO_ACTIVIDAD" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="NOMBRE_ACTIVIDAD" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CLIENTES" Relationship="POLTAModel.FK_CLI_ACTIVIDAD" FromRole="ACTIVIDADES_CLIENTE" ToRole="CLIENTES" />
+        </EntityType>
+        <Association Name="FK_CLI_ACTIVIDAD">
+          <End Type="POLTAModel.CLIENTES" Role="CLIENTES" Multiplicity="1" />
+          <End Type="POLTAModel.ACTIVIDADES_CLIENTE" Role="ACTIVIDADES_CLIENTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ACTIVIDADES_CLIENTE">
+              <PropertyRef Name="CODIGO_CLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <ComplexType Name="PAJAS_PENDIENTES_PAGO_Result">
           <Property Type="Int32" Name="CODIGO" Nullable="false" />
           <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="150" />
@@ -1618,6 +1674,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
           <Property Type="Int32" Name="Factura" Nullable="false" />
           <Property Type="Int32" Name="EstadoHacienda" Nullable="false" />
           <Property Type="String" Name="EstadoCorreo" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="CLIENTE" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2143,6 +2200,15 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="ACTIVIDADES_CLIENTE">
+            <EntityTypeMapping TypeName="POLTAModel.ACTIVIDADES_CLIENTE">
+              <MappingFragment StoreEntitySet="ACTIVIDADES_CLIENTE">
+                <ScalarProperty Name="NOMBRE_ACTIVIDAD" ColumnName="NOMBRE_ACTIVIDAD" />
+                <ScalarProperty Name="CODIGO_ACTIVIDAD" ColumnName="CODIGO_ACTIVIDAD" />
+                <ScalarProperty Name="CODIGO_CLIENTE" ColumnName="CODIGO_CLIENTE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PAJAS_PENDIENTES_PAGO" FunctionName="POLTAModel.Store.PAJAS_PENDIENTES_PAGO">
             <ResultMapping>
               <ComplexTypeMapping TypeName="POLTAModel.PAJAS_PENDIENTES_PAGO_Result">
@@ -2155,6 +2221,7 @@ advertencia 6002: La tabla o vista 'POLTA.dbo.TRANSACCIONES' no tiene definida n
                 <ScalarProperty Name="Factura" ColumnName="Factura" />
                 <ScalarProperty Name="EstadoHacienda" ColumnName="EstadoHacienda" />
                 <ScalarProperty Name="EstadoCorreo" ColumnName="EstadoCorreo" />
+                <ScalarProperty Name="CLIENTE" ColumnName="CLIENTE" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

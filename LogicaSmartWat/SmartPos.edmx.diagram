@@ -43,6 +43,8 @@
         <AssociationConnector Association="POLTAModel.FK__d2eeebbb" ManuallyRouted="false" />
         <AssociationConnector Association="POLTAModel.FK__1bca5d8f" ManuallyRouted="false" />
         <AssociationConnector Association="POLTAModel.FK__493bfcd8" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="POLTAModel.ACTIVIDADES_CLIENTE" Width="1.5" PointX="3" PointY="5.375" />
+        <AssociationConnector Association="POLTAModel.FK_CLI_ACTIVIDAD" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

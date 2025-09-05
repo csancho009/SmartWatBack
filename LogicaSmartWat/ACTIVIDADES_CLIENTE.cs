@@ -10,18 +10,14 @@
 namespace LogicaSmartWat
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class PAJAS_PENDIENTES_PAGO_Result
+    public partial class ACTIVIDADES_CLIENTE
     {
-        public int CODIGO { get; set; }
-        public string NOMBRE { get; set; }
-        public string Periodo { get; set; }
-        public Nullable<double> Total { get; set; }
-        public string MEDIDOR { get; set; }
-        public string IDENTIFICACION { get; set; }
-        public int Factura { get; set; }
-        public int EstadoHacienda { get; set; }
-        public string EstadoCorreo { get; set; }
-        public Nullable<int> CLIENTE { get; set; }
+        public int CODIGO_CLIENTE { get; set; }
+        public string CODIGO_ACTIVIDAD { get; set; }
+        public string NOMBRE_ACTIVIDAD { get; set; }
+    
+        public virtual CLIENTES CLIENTES { get; set; }
     }
 }

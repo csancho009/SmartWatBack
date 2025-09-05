@@ -51,6 +51,7 @@ namespace LogicaSmartWat
         public virtual DbSet<DISTRITOS> DISTRITOS { get; set; }
         public virtual DbSet<PROVINCIAS> PROVINCIAS { get; set; }
         public virtual DbSet<TRANSACCIONES> TRANSACCIONES { get; set; }
+        public virtual DbSet<ACTIVIDADES_CLIENTE> ACTIVIDADES_CLIENTE { get; set; }
     
         public virtual ObjectResult<ANULA_FACTURA_Result> ANULA_FACTURA(Nullable<int> numFact)
         {
@@ -327,7 +328,7 @@ namespace LogicaSmartWat
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("ObtenernerFechaLecturaAnterior", iDPAJParameter, iDLECParameter);
         }
     
-        public virtual ObjectResult<PAGO_LECTURA_Result> PAGO_LECTURA(Nullable<int> numCoti, Nullable<int> usuario, Nullable<float> montoEfectivo, Nullable<float> montoTransfer, Nullable<int> numCtaBco, string numTransfer, Nullable<float> montoTarejeta, Nullable<int> numDatafono, string voucher)
+        public virtual ObjectResult<PAGO_LECTURA_Result> PAGO_LECTURA(Nullable<int> numCoti, Nullable<int> usuario, Nullable<float> montoEfectivo, Nullable<float> montoTransfer, Nullable<int> numCtaBco, string numTransfer, Nullable<float> montoTarejeta, Nullable<int> numDatafono, string voucher, string actividadCliente)
         {
             var numCotiParameter = numCoti.HasValue ?
                 new ObjectParameter("NumCoti", numCoti) :
@@ -365,7 +366,11 @@ namespace LogicaSmartWat
                 new ObjectParameter("Voucher", voucher) :
                 new ObjectParameter("Voucher", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAGO_LECTURA_Result>("PAGO_LECTURA", numCotiParameter, usuarioParameter, montoEfectivoParameter, montoTransferParameter, numCtaBcoParameter, numTransferParameter, montoTarejetaParameter, numDatafonoParameter, voucherParameter);
+            var actividadClienteParameter = actividadCliente != null ?
+                new ObjectParameter("ActividadCliente", actividadCliente) :
+                new ObjectParameter("ActividadCliente", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PAGO_LECTURA_Result>("PAGO_LECTURA", numCotiParameter, usuarioParameter, montoEfectivoParameter, montoTransferParameter, numCtaBcoParameter, numTransferParameter, montoTarejetaParameter, numDatafonoParameter, voucherParameter, actividadClienteParameter);
         }
     
         public virtual ObjectResult<PAGO_RECIBO_ESPECIAL_Result> PAGO_RECIBO_ESPECIAL(Nullable<int> usuario, string codigoArticulo, Nullable<int> cliente, Nullable<float> monto, string nota, string medioPago, Nullable<int> ctaBanco, Nullable<int> datafono)
