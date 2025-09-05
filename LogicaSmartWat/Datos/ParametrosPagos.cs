@@ -18,5 +18,6 @@ namespace LogicaSmartWat.Datos
         public int Datafono { get; set; }
         public string Voucher { get; set; }
         public string BDCia { get; set; }
+        public string ACTIVIDAD_CLIENTE { get; set; }
     }
 }
